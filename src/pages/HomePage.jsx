@@ -39,6 +39,42 @@ const features = [
   },
 ];
 
+const newBooks = Array.from({ length: 8 }, (_, index) => ({
+  id: index + 1,
+  title: "Dahshat",
+  author: "Abdulla Qahhor",
+  rating: 4.7,
+  image: coverImage,
+  href: "/books/1",
+  badges: [<FaBook key="book" />, <FaHeadphones key="audio" />, <FaBookmark key="save" />],
+}));
+
+const categories = Array.from({ length: 9 }, () => ({
+  label: "Psixologiya",
+  icon: <FaBrain />,
+})).concat({ label: "Barchasi", icon: <FaThLarge /> });
+
+const mostRead = Array.from({ length: 6 }, (_, index) => ({
+  id: index + 1,
+  title: "Dahshat",
+  author: "Abdulla Qahhor",
+  rating: 4.7,
+  image: coverImage,
+  href: "/books/1",
+  badges: [<FaBook key="book" />, <FaHeadphones key="audio" />, <FaBookmark key="save" />],
+}));
+
+const stats = [
+  { label: "Books Available", value: "50,000+" },
+  { label: "Active Members", value: "15,000+" },
+  { label: "Categories", value: "200+" },
+  { label: "Access", value: "24/7" },
+];
+
+/**
+ * HomePage Component
+ * Responsibility: Compose the home page layout
+ */
 export default function HomePage() {
   return (
     <div className="space-y-16 pb-16">
