@@ -1,6 +1,12 @@
 import React from "react";
+import { FaBrain, FaThLarge } from "react-icons/fa";
 import { BookCard } from "../components";
 import coverImage from "../assets/cover-image.jpg";
+import CategoryCard from "../components/CategoryCard";
+import MostReadCard from "../components/MostReadCard";
+import NewArrivalCard from "../components/NewArrivalCard";
+import SectionHeader from "../components/SectionHeader";
+import StatsBar from "../components/StatsBar";
 
 const stats = [
   { label: "Kitoblar", value: "12K+" },
