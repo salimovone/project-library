@@ -54,10 +54,13 @@ const Navbar = () => {
             <button className="text-[#003282] rounded px-3 py-2 flex items-center gap-1 bg-[#f3f3f3] hover:bg-[#e0e0e0] transition">
               <BiBell className="text-xl" />
             </button>
-            <button className="text-[#003282] rounded px-3 py-2 flex items-center gap-1 bg-[#f3f3f3] hover:bg-[#e0e0e0] transition">
-              <IoPersonOutline className="text-xl" /> 
+            <Link
+              to="/profile"
+              className="text-[#003282] rounded px-3 py-2 flex items-center gap-1 bg-[#f3f3f3] hover:bg-[#e0e0e0] transition"
+            >
+              <IoPersonOutline className="text-xl" />
               <span>Profile</span>
-            </button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -117,9 +120,12 @@ const Navbar = () => {
                 <button className="text-[#003282] rounded px-3 py-2 flex items-center gap-1 bg-[#f3f3f3] hover:bg-[#e0e0e0] transition">
                   <BiBell className="text-lg" />
                 </button>
-                <button className="text-[#003282] rounded px-3 py-2 flex items-center gap-1 bg-[#f3f3f3] hover:bg-[#e0e0e0] transition">
+                <Link
+                  to="/profile"
+                  className="text-[#003282] rounded px-3 py-2 flex items-center gap-1 bg-[#f3f3f3] hover:bg-[#e0e0e0] transition"
+                >
                   <IoPersonOutline className="text-lg" />
-                </button>
+                </Link>
               </div>
             </div>
           </div>
