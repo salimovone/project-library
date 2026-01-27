@@ -8,12 +8,12 @@ import NewArrivalCard from "../components/NewArrivalCard";
 import SectionHeader from "../components/SectionHeader";
 import StatsBar from "../components/StatsBar";
 
-const stats = [
-  { label: "Kitoblar", value: "12K+" },
-  { label: "A'zo", value: "4.8K" },
-  { label: "Audio kitob", value: "1.2K" },
-  { label: "Muallif", value: "730" },
-];
+// const stats = [
+//   { label: "Kitoblar", value: "12K+" },
+//   { label: "A'zo", value: "4.8K" },
+//   { label: "Audio kitob", value: "1.2K" },
+//   { label: "Muallif", value: "730" },
+// ];
 
 // const categories = [
 //   "Badiiy adabiyot",
