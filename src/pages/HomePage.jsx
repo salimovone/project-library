@@ -15,14 +15,14 @@ const stats = [
   { label: "Muallif", value: "730" },
 ];
 
-const categories = [
-  "Badiiy adabiyot",
-  "Biznes",
-  "Dasturlash",
-  "Psixologiya",
-  "Tarix",
-  "Bolalar",
-];
+// const categories = [
+//   "Badiiy adabiyot",
+//   "Biznes",
+//   "Dasturlash",
+//   "Psixologiya",
+//   "Tarix",
+//   "Bolalar",
+// ];
 
 const features = [
   {
