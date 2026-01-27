@@ -1,5 +1,5 @@
 import React from "react";
-import { FaBrain, FaThLarge, FaBook } from "react-icons/fa";
+import { FaBrain, FaThLarge, FaBook, FaHeadphones } from "react-icons/fa";
 import { BookCard } from "../components";
 import coverImage from "../assets/cover-image.jpg";
 import CategoryCard from "../components/CategoryCard";
