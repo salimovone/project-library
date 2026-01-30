@@ -15,31 +15,25 @@ const stats = [
   { label: "Access", value: "24/7" },
 ];
 
-const newArrivals = Array.from({ length: 8 }, (_, index) => {
-  const id = index + 1;
-  return {
-    id,
-    title: "Dahshat",
-    author: "Abdulla Qahhor",
-    rating: "4.7",
-    image: coverImage,
-    href: `/books/${id}`,
-    badges: ["book", "audio", "bookmark"],
-  };
-});
+const newArrivals = Array.from({ length: 8 }, (_, index) => ({
+  id: index + 1,
+  title: "Dahshat",
+  author: "Abdulla Qahhor",
+  rating: "4.7",
+  image: coverImage,
+  href: "#",
+  badges: ["book", "audio", "bookmark"],
+}));
 
-const mostRead = Array.from({ length: 6 }, (_, index) => {
-  const id = index + 1;
-  return {
-    id,
-    title: "Dahshat",
-    author: "Abdulla Qahhor",
-    rating: "4.7",
-    image: coverImage,
-    href: `/books/${id}`,
-    badges: ["book", "audio", "bookmark"],
-  };
-});
+const mostRead = Array.from({ length: 6 }, (_, index) => ({
+  id: index + 1,
+  title: "Dahshat",
+  author: "Abdulla Qahhor",
+  rating: "4.7",
+  image: coverImage,
+  href: "#",
+  badges: ["book", "audio", "bookmark"],
+}));
 
 /**
  * HomePage Component
