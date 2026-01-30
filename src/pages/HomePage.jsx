@@ -47,7 +47,7 @@ export default function HomePage() {
           <SectionHeader title="Yangi qo'shilgan kitoblar" actionLabel="Barchasi" />
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {newArrivals.map((book) => (
-              <NewArrivalCard key={book.id} book={book} />
+              <NewArrivalCard key={book.id} book={book} href={`/books/${book.id}`} />
             ))}
           </div>
         </div>
@@ -66,7 +66,7 @@ export default function HomePage() {
         <SectionHeader title="Eng ko'p o'qilganlar" actionLabel="Barchasi" />
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {mostRead.map((book) => (
-            <MostReadCard key={book.id} book={book} />
+            <MostReadCard key={book.id} book={book} href={`/books/${book.id}`} />
           ))}
         </div>
       </section>
