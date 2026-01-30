@@ -5,6 +5,7 @@ import { Link } from "react-router";
  * Responsibility: Render new arrival book card
  */
 export default function NewArrivalCard({ book }) {
+  console.log("book: ", book);
   return (
     <Link
       to={book.href}

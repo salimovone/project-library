@@ -21,7 +21,7 @@ const newArrivals = Array.from({ length: 8 }, (_, index) => ({
   author: "Abdulla Qahhor",
   rating: "4.7",
   image: coverImage,
-  href: "#",
+  href: "/books/"+(index + 1),
   badges: ["book", "audio", "bookmark"],
 }));
 
@@ -31,7 +31,7 @@ const mostRead = Array.from({ length: 6 }, (_, index) => ({
   author: "Abdulla Qahhor",
   rating: "4.7",
   image: coverImage,
-  href: "#",
+  href: "books/"+(index + 1),
   badges: ["book", "audio", "bookmark"],
 }));
 
@@ -47,7 +47,7 @@ export default function HomePage() {
           <SectionHeader title="Yangi qo'shilgan kitoblar" actionLabel="Barchasi" />
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {newArrivals.map((book) => (
-              <NewArrivalCard key={book.id} book={book} href={`/books/${book.id}`} />
+              <NewArrivalCard key={book.id} book={book} />
             ))}
           </div>
         </div>
@@ -66,7 +66,7 @@ export default function HomePage() {
         <SectionHeader title="Eng ko'p o'qilganlar" actionLabel="Barchasi" />
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {mostRead.map((book) => (
-            <MostReadCard key={book.id} book={book} href={`/books/${book.id}`} />
+            <MostReadCard key={book.id} book={book} />
           ))}
         </div>
       </section>
