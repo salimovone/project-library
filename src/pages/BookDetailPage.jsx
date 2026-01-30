@@ -109,8 +109,8 @@ function BookDetailsPanel() {
           Every book provides a chance to try another life you could have lived.
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
-          {['Fiction', 'Fantasy', 'Contemporary', 'Philosophy'].map((tag) => (
-            <span key={tag} className="rounded-full bg-[#edf2f7] px-3 py-1 text-xs text-[#1a478e]">
+          {['Fiction', 'Fantasy', 'Contemporary', 'Philosophy'].map((tag, idx) => (
+            <span key={idx} className="rounded-full bg-[#edf2f7] px-3 py-1 text-xs text-[#1a478e]">
               {tag}
             </span>
           ))}
@@ -130,8 +130,8 @@ function ReviewSummary() {
           <p className="text-sm text-gray-500">Based on 2,847 reviews</p>
         </div>
         <div className="flex-1 space-y-2">
-          {reviewStats.map((stat) => (
-            <div key={stat.label} className="flex items-center gap-3">
+          {reviewStats.map((stat, idx) => (
+            <div key={idx} className="flex items-center gap-3">
               <span className="w-12 text-xs text-gray-500">{stat.label}</span>
               <div className="h-2 flex-1 rounded-full bg-gray-200">
                 <div
@@ -154,8 +154,8 @@ function ReviewSummary() {
 function ReviewList() {
   return (
     <div className="rounded-2xl bg-white p-6 shadow-[0_6px_20px_rgba(0,0,0,0.08)]">
-      {reviews.map((review) => (
-        <div key={review.id} className="border-b border-gray-100 py-4 last:border-none">
+      {reviews.map((review, idx) => (
+        <div key={idx} className="border-b border-gray-100 py-4 last:border-none">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-semibold text-gray-800">{review.name}</p>

@@ -2,27 +2,6 @@ import React from "react";
 import { FaBrain, FaThLarge, FaBook, FaHeadphones, FaBookmark } from "react-icons/fa";
 import { BookCard } from "../components";
 import coverImage from "../assets/cover-image.jpg";
-import CategoryCard from "../components/CategoryCard";
-import MostReadCard from "../components/MostReadCard";
-import NewArrivalCard from "../components/NewArrivalCard";
-import SectionHeader from "../components/SectionHeader";
-import StatsBar from "../components/StatsBar";
-
-// const stats = [
-//   { label: "Kitoblar", value: "12K+" },
-//   { label: "A'zo", value: "4.8K" },
-//   { label: "Audio kitob", value: "1.2K" },
-//   { label: "Muallif", value: "730" },
-// ];
-
-// const categories = [
-//   "Badiiy adabiyot",
-//   "Biznes",
-//   "Dasturlash",
-//   "Psixologiya",
-//   "Tarix",
-//   "Bolalar",
-// ];
 
 const features = [
   {
@@ -39,30 +18,11 @@ const features = [
   },
 ];
 
-const newBooks = Array.from({ length: 8 }, (_, index) => ({
-  id: index + 1,
-  title: "Dahshat",
-  author: "Abdulla Qahhor",
-  rating: 4.7,
-  image: coverImage,
-  href: "/books/1",
-  badges: [<FaBook key="book" />, <FaHeadphones key="audio" />, <FaBookmark key="save" />],
-}));
-
 const categories = Array.from({ length: 9 }, () => ({
   label: "Psixologiya",
   icon: <FaBrain />,
 })).concat({ label: "Barchasi", icon: <FaThLarge /> });
 
-const mostRead = Array.from({ length: 6 }, (_, index) => ({
-  id: index + 1,
-  title: "Dahshat",
-  author: "Abdulla Qahhor",
-  rating: 4.7,
-  image: coverImage,
-  href: "/books/1",
-  badges: [<FaBook key="book" />, <FaHeadphones key="audio" />, <FaBookmark key="save" />],
-}));
 
 const stats = [
   { label: "Books Available", value: "50,000+" },
@@ -142,8 +102,8 @@ export default function HomePage() {
 
       <section className="custom-container">
         <div className="grid grid-cols-2 gap-6 rounded-3xl bg-white p-6 shadow-md sm:grid-cols-4">
-          {stats.map((stat) => (
-            <div key={stat.label} className="text-center">
+          {stats.map((stat, idx) => (
+            <div key={idx} className="text-center">
               <p className="text-2xl font-bold text-[#1a478e]">{stat.value}</p>
               <p className="text-sm text-gray-500">{stat.label}</p>
             </div>
@@ -159,8 +119,8 @@ export default function HomePage() {
           </p>
         </div>
         <div className="grid gap-4 sm:grid-cols-3">
-          {features.map((feature) => (
-            <div key={feature.title} className="rounded-2xl bg-white p-5 shadow-md">
+          {features.map((feature, idx) => (
+            <div key={idx} className="rounded-2xl bg-white p-5 shadow-md">
               <h3 className="font-semibold text-[#1a478e]">{feature.title}</h3>
               <p className="mt-2 text-sm text-gray-600">{feature.description}</p>
             </div>
@@ -174,12 +134,12 @@ export default function HomePage() {
           <button className="text-sm font-semibold text-[#1a478e] hover:underline">Barchasini ko'rish</button>
         </div>
         <div className="mt-6 flex flex-wrap gap-3">
-          {categories.map((category) => (
+          {categories.map((category, idx) => (
             <span
-              key={category}
+              key={idx}
               className="rounded-full bg-white px-5 py-2 text-sm font-medium text-[#1a478e] shadow hover:bg-[#1a478e] hover:text-white transition"
             >
-              {category}
+              {category.label}
             </span>
           ))}
         </div>

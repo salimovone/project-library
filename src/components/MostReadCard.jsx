@@ -17,8 +17,8 @@ export default function MostReadCard({ book }) {
           <p className="text-xs text-gray-500">{book.author}</p>
         </div>
         <div className="flex items-center gap-2 text-xs text-gray-500">
-          {book.badges.map((badge) => (
-            <span key={badge} className="h-5 w-5 rounded bg-[#edf2f7]" />
+          {book.badges.map((badge, idx) => (
+            <span key={idx+1} className="h-5 w-5 rounded bg-[#edf2f7]" />
           ))}
           <span className="ml-auto flex items-center gap-1 text-sm font-semibold text-[#1a478e]">
             {book.rating}

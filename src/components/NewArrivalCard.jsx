@@ -16,8 +16,8 @@ export default function NewArrivalCard({ book }) {
         <p className="text-sm text-gray-500">{book.author}</p>
         <div className="mt-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            {book.badges.map((badge) => (
-              <span key={badge} className="h-6 w-6 rounded-md bg-[#edf2f7]" />
+            {book.badges.map((badge, idx) => (
+              <span key={idx+1} className="h-6 w-6 rounded-md bg-[#edf2f7]" />
             ))}
           </div>
           <div className="flex items-center gap-1 text-sm font-semibold text-[#1a478e]">
