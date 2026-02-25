@@ -1,81 +1,171 @@
-import React from "react";
-import { FaBookOpen, FaClock, FaTrophy, FaHeart } from "react-icons/fa";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router";
+import { NewArrivalCard } from "../components";
+import { fetchBooks, fetchLatestBooks } from "../services/bookService";
 
+// --- ELEGANT IKONALAR (Rasmdagidek ingichka, nafis) ---
+const BookIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="h-7 w-7 text-[#e02424] mb-3 mx-auto">
+    <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
+  </svg>
+);
+
+const ClockIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="h-7 w-7 text-[#e02424] mb-3 mx-auto">
+    <circle cx="12" cy="12" r="10" />
+    <polyline points="12 6 12 12 16 14" />
+  </svg>
+);
+
+const TrophyIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="h-7 w-7 text-[#e02424] mb-3 mx-auto">
+    <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+    <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+    <path d="M4 22h16" />
+    <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
+    <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
+    <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+  </svg>
+);
+
+const HeartIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="h-7 w-7 text-[#e02424] mb-3 mx-auto">
+    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+  </svg>
+);
+
+const TargetIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8 text-[#143c7b]">
+    <circle cx="12" cy="12" r="10" />
+    <circle cx="12" cy="12" r="6" />
+    <circle cx="12" cy="12" r="2" />
+  </svg>
+);
+
+// --- STATISTIKA DATASI ---
 const stats = [
-  {
-    id: 1,
-    label: "O'qilgan kitoblar soni",
-    value: 47,
-    icon: <FaBookOpen />,
-  },
-  {
-    id: 2,
-    label: "Jami o'qilgan soati",
-    value: 312,
-    icon: <FaClock />,
-  },
-  {
-    id: 3,
-    label: "Fakultetdagi reyting",
-    value: 12,
-    icon: <FaTrophy />,
-  },
-  {
-    id: 4,
-    label: "Sevimli kitoblar",
-    value: 47,
-    icon: <FaHeart />,
-  },
+  { id: 1, label: "O'qilgan kitoblar soni", value: 47, icon: <BookIcon /> },
+  { id: 2, label: "Jami o'qilgan soati", value: 312, icon: <ClockIcon /> },
+  { id: 3, label: "Fakultetdagi reyting", value: 12, icon: <TrophyIcon /> },
+  { id: 4, label: "Sevimli kitoblar", value: 47, icon: <HeartIcon /> },
 ];
 
+// --- 1. PROFIL QISMI ---
 function ProfileHeader() {
   return (
-    <div className="rounded-2xl bg-white p-6 shadow-[0_6px_20px_rgba(0,0,0,0.08)]">
-      <div className="flex items-center gap-4">
-        <div className="flex h-16 w-16 items-center justify-center rounded-full border border-red-300 text-2xl font-bold text-[#1a478e]">
+    <div className="rounded-2xl bg-white p-6 shadow-sm border border-gray-100">
+      <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5">
+        <div className="flex h-20 w-20 items-center justify-center rounded-full border-4 border-[#e02424] text-3xl text-[#143c7b] bg-white shrink-0">
           H
         </div>
-        <div>
-          <h1 className="text-xl font-semibold text-[#1a478e]">Husen Komilov</h1>
-          <p className="text-sm text-gray-500">@husenkomilov</p>
-          <p className="text-xs text-gray-400">Oxirgi tashrif 10 kun oldin.</p>
+        <div className="text-center sm:text-left pt-2">
+          <h1 className="text-2xl font-semibold text-[#143c7b] leading-tight">Husen Komilov</h1>
+          <div className="mt-1 flex flex-col sm:flex-row items-center gap-1 sm:gap-3 text-[15px]">
+            <span className="text-[#5174ac]">@husenkomilov</span>
+            <span className="hidden sm:inline text-gray-300">|</span>
+            <span className="text-gray-500">Oxirgi tashrif 10 kun oldin.</span>
+          </div>
         </div>
       </div>
     </div>
   );
 }
 
+// --- 2. STATISTIKA KARTALARI ---
 function StatsCard({ stat }) {
   return (
-    <div className="rounded-2xl bg-white p-5 text-center shadow-[0_6px_20px_rgba(0,0,0,0.08)]">
-      <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-[#edf2f7] text-[#1a478e]">
-        {stat.icon}
-      </div>
-      <p className="mt-3 text-2xl font-semibold text-[#1a478e]">{stat.value}</p>
-      <p className="mt-1 text-xs text-gray-500">{stat.label}</p>
+    <div className="flex flex-col justify-center rounded-2xl bg-white p-6 text-center shadow-sm border border-gray-100 transition hover:-translate-y-1">
+      {stat.icon}
+      <p className="text-[28px] font-bold text-[#143c7b] leading-none">{stat.value}</p>
+      <p className="mt-2 text-sm font-medium text-[#5174ac]">{stat.label}</p>
     </div>
   );
 }
 
-/**
- * UserPage Component
- * Responsibility: Display user profile overview
- */
-export default function UserPage() {
+// --- 3. MAQSAD (PROGRESS BAR) ---
+function GoalProgress() {
   return (
-    <div className="bg-[#f6f6f6] px-4 py-8 sm:px-6">
-      <div className="custom-container space-y-6">
+    <div className="rounded-2xl bg-white p-6 shadow-sm border border-gray-100 flex flex-col gap-5 mt-6">
+      <div className="flex justify-between items-end">
+        <div className="flex items-center gap-3">
+          <TargetIcon />
+          <div>
+            <h3 className="text-lg font-bold text-[#143c7b] leading-tight">O'qish maqsadi 2026</h3>
+            <p className="text-[13px] font-medium text-[#5174ac] mt-0.5">52 kitobdan 47 tasi</p>
+          </div>
+        </div>
+        <div className="text-right">
+          <p className="text-lg font-bold text-[#143c7b] leading-tight">90 %</p>
+          <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">Bajarildi</p>
+        </div>
+      </div>
+      
+      {/* Progress Line */}
+      <div className="w-full bg-[#edf2f7] rounded-full h-2.5 overflow-hidden">
+        <div className="bg-[#143c7b] h-2.5 rounded-full transition-all duration-1000" style={{ width: '90%' }}></div>
+      </div>
+      
+      <p className="text-sm font-medium text-[#5174ac]">
+        Siz muddatdan 3 ta kitob oldindasiz!
+      </p>
+    </div>
+  );
+}
+
+export default function UserPage() {
+
+    const [books, setBooks] = useState([]);
+  
+    let isMounted = false;
+    useEffect(() => {
+      if (isMounted) return;
+      fetchLatestBooks(4).then(setBooks);
+      setBooks(prev=>prev.slice(0, 4))
+      return () => {
+        isMounted = true;
+      };
+    }, []);
+
+  return (
+    <div className="min-h-screen bg-[#f8f9fa] py-8 font-sans">
+      <div className="max-w-300 mx-auto px-4 sm:px-6 space-y-6">
+        
+        {/* Yuqori Profil va Statistika */}
         <ProfileHeader />
+        
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           {stats.map((stat) => (
             <StatsCard key={stat.id} stat={stat} />
           ))}
         </div>
-        <div className="flex flex-wrap gap-4 text-xs text-gray-500">
-          <button className="rounded-full border border-gray-200 bg-white px-4 py-2">Sevimlilar</button>
-          <button className="rounded-full border border-gray-200 bg-white px-4 py-2">O'qilgan kitoblar</button>
-          <button className="rounded-full border border-gray-200 bg-white px-4 py-2">Istaklar ro'yxati</button>
+
+        {/* Maqsad (Progress Bar) */}
+        <GoalProgress />
+
+        {/* Tab Tugmalar (Filtrlar) */}
+        <div className="flex flex-wrap items-center gap-3 pt-4 pb-2">
+          {/* Faol tab dizayni (Rasmdagidek bir oz farq qiladi, faolini bg-white va shadow bilan qildim) */}
+          <button className="flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-[#143c7b] shadow-sm border border-gray-100 transition hover:bg-gray-50">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-gray-400"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+            Sevimlilar
+          </button>
+          <button className="flex items-center gap-2 rounded-full bg-transparent px-5 py-2.5 text-sm font-medium text-[#5174ac] transition hover:bg-white hover:shadow-sm">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-gray-400"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+            O'qilgan kitoblar
+          </button>
+          <button className="flex items-center gap-2 rounded-full bg-transparent px-5 py-2.5 text-sm font-medium text-[#5174ac] transition hover:bg-white hover:shadow-sm">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-gray-400"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
+            Istaklar ro'yxati
+          </button>
         </div>
+
+        {/* Kitoblar Ro'yxati */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-8 sm:gap-x-6">
+          {books.map((book) => (
+            <NewArrivalCard key={book.id} book={book} />
+          ))}
+        </div>
+
       </div>
     </div>
   );

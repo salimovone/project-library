@@ -5,6 +5,7 @@ import LibraryPage from '../pages/LibraryPage';
 import AudiobooksPage from '../pages/AudiobooksPage';
 import BookDetailPage from '../pages/BookDetailPage';
 import UserPage from '../pages/UserPage';
+import { AllBooks } from '../pages';
 
 // Router configuration - Single Responsibility: only defines routes
 // Uses MainLayout as parent route with Outlet for child pages
@@ -25,6 +26,10 @@ export const router = createBrowserRouter([
       {
         path: '/audiobooks',
         element: <AudiobooksPage />,
+      },
+      {
+        path: '/books',
+        element: <AllBooks />,
       },
       {
         path: '/books/:id',

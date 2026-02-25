@@ -5,3 +5,4 @@
 export { default as HomePage } from './HomePage';
 export { default as LibraryPage } from './LibraryPage';
 export { default as AudiobooksPage } from './AudiobooksPage';
+export { default as AllBooks } from './AllBooksPage';
