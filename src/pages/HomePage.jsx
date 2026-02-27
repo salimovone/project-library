@@ -11,14 +11,6 @@ import { fetchLatestBooks } from "../services/bookService";
 import { fetchCategories } from "../services/additional";
 import { useNavigate } from "react-router";
 
-// const categories = Array.from({length: 9}, () => ({
-// 	label: "Psixologiya",
-// 	icon: <FaBrain className="text-2xl text-[#1a478e]" />,
-// })).concat({
-// 	label: "Barchasi",
-// 	icon: <FaThLarge className="text-2xl text-[#1a478e]" />,
-// });
-
 const stats = [
 	{label: "Books Available", value: "50,000+"},
 	{label: "Active Members", value: "15,000+"},
