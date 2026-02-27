@@ -2,11 +2,12 @@ import api from './api';
 
 export async function fetchLatestBooks(howMany = 8) {
   let data = await api.get("kitob", {params: {"latest": howMany > 0}})
-  return data
+  return data.results
 }
 
 export async function fetchBooks() {
-  return api.get('/kitob');
+  let data = await api.get('/kitob')
+  return data.results;
 }
 
 export async function fetchBook(id) {
