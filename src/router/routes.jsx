@@ -7,6 +7,7 @@ import BookDetailPage from '../pages/BookDetailPage';
 import UserPage from '../pages/UserPage';
 import { AllBooks } from '../pages';
 import LoginPage from '../pages/Auth/LoginPage';
+import BookCreatePage from '../pages/BookCreatePage';
 
 // Router configuration - Single Responsibility: only defines routes
 // Uses MainLayout as parent route with Outlet for child pages
@@ -39,6 +40,10 @@ export const router = createBrowserRouter([
       {
         path: '/profile',
         element: <UserPage />,
+      },
+      {
+        path: "/createBook",
+        element: <BookCreatePage />
       },
       {
         path: '*',

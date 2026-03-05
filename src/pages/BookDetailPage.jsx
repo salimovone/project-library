@@ -5,25 +5,6 @@ import {useParams} from "react-router";
 import {fetchComments} from "../services/commentService";
 import { formatDateReadable } from "../utils/helper";
 
-const mockReviews = [
-	{
-		id: 1,
-		name: "Sarah Johnson",
-		time: "2 days ago",
-		rating: 5,
-		title: "Life-changing read!",
-		text: "This book absolutely blew me away.",
-	},
-	{
-		id: 2,
-		name: "Michael Chen",
-		time: "1 week ago",
-		rating: 4,
-		title: "Beautiful and thought-provoking",
-		text: "A beautiful exploration of regret...",
-	},
-];
-
 const reviewStats = [
 	{label: "5 star", value: 75},
 	{label: "4 star", value: 15},
@@ -92,7 +73,6 @@ function BookDetailsPanel({book}) {
 			})
 		: "Mavjud emas";
 
-	// Reytingni 5 yulduzlik sistemaga tushirish (agar 10 ballik bo'lsa, 2 ga bo'lamiz)
 	const normalizedRating =
 		book.rating > 5 ? (book.rating / 2).toFixed(1) : book.rating;
 
@@ -244,6 +224,7 @@ function ReviewList() {
 	useEffect(() => {
 		if (isMounted) return;
 		fetchComments(id).then(setComments);
+		
 		return () => {
 			isMounted = true;
 		};
@@ -268,8 +249,8 @@ function ReviewList() {
 							<div className="flex items-center justify-between mb-2">
 								<div>
 									<p className="text-sm font-bold text-gray-800">
-										{/* {review.name} */}
-                    John Doe
+										{/* {review.user.first_name} {review.user.last_name} */}
+										{review.user.username}
 									</p>
 									<p className="text-xs text-gray-400 font-medium">
 										{formatDateReadable(review.c_at)}
@@ -281,10 +262,7 @@ function ReviewList() {
 									))}
 								</div>
 							</div>
-							<h4 className="text-sm font-semibold text-gray-800">
-								{/* {review.title} */}
-                  comment title
-							</h4>
+						
 							<p className="mt-1 text-sm text-gray-600 leading-relaxed">
 								{review.content}
 							</p>

@@ -3,7 +3,7 @@ export const formatDateReadable = (isoString) => {
 
     return date.toLocaleString('uz-UZ', {
         year: 'numeric',
-        month: 'long',
+        month: 'numeric',
         day: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
