@@ -12,19 +12,13 @@ export const AuthProvider = ({ children }) => {
     const initializeAuth = async () => {
       const accessToken = localStorage.getItem('access');
       
-      if (accessToken) {
-        setIsAuthenticated(true);
-        
-        // TODO: Backendga /token/verify/ qo'shilganda shu qismni ishlatiladi:
-        /*
+      if (accessToken) {        
         try {
           await api.post('/token/verify/', { token: accessToken });
           setIsAuthenticated(true);
         } catch (error) {
-          // Token noto'g'ri bo'lsa, logout qilamiz (interceptor o'zi hal qiladi)
           console.error("Token verification failed");
         }
-        */
       }
       setLoading(false);
     };
