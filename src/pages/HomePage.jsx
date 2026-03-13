@@ -11,13 +11,6 @@ import { fetchLatestBooks } from "../services/bookService";
 import { fetchCategories } from "../services/additional";
 import { useNavigate } from "react-router";
 
-const stats = [
-	{label: "Books Available", value: "50,000+"},
-	{label: "Active Members", value: "15,000+"},
-	{label: "Categories", value: "200+"},
-	{label: "Access", value: "24/7"},
-];
-
 /**
  * HomePage Component
  * Responsibility: Compose the home page layout
@@ -32,9 +25,9 @@ export default function HomePage() {
 	useEffect(() => {
 		if(isMounted) return;
 
-		fetchLatestBooks().then((data) => setNewArrivals(data))
-		fetchLatestBooks(6).then((data) => setMostRead(data))
-		fetchCategories().then(data => {setCategories(data)})
+		fetchLatestBooks().then(setNewArrivals)
+		fetchLatestBooks(6).then(setMostRead)
+		fetchCategories().then(setCategories)
 
 		return () => {
 			isMounted = true;
@@ -86,7 +79,7 @@ export default function HomePage() {
 				</div>
 			</section>
 
-			<StatsBar stats={stats} />
+			<StatsBar />
 		</div>
 	);
 }

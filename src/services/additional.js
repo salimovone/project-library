@@ -5,6 +5,12 @@ export async function fetchCategories() {
   return data.results
 }
 
+export async function fetchMainPageStats() {
+  let data = await api.get("/main-page-stats/")
+  return data
+}
+
 export default {
-    fetchCategories
+    fetchCategories,
+    fetchMainPageStats
 }
