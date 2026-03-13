@@ -10,7 +10,13 @@ export async function fetchMainPageStats() {
   return data
 }
 
+export async function fetchUserProfileStats(user_id) {
+  let data = await api.get("/user-profile-stats", { params: { "user_id": user_id } })
+  return data
+}
+
 export default {
     fetchCategories,
-    fetchMainPageStats
+    fetchMainPageStats,
+    fetchUserProfileStats
 }
