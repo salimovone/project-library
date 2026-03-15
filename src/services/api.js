@@ -56,7 +56,6 @@ api.interceptors.response.use(
       if (!refreshToken) {
         processQueue(new Error("No refresh token"), null);
         localStorage.clear();
-        window.location.href = '/login';
         return Promise.reject(error);
       }
 

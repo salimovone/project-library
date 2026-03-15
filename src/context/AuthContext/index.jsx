@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from 'react';
 import api from '../../services/api';
+import { useNavigate } from 'react-router';
 
 export const AuthContext = createContext(null);
 
@@ -7,7 +8,7 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(localStorage.getItem('access') != null );
   const [loading, setLoading] = useState(false);
 
-  const login = async (username, password) => {
+  const login = async (username, password, callback = null) => {
     try {
       setLoading(true);
       const response = await api.post('/token/', { username, password });
@@ -22,6 +23,7 @@ export const AuthProvider = ({ children }) => {
       throw error;
     }finally {
       setLoading(false);
+      callback && callback();
     }
   };
 

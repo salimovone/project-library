@@ -1,13 +1,8 @@
 import { RouterProvider } from 'react-router';
-import { authRouter, router } from './router/routes';
-import useAuth from './hooks/useAuth';
+import { router } from './router/routes';
 
 function App() {
-  const { isAuthenticated } = useAuth();
-  if(isAuthenticated)
-    return <RouterProvider router={router} />;
-  else 
-    return <RouterProvider router={authRouter} />;
+  return <RouterProvider router={router} />;
 }
 
 export default App;

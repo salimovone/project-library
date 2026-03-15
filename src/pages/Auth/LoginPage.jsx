@@ -2,18 +2,25 @@ import { useState } from "react";
 import { FiUser, FiEyeOff, FiEye, FiArrowRight } from "react-icons/fi";
 import logo from "../../assets/logo.png";
 import useAuth from "../../hooks/useAuth";
+import { useNavigate } from "react-router";
 
 export default function LoginPage() {
+  const { login, loading, isAuthenticated, logout } = useAuth();
   const [useId, setuseId] = useState("");
   const [password, setPassword] = useState("");  
   const [showPassword, setShowPassword] = useState(false);
-  const { login, loading, isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
+  
+  if(isAuthenticated)
+    navigate('/')
 
   const handleLogin = (e) => {
     e.preventDefault();
     if(isAuthenticated)
       logout();
-    login(useId, password)
+    login(useId, password, () => navigate('/'))
+    if(isAuthenticated)
+      navigate('/')
   };
 
   return (

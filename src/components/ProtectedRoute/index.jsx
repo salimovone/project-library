@@ -1,9 +1,8 @@
 import { Navigate, Outlet } from 'react-router';
+import useRole from '../../hooks/useRole';
 
-export default function ProtectedRoute({ allowedRoles }) {
-  const { role, loading } = useRole();
-
-  if (loading) return <div>Yuklanmoqda...</div>;
-
-  return allowedRoles.includes(role) ? <Outlet /> : <Navigate to="/" replace />;
+export default function ProtectedRoute({ requiredRole, strict = false }) {
+  const { checkUserLevel, role } = useRole();
+  if(strict && role != requiredRole) return <Navigate to="/" replace />;
+  return checkUserLevel(requiredRole) ? <Outlet /> : <Navigate to="/" replace />;
 }
