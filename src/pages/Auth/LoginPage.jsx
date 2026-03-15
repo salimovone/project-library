@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { FiUser, FiEyeOff, FiEye, FiArrowRight } from "react-icons/fi";
 import logo from "../../assets/logo.png";
 import { useAuth } from "../../context/AuthContext";
@@ -10,9 +10,7 @@ export default function LoginPage() {
   const { login, loading } = useAuth();
 
   const handleLogin = (e) => {
-    e.preventDefault(); // Sahifa yangilanib ketishining oldini oladi
-    // Bu yerda API ga login so'rovini (POST) yuborish logikasi yoziladi.
-    console.log("Login ma'lumotlari:", { useId, password });
+    e.preventDefault();
     login(useId, password)
   };
 
@@ -88,8 +86,9 @@ export default function LoginPage() {
 
           {/* Kirish Tugmasi */}
           <button
+            disabled={loading}
             type="submit"
-            className="w-full flex items-center justify-center gap-2 bg-[#003282] hover:bg-blue-900 text-white font-medium py-3.5 rounded-xl transition-colors duration-200 mt-2"
+            className="w-full flex items-center justify-center gap-2 bg-[#003282] hover:bg-blue-900 disabled:bg-blue-700 active:bg-blue-700 text-white font-medium py-3.5 rounded-xl transition-colors duration-200 mt-2"
           >
             Kirish <FiArrowRight className="text-lg" />
           </button>

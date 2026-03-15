@@ -1,48 +1,54 @@
 @import "tailwindcss";
 
-/* Asosiy container sinfi */
-.custom-container {
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 1rem;   /* 16px */
-  padding-right: 1rem;
+@layer components {
+  .custom-container {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    max-width: 100%;
 
-  /* Mobil → kichik ekranlar */
-  max-width: 100%;
+    @media (min-width: 640px) {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+      max-width: 640px;
+    }
 
-  /* sm (≥640px) */
-  @media (min-width: 640px) {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-    max-width: 640px;
+    @media (min-width: 768px) {
+      padding-left: 2rem;
+      padding-right: 2rem;
+      max-width: 768px;
+    }
+
+    @media (min-width: 1024px) {
+      padding-left: 3rem;
+      padding-right: 3rem;
+      max-width: 1024px;
+    }
+
+    @media (min-width: 1280px) {
+      padding-left: 4rem;
+      padding-right: 4rem;
+      max-width: 1280px;
+    }
+
+    @media (min-width: 1536px) {
+      padding-left: 5rem;
+      padding-right: 5rem;
+      max-width: 1480px; 
+    }
+  }
+}
+
+@layer utilities {
+  .no-arrow {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
   }
 
-  /* md (≥768px) */
-  @media (min-width: 768px) {
-    padding-left: 2rem;
-    padding-right: 2rem;
-    max-width: 768px;
-  }
-
-  /* lg (≥1024px) → Full HD da yaxshi ochiladi */
-  @media (min-width: 1024px) {
-    padding-left: 3rem;
-    padding-right: 3rem;
-    max-width: 1024px;
-  }
-
-  /* xl (≥1280px) */
-  @media (min-width: 1280px) {
-    padding-left: 4rem;
-    padding-right: 4rem;
-    max-width: 1280px;
-  }
-
-  /* 2xl (≥1536px) — Full HD va undan kattaroq ekranlar uchun */
-  @media (min-width: 1536px) {
-    padding-left: 5rem;
-    padding-right: 5rem;
-    max-width: 1480px;     /* yoki 1400px / 1440px / 1600px qo'yishingiz mumkin */
+  .no-arrow::-ms-expand {
+    display: none;
   }
 }

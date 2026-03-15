@@ -1,4 +1,4 @@
-import { Link } from "react-router"; // react-router-dom dan import qilinishi kerak
+import { Link } from "react-router"; // react-router dan import qilinishi kerak
 
 /**
  * NewArrivalCard Component
