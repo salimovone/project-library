@@ -1,6 +1,6 @@
 import { RouterProvider } from 'react-router';
 import { authRouter, router } from './router/routes';
-import { useAuth } from './context/AuthContext';
+import useAuth from './hooks/useAuth';
 
 function App() {
   const { isAuthenticated } = useAuth();

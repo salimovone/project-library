@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect, useContext } from 'react';
 import api from '../../services/api';
 
-const AuthContext = createContext(null);
+export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -42,7 +42,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Tizimdan chiqish funksiyasi
   const logout = () => {
     localStorage.removeItem('access');
     localStorage.removeItem('refresh');
@@ -55,14 +54,5 @@ export const AuthProvider = ({ children }) => {
       {!loading && children}
     </AuthContext.Provider>
   );
-};
-
-// Istalgan joyda ishlatish uchun Custom Hook
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
 };
 

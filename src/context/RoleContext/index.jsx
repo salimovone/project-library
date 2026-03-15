@@ -1,8 +1,20 @@
-import React from 'react'
+import { createContext } from "react";
 
-const index = () => {
+export const RoleContext = createContext(null);
+
+const index = ({ children }) => {
+  const ROLES = {
+    GUEST: 1,
+    STUDENT: 2,
+    TEACHER: 3,
+    LIBRARIAN: 4,
+    ADMIN: 5,
+  };
+
   return (
-    <div>index</div>
+    <RoleContext.Provider value={ROLES}>
+      {children}
+    </RoleContext.Provider>
   )
 }
 

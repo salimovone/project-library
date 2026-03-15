@@ -6,7 +6,6 @@ import {formatDateReadable} from "../utils/helper";
 import {fetchBookmarks, getMe} from "../services/userService";
 import {fetchUserProfileStats} from "../services/additional";
 
-// --- ELEGANT IKONALAR ---
 const BookIcon = () => (
 	<svg
 		viewBox="0 0 24 24"
@@ -85,7 +84,6 @@ const TargetIcon = () => (
 	</svg>
 );
 
-// --- STATISTIKA DATASI ---
 const stats = [
 	{
 		id: 1,
@@ -103,7 +101,6 @@ const stats = [
 	{id: 4, label: "Saqlangan kitoblar", stat: "bookmarks", icon: <HeartIcon />},
 ];
 
-// --- 1. PROFIL QISMI ---
 function ProfileHeader({user}) {
 	return (
 		<div className="rounded-2xl bg-white p-6 shadow-sm border border-gray-100">
@@ -116,8 +113,6 @@ function ProfileHeader({user}) {
 						{user.first_name ? user.first_name : "Kitobxon"} {user.last_name}
 					</h1>
 					<div className="mt-1 flex flex-col sm:flex-row items-center gap-1 sm:gap-3 text-[15px]">
-						{/* <span className="text-[#5174ac]">@{user.username}</span> */}
-						{/* <span className="hidden sm:inline text-gray-300">|</span> */}
 						<span className="text-gray-500">
 							{formatDateReadable(user.last_login)}
 						</span>
@@ -128,7 +123,6 @@ function ProfileHeader({user}) {
 	);
 }
 
-// --- 2. STATISTIKA KARTALARI ---
 function StatsCard({stat, value}) {
 	return (
 		<div className="flex flex-col justify-center rounded-2xl bg-white p-6 text-center shadow-sm border border-gray-100 transition hover:-translate-y-1">
@@ -141,7 +135,6 @@ function StatsCard({stat, value}) {
 	);
 }
 
-// --- 3. MAQSAD (PROGRESS BAR) ---
 function GoalProgress({hideProgress}) {
 	if (hideProgress) return null;
 	return (
@@ -239,7 +232,6 @@ export default function UserPage() {
 
 				<GoalProgress hideProgress={true} />
 
-				{/* Tab Tugmalar (Filtrlar) */}
 				<div className="flex flex-wrap items-center gap-3 pt-4 pb-2">
 					<button
 						onClick={() => setFilters("read")}
@@ -278,7 +270,6 @@ export default function UserPage() {
 					</button>
 				</div>
 
-				{/* Kitoblar Ro'yxati */}
 				<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-8 sm:gap-x-6">
 					{books.map(book => (
 						<NewArrivalCard key={book.id} book={book} />
