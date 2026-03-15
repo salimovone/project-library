@@ -1,10 +1,10 @@
-import { createContext, useState, useEffect, useContext } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import api from '../../services/api';
 
 export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(localStorage.getItem('access') != null );
   const [loading, setLoading] = useState(false);
 
   const login = async (username, password) => {

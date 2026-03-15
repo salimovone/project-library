@@ -7,10 +7,12 @@ export default function LoginPage() {
   const [useId, setuseId] = useState("");
   const [password, setPassword] = useState("");  
   const [showPassword, setShowPassword] = useState(false);
-  const { login, loading } = useAuth();
+  const { login, loading, isAuthenticated, logout } = useAuth();
 
   const handleLogin = (e) => {
     e.preventDefault();
+    if(isAuthenticated)
+      logout();
     login(useId, password)
   };
 
