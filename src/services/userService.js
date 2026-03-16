@@ -1,7 +1,7 @@
 import api from './api';
 
 export async function getMe() {
-  let data = await api.get("/me")
+  let data = await api.get("/me/")
   return data
 }
 

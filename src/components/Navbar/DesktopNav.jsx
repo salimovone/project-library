@@ -27,7 +27,7 @@ const DesktopNav = ({ categories }) => {
                 className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition"
                 onClick={() => setIsDropdownOpen(false)}
               >
-                {cat.name}
+                {cat?.name}
               </Link>
             ))}
             
@@ -44,7 +44,7 @@ const DesktopNav = ({ categories }) => {
         )}
       </div>
 
-      <Link to={"/library"} className="text-gray-700 hover:text-blue-600 font-medium transition">
+      <Link to={"/books"} className="text-gray-700 hover:text-blue-600 font-medium transition">
         Kutubxona
       </Link>
       <Link to={"/audiobooks"} className="text-gray-700 hover:text-blue-600 font-medium transition">

@@ -60,7 +60,7 @@ export default function HomePage() {
 						<CategoryCard
 							key={category.id}
 							icon={<FaBrain className="text-2xl text-[#1a478e]"/>}
-							label={category.name}
+							label={category?.name}
 						/>
 					))}
 					<CategoryCard

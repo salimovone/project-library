@@ -30,7 +30,7 @@ const MobileNav = ({ categories, closeMenu }) => {
                   className="text-sm text-gray-600 hover:text-blue-600 py-1"
                   onClick={closeMenu}
                 >
-                  {cat.name}
+                  {cat?.name}
                 </Link>
               ))}
               {hasMoreCategories && (
@@ -47,7 +47,7 @@ const MobileNav = ({ categories, closeMenu }) => {
         </div>
 
         <Link 
-          to={"/library"} 
+          to={"/books"} 
           className="block text-gray-700 hover:text-blue-600 font-medium py-2 transition"
           onClick={closeMenu}
         >

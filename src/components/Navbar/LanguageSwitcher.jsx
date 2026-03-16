@@ -24,7 +24,7 @@ const LanguageSwitcher = () => {
         onClick={toggleDropdown}
         className="flex-1 h-10 rounded px-3 py-2 bg-[#f3f3f3] text-[#003282] text-sm font-medium flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-blue-600"
       >
-        <span>{selectedLanguage.name}</span>
+        <span>{selectedLanguage?.name}</span>
         <BiChevronDown className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
@@ -36,7 +36,7 @@ const LanguageSwitcher = () => {
               onClick={() => selectLanguage(lang)}
               className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition"
             >
-              {lang.name}
+              {lang?.name}
             </button>
           ))}
         </div>

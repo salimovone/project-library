@@ -33,7 +33,7 @@ function BookCoverCard({book}) {
 		<div className="rounded-2xl bg-white h-full p-6 shadow-[0_6px_20px_rgba(0,0,0,0.08)] self-start sticky top-24">
 			<img
 				src={imageUrl}
-				alt={book.name}
+				alt={book?.name}
 				className="h-100 w-full rounded-2xl object-cover shadow-sm"
 			/>
 			<div className="mt-6 space-y-3">
@@ -81,7 +81,7 @@ function BookDetailsPanel({book}) {
 			<div className="flex justify-between items-start gap-4">
 				<div>
 					<h1 className="text-3xl font-bold text-[#1a478e] leading-tight">
-						{book.name}
+						{book?.name}
 					</h1>
 					<p className="text-base text-gray-500 mt-1 font-medium">
 						by {book.author}
@@ -161,7 +161,7 @@ function BookDetailsPanel({book}) {
 								key={tag.id}
 								className="rounded-md bg-[#edf2f7] px-3 py-1.5 text-xs font-semibold text-[#1a478e] capitalize hover:bg-blue-100 cursor-pointer transition"
 							>
-								#{tag.name}
+								#{tag?.name}
 							</span>
 						))}
 					</div>
