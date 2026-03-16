@@ -28,9 +28,11 @@ export async function fetchBooks(filters) {
   }
 
   if (filters?.book_format) {
-    const formats = Object.keys(filters.book_format).filter(key => filters.book_format[key]);
+    const formats = Object.keys(filters.book_format).filter(key => !filters.book_format[key]);
     if (formats.length > 0) {
-      params.book_format = formats.join(',');
+      for (const element of formats) {
+        params[element] = false;   
+      }
     }
   }
 
