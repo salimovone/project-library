@@ -3,7 +3,7 @@ import {FaStar, FaHeadphones, FaBookmark, FaDownload} from "react-icons/fa";
 import {fetchBook} from "../services/bookService";
 import {useParams} from "react-router";
 import {fetchComments} from "../services/commentService";
-import { formatDateReadable } from "../utils/helper";
+import {formatDateReadable} from "../utils/helper";
 
 const reviewStats = [
 	{label: "5 star", value: 75},
@@ -83,9 +83,13 @@ function BookDetailsPanel({book}) {
 					<h1 className="text-3xl font-bold text-[#1a478e] leading-tight">
 						{book?.name}
 					</h1>
-					<p className="text-base text-gray-500 mt-1 font-medium">
-						by {book.author}
-					</p>
+					{book.author &&
+						book.author.length &&
+						book.author.map((author, idx) => (
+							<p key={idx+1} className="text-base text-gray-500 mt-1 font-medium">
+								by {author.name}
+							</p>
+						))}
 				</div>
 
 				{/* Omborda bor/yo'qligi */}
@@ -224,7 +228,7 @@ function ReviewList() {
 	useEffect(() => {
 		if (isMounted) return;
 		fetchComments(id).then(setComments);
-		
+
 		return () => {
 			isMounted = true;
 		};
@@ -262,7 +266,7 @@ function ReviewList() {
 									))}
 								</div>
 							</div>
-						
+
 							<p className="mt-1 text-sm text-gray-600 leading-relaxed">
 								{review.content}
 							</p>
