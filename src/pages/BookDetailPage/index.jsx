@@ -12,6 +12,7 @@ export default function BookDetailPage() {
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
+  const [newComment, setNewComment] = useState(null);
 
   useEffect(() => {
     setLoading(true);
@@ -46,8 +47,8 @@ export default function BookDetailPage() {
 
         {/* Pastki qism: Sharhlar va Reytinglar (max-w cheklovi olib tashlandi) */}
         <div className="space-y-6 w-full">
-          <ReviewSummary />
-          <ReviewList />
+          <ReviewSummary book={book} onCommentPosted={setNewComment} userRating={1} />
+          <ReviewList newComment={newComment} />
         </div>
       </div>
     </div>

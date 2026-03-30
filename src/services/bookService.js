@@ -1,7 +1,7 @@
 import api from './api';
 
 export async function fetchLatestBooks(howMany = 8) {
-  let data = await api.get("kitob", {params: {"page_size": howMany, "sort": "latest"}})
+  let data = await api.get("/kitob/", {params: {"page_size": howMany, "sort": "latest"}})
   return data.results
 }
 
@@ -67,14 +67,19 @@ export const getAuthors = async () => {
   return res.results;
 }
 
+export const getBookStats = async (bookId) => {
+  const res = await api.get(`/book-detail-stats/`, { params: { book_id: bookId } });
+  return res;
+};
 
 export default {
   fetchLatestBooks,
   fetchBooks,
-  fetchBook,
+  fetchBook,  
   createBook,
   updateBook,
   deleteBook,
   getTags,
-  getAuthors
+  getAuthors,
+  getBookStats
 };
