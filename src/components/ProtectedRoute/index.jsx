@@ -3,6 +3,7 @@ import useRole from '../../hooks/useRole';
 
 export default function ProtectedRoute({ requiredRole, strict = false }) {
   const { checkUserLevel, role } = useRole();
+  console.log(`role: ${role}, requiredRole: ${requiredRole}, strict: ${strict}, checkUserLevel: ${checkUserLevel(requiredRole)}`);
   if(strict && role != requiredRole) return <Navigate to="/" replace />;
   return checkUserLevel(requiredRole) ? <Outlet /> : <Navigate to="/" replace />;
 }

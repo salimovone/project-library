@@ -1,10 +1,13 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect, useRef } from "react";
 import { getMe } from "../../services/userService";
 
 export const RoleContext = createContext(null);
 
 export const RoleProvider = ({ children }) => {
   const [role, setRole] = useState("guest");
+  const [isLoading, setIsLoading] = useState(true);
+  const hasFetched = useRef(false);
+
   const ROLES = {
     guest: 1,
     student: 2,
@@ -13,15 +16,24 @@ export const RoleProvider = ({ children }) => {
     admin: 5,
   };
 
-  const getCurrentUserRole = () => {
-    try {
-      getMe().then((data) => {
-        setRole(data.role);
-      });
-    } catch (error) {}
-  };
+  useEffect(() => {
+    if (hasFetched.current) return;
 
-  useState(() => {
+    const getCurrentUserRole = async () => {
+      try {
+        hasFetched.current = true;
+        const data = await getMe();
+        if (data && data.role) {
+          setRole(data.role);
+        }
+      } catch (error) {
+        console.error("Role olishda xatolik:", error);
+        setRole("guest");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
     getCurrentUserRole();
   }, []);
 
@@ -30,8 +42,8 @@ export const RoleProvider = ({ children }) => {
   };
 
   return (
-    <RoleContext.Provider value={{ checkUserLevel, role }}>
-      {children}
+    <RoleContext.Provider value={{ checkUserLevel, role, isLoading }}>
+      {!isLoading ? children : <div className="flex h-screen items-center justify-center">Yuklanmoqda...</div>}
     </RoleContext.Provider>
   );
 };
