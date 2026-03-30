@@ -56,17 +56,18 @@ export default function HomePage() {
 					Sizni nima qiziqtiradi?
 				</h2>
 				<div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-					{categories.map((category, idx) => (
+					{categories.map((category) => (
 						<CategoryCard
 							key={category.id}
-							icon={<FaBrain className="text-2xl text-[#1a478e]"/>}
+							// icon={<FaBrain className="text-2xl text-[#1a478e]"/>}
+							icon={category.icon ? category.icon : "default"}
 							label={category?.name}
 						/>
 					))}
-					<CategoryCard
+					{/* <CategoryCard
 						icon={<FaThLarge className="text-2xl text-[#1a478e]"/>}
 						label={"Barchasi"}
-					/>
+					/> */}
 				</div>
 			</section>
 
