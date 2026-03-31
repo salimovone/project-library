@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { MdClose } from "react-icons/md";
-import { fetchCategories } from "../../services/additional";
+import { fetchCategories, fetchSubcategories } from "../../services/additional";
 import {Actions, DesktopNav, Logo, MobileNav} from "./components";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [categoriesData, setCategoriesData] = useState([]);
+  const [subcategoriesData, setSubcategoriesData] = useState([]);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -18,9 +19,10 @@ const Navbar = () => {
 
   useEffect(() => {
     let isMounted = true;
-    fetchCategories().then(data => {
+    Promise.all([fetchCategories(), fetchSubcategories()]).then(([catData, subcatData]) => {
       if (isMounted) {
-        setCategoriesData(data);
+        setCategoriesData(catData);
+        setSubcategoriesData(subcatData);
       }
     });
     return () => {
@@ -33,7 +35,7 @@ const Navbar = () => {
       <div className="custom-container mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
           <Logo />
-          <DesktopNav categories={categoriesData} />
+          <DesktopNav categories={categoriesData} subcategories={subcategoriesData} />
           <Actions />
           
           <div className="flex md:hidden items-center">
@@ -47,7 +49,7 @@ const Navbar = () => {
         </div>
 
         {isMenuOpen && (
-          <MobileNav categories={categoriesData} closeMenu={closeMenu} />
+          <MobileNav categories={categoriesData} subcategories={subcategoriesData} closeMenu={closeMenu} />
         )}
       </div>
     </nav>

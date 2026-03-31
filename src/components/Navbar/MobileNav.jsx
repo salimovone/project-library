@@ -5,8 +5,9 @@ import { BiBell, BiChevronDown } from 'react-icons/bi';
 import { IoPersonOutline } from 'react-icons/io5';
 import LanguageSwitcher from './LanguageSwitcher';
 
-const MobileNav = ({ categories, closeMenu }) => {
+const MobileNav = ({ categories, subcategories = [], closeMenu }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [activeCategory, setActiveCategory] = useState(null);
   const displayCategories = categories.slice(0, 5);
   const hasMoreCategories = categories.length > 5;
 
@@ -23,16 +24,46 @@ const MobileNav = ({ categories, closeMenu }) => {
           
           {isDropdownOpen && (
             <div className="pl-4 py-2 flex flex-col gap-2 border-l-2 border-gray-100 ml-2 mt-1">
-              {displayCategories.map(cat => (
-                <Link 
-                  key={cat.id} 
-                  to={`/category/${cat.id}`} 
-                  className="text-sm text-gray-600 hover:text-blue-600 py-1"
-                  onClick={closeMenu}
-                >
-                  {cat?.name}
-                </Link>
-              ))}
+              {displayCategories.map(cat => {
+                const catSubcategories = subcategories.filter(sub => sub.category === cat.id);
+                const isCatActive = activeCategory === cat.id;
+
+                return (
+                  <div key={cat.id} className="flex flex-col">
+                    <div className="flex justify-between items-center">
+                      <Link 
+                        to={`/category/${cat.id}`} 
+                        className="text-sm text-gray-600 hover:text-blue-600 py-1 flex-1"
+                        onClick={closeMenu}
+                      >
+                        {cat?.name}
+                      </Link>
+                      {catSubcategories.length > 0 && (
+                        <button 
+                          onClick={() => setActiveCategory(isCatActive ? null : cat.id)}
+                          className="px-2"
+                        >
+                          <BiChevronDown className={`transition-transform duration-200 ${isCatActive ? 'rotate-180' : ''}`} />
+                        </button>
+                      )}
+                    </div>
+                    {isCatActive && catSubcategories.length > 0 && (
+                      <div className="pl-4 py-1 flex flex-col gap-1 border-l-2 border-gray-50 ml-2">
+                        {catSubcategories.map(sub => (
+                          <Link 
+                            key={sub.id} 
+                            to={`/category/${cat.id}?subcategory=${sub.id}`} 
+                            className="text-xs text-gray-500 hover:text-blue-600 py-1"
+                            onClick={closeMenu}
+                          >
+                            {sub?.name}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
               {hasMoreCategories && (
                 <Link 
                   to="/categories" 

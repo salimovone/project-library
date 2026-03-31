@@ -5,6 +5,11 @@ export async function fetchCategories() {
   return data.results
 }
 
+export async function fetchSubcategories() {
+  let data = await api.get("/subcategories/")
+  return data.results
+}
+
 export async function fetchMainPageStats() {
   let data = await api.get("/main-page-stats/")
   return data
@@ -17,6 +22,7 @@ export async function fetchUserProfileStats(user_id) {
 
 export default {
     fetchCategories,
+    fetchSubcategories,
     fetchMainPageStats,
     fetchUserProfileStats
 }

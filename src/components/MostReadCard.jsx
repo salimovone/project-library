@@ -42,6 +42,7 @@ export default function MostReadCard({ book }) {
           {/* Format ikonalari (Bir xil qalinlikdagi Outline ikonalar) */}
           <div className="flex items-center gap-2">
             {/* Kitob ikonasi (Ko'k) */}
+            {book.is_physical && (
             <svg
               viewBox="0 0 24 24"
               fill="none"
@@ -54,11 +55,12 @@ export default function MostReadCard({ book }) {
               <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
               <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
             </svg>
-
+            )}
             {/* Vertikal chiziq ajratgich */}
-            <div className="h-3 w-[1.5px] bg-gray-300 rounded-full"></div>
 
             {/* Quloqchin ikonasi (Qizil) */}
+            <div className="h-3 w-[1.5px] bg-gray-300 rounded-full"></div>
+            {book.has_audio && (
             <svg
               viewBox="0 0 24 24"
               fill="none"
@@ -71,11 +73,12 @@ export default function MostReadCard({ book }) {
               <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
               <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
             </svg>
-
+            )}
             {/* Vertikal chiziq ajratgich */}
             <div className="h-3 w-[1.5px] bg-gray-300 rounded-full"></div>
 
             {/* Planshet/Ekran ikonasi (Olovrang) */}
+            {book.has_pdf && (
             <svg
               viewBox="0 0 24 24"
               fill="none"
@@ -88,6 +91,7 @@ export default function MostReadCard({ book }) {
               <rect width="16" height="20" x="4" y="2" rx="2" ry="2" />
               <line x1="12" x2="12.01" y1="18" y2="18" />
             </svg>
+            )}
           </div>
 
           {/* Reyting va Yulduz */}
