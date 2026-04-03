@@ -61,7 +61,7 @@ export default function BookCreatePage() {
         <form onSubmit={handleSubmit} className="max-w-5xl mx-auto space-y-8">
           
           {/* 1. ASOSIY MA'LUMOTLAR FORMASI */}
-          <div className="bg-[#f6f8fa] border border-[#d1d9e6] rounded-[24px] p-8 shadow-sm">
+          <div className="bg-[#f6f8fa] border border-[#d1d9e6] rounded-3xl p-8 shadow-sm">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Kitob nomi */}
               <div className="space-y-1.5">
@@ -148,7 +148,7 @@ export default function BookCreatePage() {
           </div>
 
           {/* 2. RASMLAR JADVALI */}
-          <div className="bg-[#f6f8fa] border border-[#d1d9e6] rounded-[24px] overflow-hidden shadow-sm">
+          <div className="bg-[#f6f8fa] border border-[#d1d9e6] rounded-3xl overflow-hidden shadow-sm">
             <table className="w-full text-center border-collapse">
               <thead>
                 <tr className="border-b border-[#d1d9e6]">
@@ -171,7 +171,7 @@ export default function BookCreatePage() {
                       <input
                         type="number"
                         placeholder="Tartib raqam ..."
-                        className="w-full max-w-[150px] mx-auto border border-gray-300 rounded-lg py-2 px-3 text-sm focus:outline-none"
+                        className="w-full max-w-37.5 mx-auto border border-gray-300 rounded-lg py-2 px-3 text-sm focus:outline-none"
                         value={imgRow.order}
                         onChange={(e) => handleImageChange(imgRow.id, "order", e.target.value)}
                       />

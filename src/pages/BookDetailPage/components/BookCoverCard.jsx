@@ -40,7 +40,6 @@ export default function BookCoverCard({ book }) {
   const [currentStatus, setCurrentStatus] = useState(book.reservation_status); 
   const [loading, setLoading] = useState(false);
 
-  // Statusga qarab tugma ko'rinishini aniqlash
   const statusConfig = useMemo(() => {
     switch (currentStatus) {
       case "pending":
