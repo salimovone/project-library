@@ -18,7 +18,7 @@ export default function LoginPage() {
     e.preventDefault();
     if(isAuthenticated)
       logout();
-    login(useId, password, () => navigate('/'))
+    login(useId, password, () => {window.location.reload()});
     if(isAuthenticated)
       navigate('/')
   };
