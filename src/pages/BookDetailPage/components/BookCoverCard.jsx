@@ -8,6 +8,34 @@ export default function BookCoverCard({ book }) {
   const imageUrl = book.img ? book.img : fallbackImg;
   const { checkUserLevel } = useRole();
 
+ const handleDownloadURL = async () => {
+  if (!book.pdf) return;
+
+  try {
+    const fileUrl = book.pdf;
+    const fileName = fileUrl.split("/").pop() || "kitob.pdf";
+
+    const response = await fetch(fileUrl);
+    
+    const blob = await response.blob();
+    
+    const url = window.URL.createObjectURL(blob);
+    
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', fileName); // Fayl nomini beramiz
+    document.body.appendChild(link);
+    
+    link.click();
+
+    link.parentNode.removeChild(link);
+    window.URL.revokeObjectURL(url); 
+  } catch (error) {
+    console.error("Yuklab olishda xatolik:", error);
+    window.open(book.pdf, '_blank');
+  }
+};
+
   // Lokal holatni boshqarish
   const [currentStatus, setCurrentStatus] = useState(book.reservation_status); 
   const [loading, setLoading] = useState(false);
@@ -85,7 +113,7 @@ export default function BookCoverCard({ book }) {
       
       <div className="mt-6 space-y-3">
         {book.has_pdf && (
-          <button className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-orange-400 px-4 py-3 font-semibold text-white transition hover:bg-orange-500 ">
+          <button onClick={handleDownloadURL} className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-orange-400 px-4 py-3 font-semibold text-white transition hover:bg-orange-500 ">
             <FaDownload /> Yuklab olish
           </button>
         )}
