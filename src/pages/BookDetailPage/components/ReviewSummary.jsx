@@ -21,7 +21,6 @@ export default function ReviewSummary({ onCommentPosted, book }) {
       const data = await getBookStats(id);
       setApiStats(data);
     } catch (error) {
-      console.error("Stats yuklashda xatolik:", error);
     } finally {
       setIsApiLoading(false);
     }
@@ -29,7 +28,6 @@ export default function ReviewSummary({ onCommentPosted, book }) {
 
   useEffect(() => {
     fetchStats().then(() => {
-		console.log("Stats ma'lumotlari:", apiStats);
 	});
   }, [id]);
 
@@ -65,7 +63,6 @@ export default function ReviewSummary({ onCommentPosted, book }) {
       onCommentPosted(); // Ro'yxatni yangilash uchun parentga xabar
       await fetchStats(); // Statlarni yangilash
     } catch (error) {
-      console.error("Sharh yuborishda xatolik:", error);
     }
   };
 
@@ -88,7 +85,7 @@ export default function ReviewSummary({ onCommentPosted, book }) {
         <div className="flex-1 space-y-4">
           {[5, 4, 3, 2, 1].map((star) => (
             <div key={star} className="flex items-center gap-4">
-              <div className="flex items-center gap-2 min-w-[85px]">
+              <div className="flex items-center gap-2 min-w-21.25">
                 <FaStar
                   className={
                     statsData.selfScore >= star 

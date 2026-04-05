@@ -10,7 +10,6 @@ export function ProfileHeader({ user }) {
 
 	const handleLogout = () => {
         logout();
-		console.log("Logging out...");
 		setIsModalOpen(false);
 	};
 

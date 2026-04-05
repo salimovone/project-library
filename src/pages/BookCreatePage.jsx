@@ -44,8 +44,6 @@ export default function BookCreatePage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     // API ga yuborish logikasi shu yerda bo'ladi
-    console.log("Kitob ma'lumotlari:", bookData);
-    console.log("Rasmlar:", images);
   };
 
   return (

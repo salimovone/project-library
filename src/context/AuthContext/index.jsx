@@ -79,7 +79,6 @@ export const AuthProvider = ({ children }) => {
         });
       }
     } catch (error) {
-      console.error("Logout xatoligi:", error);
     } finally {
       localStorage.removeItem('access');
       localStorage.removeItem('refresh');

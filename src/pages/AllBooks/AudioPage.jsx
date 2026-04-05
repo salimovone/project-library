@@ -5,7 +5,7 @@ import FilterBar from "./components/FilterBar";
 import SearchBar from "./components/SearchBar";
 import BookGrid from "./components/BookGrid";
 
-export default function AllBooks() {
+export default function AudioPage() {
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [books, setBooks] = useState([]);
   const [tags, setTags] = useState([]);
@@ -20,7 +20,7 @@ export default function AllBooks() {
     author: "",
     book_format: {
       is_physical: true,
-      is_audio: true,
+      is_audio: false,
       is_pdf: true,
     },
   };

@@ -57,11 +57,9 @@ export default function UserPage() {
 		switch (filters) {
 			case "read":
 				fetchLatestBooks(4).then(setBooks);
-				console.log("read");
 				break;
 			case "wishlist":
 				fetchBookmarks().then(setBooks);
-				console.log("wishlist");
 				break;
 		}
 	}, [filters]);

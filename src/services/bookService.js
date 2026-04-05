@@ -31,7 +31,7 @@ export async function fetchBooks(filters) {
     const formats = Object.keys(filters.book_format).filter(key => !filters.book_format[key]);
     if (formats.length > 0) {
       for (const element of formats) {
-        params[element] = false;   
+        params[element] = true;   
       }
     }
   }

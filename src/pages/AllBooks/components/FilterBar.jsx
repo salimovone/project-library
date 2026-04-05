@@ -1,6 +1,5 @@
 import { BiChevronDown, BiFilterAlt } from "react-icons/bi";
 import SearchableSelect from "./SearchableSelect";
-import CheckboxGroup from "./CheckboxGroup";
 
 export default function FilterBar({
   filters,
@@ -56,13 +55,6 @@ export default function FilterBar({
               value={filters.author}
               onChange={handleInputChange}
               options={authors}
-            />
-
-            <CheckboxGroup
-              name="book_format"
-              label="Kitob holati"
-              value={filters.book_format}
-              onChange={handleInputChange}
             />
           </div>
 

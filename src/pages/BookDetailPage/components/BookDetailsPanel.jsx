@@ -1,117 +1,106 @@
-import { FaStar } from "react-icons/fa";
+import {FaStar, FaRegStar, FaStarHalfAlt} from "react-icons/fa";
 
-export default function BookDetailsPanel({ book }) {
-  // Sanani chiroyli formatlash
-  const pubDate = book.c_at
-    ? new Date(book.c_at).toLocaleDateString("uz-UZ", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      })
-    : "Mavjud emas";
+export default function BookDetailsPanel({book}) {
 
-  const normalizedRating =
-    book.rating > 5 ? (book.rating / 2).toFixed(1) : book.rating;
+	console.log("book", book)
 
-  return (
-    <div className="rounded-2xl bg-white p-6 md:p-8 max-lg:mt-16 shadow-[0_6px_20px_rgba(0,0,0,0.08)]">
-      <div className="flex justify-between items-start gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-[#1a478e] leading-tight">
-            {book?.name}
-          </h1>
-          {book.author &&
-            book.author.length &&
-            book.author.map((author, idx) => (
-              <p key={idx + 1} className="text-base text-gray-500 mt-1 font-medium">
-                by {author.name}
-              </p>
-            ))}
-        </div>
+	const pubDate = book.published_date
+		&& new Date(book.published_date).toLocaleDateString("en-US", {
+				year: "numeric",
+				month: "short",
+				day: "numeric",
+			})
 
-        {/* Omborda bor/yo'qligi */}
-        <span
-          className={`px-3 py-1 rounded-full text-xs font-semibold shrink-0 ${
-            book.quantity > 0
-              ? "bg-green-100 text-green-700"
-              : "bg-red-100 text-red-700"
-          }`}
-        >
-          {book.quantity > 0 ? `Omborda: ${book.quantity} ta` : "Qolmagan"}
-        </span>
-      </div>
+	const normalizedRating =
+		book.rating > 5 ? (book.rating / 2).toFixed(1) : book.rating?.toFixed(1) || "0.0";
 
-      <div className="mt-4 flex items-center gap-2 text-sm text-gray-600">
-        <div className="flex text-yellow-500">
-          {Array.from({ length: 5 }).map((_, index) => (
-            <FaStar
-              key={index}
-              className={
-                index < Math.floor(normalizedRating)
-                  ? "text-yellow-400"
-                  : "text-gray-300"
-              }
-            />
-          ))}
-        </div>
-        <span className="font-bold text-[#1a478e] text-base">
-          {normalizedRating}
-        </span>
-        <span>({book.is_frequent ? "Ko'p o'qilgan" : "Yangi"})</span>
-      </div>
+	return (
+		<div className="w-full mx-auto rounded-3xl bg-white p-8 md:p-12 shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-gray-100">
+			<div className="mb-6">
+				<h1 className="text-4xl font-medium text-[#003366] mb-3 tracking-tight">
+					{book?.name}
+				</h1>
+				<p className="text-xl text-[#4a90e2] font-medium">
+					by {book.author?.[0]?.name}
+				</p>
+			</div>
 
-      {/* Detallar Jadvali */}
-      <div className="mt-8 border-t border-gray-100 pt-6">
-        <h2 className="text-base font-bold text-[#143c7b] mb-4">
-          Kitob tafsilotlari
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8 text-sm text-gray-600 bg-gray-50 p-4 rounded-xl">
-          <div className="flex justify-between sm:block border-b sm:border-none border-gray-200 pb-2 sm:pb-0">
-            <p className="text-gray-500 mb-1">Kategoriya:</p>
-            <p className="font-semibold text-gray-800 capitalize">
-              {book.category?.name || "N/A"}
-            </p>
-          </div>
-          <div className="flex justify-between sm:block border-b sm:border-none border-gray-200 pb-2 sm:pb-0">
-            <p className="text-gray-500 mb-1">ISBN:</p>
-            <p className="font-semibold text-gray-800">{book.isbn || "N/A"}</p>
-          </div>
-          <div className="flex justify-between sm:block border-b sm:border-none border-gray-200 pb-2 sm:pb-0">
-            <p className="text-gray-500 mb-1">Nashr sanasi:</p>
-            <p className="font-semibold text-gray-800">{pubDate}</p>
-          </div>
-          <div className="flex justify-between sm:block">
-            <p className="text-gray-500 mb-1">Kitobxon:</p>
-            <p className="font-semibold text-gray-800">
-              {book.reader?.first_name} {book.reader?.last_name}
-            </p>
-          </div>
-        </div>
-      </div>
+			<div className="flex items-center gap-2 mb-6">
+				<div className="flex text-[#e63946] text-lg">
+					{Array.from({length: 5}).map((_, index) => {
+						const step = index + 1;
+						if (normalizedRating >= step) {
+							return <FaStar key={index} />;
+						} else if (normalizedRating > index && normalizedRating < step) {
+							return <FaStarHalfAlt key={index} />;
+						} else {
+							return <FaRegStar key={index} className="text-gray-300" />;
+						}
+					})}
+				</div>
+				<span className="text-[#1a478e] font-bold text-xl ml-1">
+					{normalizedRating}
+				</span>
+				<span className="text-[#4a90e2] text-xl ml-2">(33 kommentlar)</span>
+			</div>
 
-      {/* Description / About */}
-      <div className="mt-8 border-t border-gray-100 pt-6">
-        <h2 className="text-base font-bold text-[#143c7b] mb-3">
-          Kitob haqida
-        </h2>
-        <div className="text-sm text-gray-600 leading-relaxed whitespace-pre-line">
-          {book.description || "Ma'lumot kiritilmagan..."}
-        </div>
+			<hr className="border-t-2 border-[#1a478e]/20 mb-10" />
 
-        {/* Teglar */}
-        {book.tags && book.tags.length > 0 && (
-          <div className="mt-6 flex flex-wrap gap-2">
-            {book.tags.map((tag) => (
-              <span
-                key={tag.id}
-                className="rounded-md bg-[#edf2f7] px-3 py-1.5 text-xs font-semibold text-[#1a478e] capitalize hover:bg-blue-100 cursor-pointer transition"
-              >
-                #{tag?.name}
-              </span>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
+			<div className="mb-10">
+				<h2 className="text-xl font-extrabold text-black mb-6">Book Details</h2>
+				<div className="grid grid-cols-2 gap-x-12 gap-y-5">
+					<div className="flex justify-between items-center">
+						<span className="text-gray-500 font-medium">Format:</span>
+						<span className="font-bold text-gray-800">{book.is_physical ? "Hardcover" : "Digital"}</span>
+					</div>
+					<div className="flex justify-between items-center">
+						<span className="text-gray-500 font-medium">Pages:</span>
+						<span className="font-bold text-gray-800">{book.pages? book.pages : "noma'lum"}</span>
+					</div>
+					<div className="flex justify-between items-center">
+						<span className="text-gray-500 font-medium">Publisher:</span>
+						<span className="font-bold text-gray-800">Viking</span>
+					</div>
+					<div className="flex justify-between items-center">
+						<span className="text-gray-500 font-medium">Language:</span>
+						<span className="font-bold text-gray-800">English</span>
+					</div>
+					<div className="flex justify-between items-center">
+						<span className="text-gray-500 font-medium">ISBN-13:</span>
+						<span className="font-bold text-gray-800">
+							{book.isbn}
+						</span>
+					</div>
+					<div className="flex justify-between items-center">
+						<span className="text-gray-500 font-medium">Publication Date:</span>
+						<span className="font-bold text-gray-800">{pubDate}</span>
+					</div>
+				</div>
+			</div>
+
+			<hr className="border-t-2 border-[#1a478e]/20 mb-10" />
+
+			{/* About Section */}
+			<div className="mb-8">
+				<h2 className="text-xl font-extrabold text-black mb-6">
+					About This Book
+				</h2>
+				<div className="text-[17px] text-gray-600 leading-[1.6] space-y-6">
+					{book.description}
+				</div>
+			</div>
+
+			{/* Tags (Kategoriyalar) */}
+			<div className="flex flex-wrap gap-3 mt-10">
+				{book.tags?.map(tag => (
+					<span
+						key={tag.id}
+						className="px-5 py-2 rounded-full bg-[#eef2ff] text-[#6366f1] text-sm font-semibold hover:bg-[#e0e7ff] transition-colors cursor-pointer"
+					>
+						{tag.name}
+					</span>
+				))}
+			</div>
+		</div>
+	);
 }

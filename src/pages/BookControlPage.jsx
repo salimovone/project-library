@@ -29,7 +29,6 @@ export default function BookControlPage() {
       const statRes = await fetchMainPageStats();
       setStats(statRes);
     } catch (err) {
-      console.error("Xatolik:", err);
     } finally {
       setLoading(false);
     }
@@ -96,7 +95,7 @@ export default function BookControlPage() {
         </div>
 
         {/* TABLE */}
-        <div className="bg-white border border-[#143c7b] rounded-[24px] overflow-hidden shadow-sm">
+        <div className="bg-white border border-[#143c7b] rounded-3xl overflow-hidden shadow-sm">
           <table className="w-full text-left border-collapse">
             <thead className="bg-gray-50 border-b border-gray-100">
               <tr>
@@ -156,7 +155,7 @@ export default function BookControlPage() {
 
       {/* MODAL */}
       {showModal && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-40 p-4">
+        <div className="fixed inset-0 z-100 flex items-center justify-center bg-black bg-opacity-40 p-4">
           <div className="bg-white w-full max-w-md rounded-3xl p-8 shadow-2xl relative">
             <button onClick={() => setShowModal(false)} className="absolute right-6 top-6 text-gray-400 hover:text-red-500"><FiX className="text-xl" /></button>
             <h2 className="text-xl font-bold text-[#143c7b] mb-2">{activeTab === "pending" ? "Kitobni topshirish" : "Kitobni qabul qilish"}</h2>

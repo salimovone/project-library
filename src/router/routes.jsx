@@ -1,10 +1,10 @@
 import { createBrowserRouter, Navigate } from "react-router";
 import MainLayout from "../layouts/MainLayout";
 import HomePage from "../pages/HomePage";
-import AudiobooksPage from "../pages/AudiobooksPage";
 import BookDetailPage from "../pages/BookDetailPage";
 import UserPage from "../pages/UserPage";
 import { AllBooks } from "../pages";
+import AudioPage from "../pages/AllBooks/AudioPage";
 import LoginPage from "../pages/Auth/LoginPage";
 import BookCreatePage from "../pages/BookCreatePage";
 import BookControlPage from "../pages/BookControlPage";
@@ -33,7 +33,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "/audiobooks",
-            element: <AudiobooksPage />,
+            element: <AudioPage />,
           },
           {
             path: "/books/:id",
@@ -93,20 +93,3 @@ export const router = createBrowserRouter([
     ],
   },
 ]);
-
-// export const authRouter = createBrowserRouter([
-//   {
-//     path: '/',
-//     errorElement: <div className="flex items-center justify-center h-screen text-2xl text-red-600">Sahifa topilmadi {":("}</div>,
-//     children: [
-//       {
-//         path: '/',
-//         element: <LoginPage />,
-//       },
-//       {
-//         path: '/*',
-//         element: <LoginPage />,
-//       }
-//     ]
-//   }
-// ])

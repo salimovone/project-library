@@ -25,7 +25,6 @@ export default function Comment({ comment, onCommentPosted }) {
       setShowReplyForm(false);
       onCommentPosted();
     } catch (error) {
-      console.error("Failed to post reply:", error);
     }
   };
 

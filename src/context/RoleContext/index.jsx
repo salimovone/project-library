@@ -27,7 +27,6 @@ export const RoleProvider = ({ children }) => {
           setRole(data.role);
         }
       } catch (error) {
-        console.error("Role olishda xatolik:", error);
         setRole("guest");
       } finally {
         setIsLoading(false);

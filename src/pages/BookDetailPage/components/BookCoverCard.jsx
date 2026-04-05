@@ -31,7 +31,6 @@ export default function BookCoverCard({ book }) {
     link.parentNode.removeChild(link);
     window.URL.revokeObjectURL(url); 
   } catch (error) {
-    console.error("Yuklab olishda xatolik:", error);
     window.open(book.pdf, '_blank');
   }
 };
@@ -94,9 +93,7 @@ export default function BookCoverCard({ book }) {
     try {
       await reserveBookStudent(book.id);
       setCurrentStatus("pending"); // Band qilinganda srazu "pending"ga o'tadi
-      console.log("Muvaffaqiyatli so'rov yuborildi!");
     } catch (error) {
-      console.error("Xatolik:", error);
     } finally {
       setLoading(false);
     }
