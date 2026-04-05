@@ -1,43 +1,49 @@
-import { useState, useEffect } from "react";
-import { FiUser, FiEyeOff, FiEye, FiArrowRight } from "react-icons/fi";
-import logo from "../../assets/logo.png";
-import useAuth from "../../hooks/useAuth";
-import { useNavigate } from "react-router";
+import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react';
+import { useNavigate } from 'react-router';
+import { FiArrowRight, FiEye, FiEyeOff, FiUser } from 'react-icons/fi';
+import logo from '../../assets/logo.png';
+import useAuth from '../../hooks/useAuth';
 
 export default function LoginPage() {
-  const { login, loading, isAuthenticated, error } = useAuth();
-  const [useId, setuseId] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const { error, isAuthenticated, loading, login } = useAuth();
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [localError, setLocalError] = useState<string | null>(null);
   const navigate = useNavigate();
-
-  const [localError, setLocalError] = useState(null);
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate("/");
+      navigate('/', { replace: true });
       window.location.reload();
     }
   }, [isAuthenticated, navigate]);
 
   useEffect(() => {
-    if (error) {
-      setLocalError(error);
-      setuseId(""); // Inputni tozalash
-      setPassword(""); // Inputni tozalash
+    if (!error) {
+      return;
     }
+
+    setLocalError(error);
+    setUsername('');
+    setPassword('');
   }, [error]);
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    login(useId, password);
+  const handleLogin = (event: FormEvent<HTMLFormElement>): void => {
+    event.preventDefault();
+    void login(username, password);
   };
 
-  const handleInputChange = (setter) => (e) => {
-    setter(e.target.value);
-    if (localError) {
-      setLocalError(null); // Xatoni va UI qizil rangini olib tashlash
-    }
+  const createInputChangeHandler = (
+    setter: (value: string) => void,
+  ) => {
+    return (event: ChangeEvent<HTMLInputElement>): void => {
+      setter(event.target.value);
+
+      if (localError) {
+        setLocalError(null);
+      }
+    };
   };
 
   return (
@@ -56,15 +62,15 @@ export default function LoginPage() {
             Qaytib kelganingizdan xursandmiz
           </h1>
           <p className="text-[#5174ac] font-medium text-sm md:text-base">
-            O'qishni davom ettirish uchun tizimga kiring
+            O&apos;qishni davom ettirish uchun tizimga kiring
           </p>
         </div>
 
-        {localError && (
+        {localError ? (
           <div className="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-r-xl">
             <p className="text-sm text-red-700 font-medium">{localError}</p>
           </div>
-        )}
+        ) : null}
 
         <form onSubmit={handleLogin} className="space-y-6">
           <div className="space-y-2">
@@ -77,8 +83,8 @@ export default function LoginPage() {
               </div>
               <input
                 type="text"
-                value={useId}
-                onChange={handleInputChange(setuseId)}
+                value={username}
+                onChange={createInputChangeHandler(setUsername)}
                 placeholder="457000007876"
                 className="w-full bg-[#f8f9fa] border border-gray-300 rounded-xl py-3 pl-10 pr-4 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#143c7b] focus:ring-1 focus:ring-[#143c7b] transition-colors"
                 required
@@ -94,7 +100,7 @@ export default function LoginPage() {
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-[#5174ac]">
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
+                  onClick={() => setShowPassword((currentValue) => !currentValue)}
                   className="focus:outline-none hover:text-[#143c7b] transition-colors"
                 >
                   {showPassword ? (
@@ -105,9 +111,9 @@ export default function LoginPage() {
                 </button>
               </div>
               <input
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? 'text' : 'password'}
                 value={password}
-                onChange={handleInputChange(setPassword)}
+                onChange={createInputChangeHandler(setPassword)}
                 placeholder="••••••••"
                 className="w-full bg-[#f8f9fa] border border-gray-300 rounded-xl py-3 pl-10 pr-4 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#143c7b] focus:ring-1 focus:ring-[#143c7b] transition-colors"
                 required
@@ -118,14 +124,13 @@ export default function LoginPage() {
           <button
             disabled={loading}
             type="submit"
-            className={`w-full flex items-center justify-center gap-2 text-white font-medium py-3.5 rounded-xl transition-colors duration-200 mt-2 
-              ${
-                localError
-                  ? "bg-red-600 hover:bg-red-700 disabled:bg-red-400 active:bg-red-800" 
-                  : "bg-[#003282] hover:bg-blue-900 disabled:bg-blue-400 active:bg-blue-700"
-              }`}
+            className={`w-full flex items-center justify-center gap-2 text-white font-medium py-3.5 rounded-xl transition-colors duration-200 mt-2 ${
+              localError
+                ? 'bg-red-600 hover:bg-red-700 disabled:bg-red-400 active:bg-red-800'
+                : 'bg-[#003282] hover:bg-blue-900 disabled:bg-blue-400 active:bg-blue-700'
+            }`}
           >
-            {loading ? "Kutilmoqda..." : "Kirish"}{" "}
+            {loading ? 'Kutilmoqda...' : 'Kirish'}
             <FiArrowRight className="text-lg" />
           </button>
         </form>

@@ -1,4 +1,3 @@
-// components/BookCard.tsx
 import React from 'react';
 import { 
   FaBook, 
@@ -7,7 +6,17 @@ import {
   FaStar 
 } from 'react-icons/fa';
 
-const BookCard = ({
+interface BookCardProps {
+  title?: string;
+  author?: string;
+  coverImage?: string;
+  rating?: number;
+  ratingCount?: number;
+  onClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
+  className?: string;
+}
+
+const BookCard: React.FC<BookCardProps> = ({
   title = "Book Title",
   author = "Author Name",
   coverImage,

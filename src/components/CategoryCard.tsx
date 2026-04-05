@@ -1,6 +1,12 @@
+import React from 'react';
 import { FaBrain } from "react-icons/fa";
 
-export default function CategoryCard({ icon, label }) {
+interface CategoryCardProps {
+  icon?: string;
+  label: string;
+}
+
+export default function CategoryCard({ icon, label }: CategoryCardProps) {
   const hasIcon = icon && typeof icon === 'string' && icon.trim() !== 'default';
 
   return (
@@ -9,7 +15,7 @@ export default function CategoryCard({ icon, label }) {
         {hasIcon ? (
           <div 
             className="flex items-center justify-center w-8 h-8 dynamic-svg-wrapper"
-            dangerouslySetInnerHTML={{ __html: icon }} 
+            dangerouslySetInnerHTML={{ __html: icon as string }} 
           />
         ) : (
           <FaBrain size={24} />

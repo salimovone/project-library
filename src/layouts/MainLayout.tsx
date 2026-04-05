@@ -1,4 +1,6 @@
+import React from 'react';
 import { Outlet } from 'react-router';
+// Update to use the correct TSX extension for Navbar import if it was explicitly imported in layout. But leaving extensionless works perfectly here.
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 

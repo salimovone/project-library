@@ -1,19 +1,31 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { BiChevronDown } from "react-icons/bi";
 
-const languages = [
+interface Language {
+  code: string;
+  name: string;
+  flag: string;
+}
+
+const languages: Language[] = [
   { code: "uz", name: "O'zb", flag: "/src/assets/uz.png" },
   { code: "en", name: "Eng", flag: "/src/assets/gb.png" },
   { code: "ru", name: "Rus", flag: "/src/assets/ru.png" },
 ];
 
-const LanguageSwitcher = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState(languages[0]);
+const temporaryFix: Language = {
+  code: "uz",
+  name: "O'zb",
+  flag: "/src/assets/uz.png",
+}
+
+const LanguageSwitcher: React.FC = () => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [selectedLanguage, setSelectedLanguage] = useState<Language>(temporaryFix);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
 
-  const selectLanguage = (lang) => {
+  const selectLanguage = (lang: Language) => {
     setSelectedLanguage(lang);
     setIsOpen(false);
   };

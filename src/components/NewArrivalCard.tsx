@@ -1,6 +1,29 @@
-import { Link } from "react-router"; // react-router dan import qilinishi kerak
+import React from 'react';
+import { Link } from "react-router";
 
-export default function NewArrivalCard({ book }) {
+interface Tag {
+  id: string | number;
+  name: string;
+}
+
+interface Author {
+  name: string;
+}
+
+interface Book {
+  id: string | number;
+  name: string;
+  img?: string;
+  author?: Author[];
+  tags?: Tag[];
+  rating?: number | string;
+}
+
+interface NewArrivalCardProps {
+  book: Book;
+}
+
+export default function NewArrivalCard({ book }: NewArrivalCardProps) {
   const imageUrl = book.img;
 
   return (
@@ -22,10 +45,9 @@ export default function NewArrivalCard({ book }) {
         </h3>
         {
           (book.author) && book.author.map((author, idx) => (
-            <p key = {idx+1} className="text-sm text-gray-500 line-clamp-1">{author?.name}</p>
+            <p key={idx+1} className="text-sm text-gray-500 line-clamp-1">{author?.name}</p>
           ))
         }
-        {/* <p className="text-sm text-gray-500 line-clamp-1">{book.author}</p> */}
 
         <div className="mt-auto pt-4 flex items-center justify-between">
           <div className="flex items-center gap-1.5 flex-wrap">

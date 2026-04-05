@@ -1,10 +1,26 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router';
 import { BiChevronDown, BiChevronRight } from 'react-icons/bi';
 
-const DesktopNav = ({ categories, subcategories = [] }) => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [activeCategory, setActiveCategory] = useState(null);
+interface Category {
+  id: string | number;
+  name: string;
+}
+
+interface Subcategory {
+  id: string | number;
+  category: string | number;
+  name: string;
+}
+
+interface DesktopNavProps {
+  categories: Category[];
+  subcategories?: Subcategory[];
+}
+
+const DesktopNav: React.FC<DesktopNavProps> = ({ categories, subcategories = [] }) => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+  const [activeCategory, setActiveCategory] = useState<string | number | null>(null);
   const displayCategories = categories.slice(0, 5);
   const hasMoreCategories = categories.length > 5;
 

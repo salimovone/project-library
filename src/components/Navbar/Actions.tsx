@@ -1,3 +1,4 @@
+import React from 'react';
 import { BiBell } from "react-icons/bi";
 import { IoPersonOutline } from "react-icons/io5";
 import { Link } from "react-router";
@@ -5,8 +6,7 @@ import LanguageSwitcher from "./LanguageSwitcher";
 import Search from "./Search";
 import useAuth from "../../hooks/useAuth";
 
-
-const Actions = () => {
+const Actions: React.FC = () => {
   const { isAuthenticated } = useAuth();
   return (
     <div className="hidden md:flex items-center gap-3">

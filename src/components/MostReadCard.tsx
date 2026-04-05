@@ -1,10 +1,30 @@
+import React from 'react';
 import { Link } from "react-router";
+
+interface Author {
+  name: string;
+}
+
+interface Book {
+  id: string | number;
+  name: string;
+  img?: string;
+  author: Author[];
+  is_physical?: boolean;
+  has_audio?: boolean;
+  has_pdf?: boolean;
+  rating?: number | string;
+}
+
+interface MostReadCardProps {
+  book: Book;
+}
 
 /**
  * MostReadCard Component
  * Responsibility: Render most read book card based on the provided design
  */
-export default function MostReadCard({ book }) {
+export default function MostReadCard({ book }: MostReadCardProps) {
   const imageUrl = book.img;
 
   return (
