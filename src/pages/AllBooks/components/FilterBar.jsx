@@ -58,12 +58,6 @@ export default function FilterBar({
               options={authors}
             />
 
-            <CheckboxGroup
-              name="book_format"
-              label="Kitob holati"
-              value={filters.book_format}
-              onChange={handleInputChange}
-            />
           </div>
 
           <div className="mt-8 flex flex-col gap-3">
