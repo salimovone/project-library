@@ -114,12 +114,12 @@ export default function BookCoverCard({ book }) {
           </button>
         )}
 
-        <button
+        {/* <button
           className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-pink-600 px-4 py-3 font-semibold text-white transition hover:bg-pink-700 disabled:bg-pink-300"
           disabled={!checkUserLevel("student") || !book.has_audio}
         >
           <FaHeadphones /> Audioni tinglash 
-        </button>
+        </button> */}
 
         <button
           onClick={handleBookmark}

@@ -6,8 +6,7 @@ import useRole from "../../hooks/useRole";
 const DesktopNav = ({categories, subcategories = []}) => {
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 	const [activeCategory, setActiveCategory] = useState(null);
-	const displayCategories = categories.slice(0, 5);
-	const hasMoreCategories = categories.length > 5;
+	const displayCategories = categories.slice(0);
 	const {checkUserLevel} = useRole();
 
 	return (

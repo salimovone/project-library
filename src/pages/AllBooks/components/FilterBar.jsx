@@ -12,6 +12,8 @@ export default function FilterBar({
   isMobileFilterOpen,
   setIsMobileFilterOpen,
 }) {
+
+  console.log("categories: ", categories)
   return (
     <>
       <button
