@@ -74,7 +74,7 @@ export default function BookControlPage() {
     if (!selectedItem) return;
     
     try {
-      const newStatus = activeTab === "pending" ? "borrowed" : "returned";
+      const newStatus = activeTab === "pending" ? "given" : "returned";
       const payload = { 
         status: newStatus,
         ...(returnDate && { return_date: returnDate }) 
@@ -192,18 +192,6 @@ export default function BookControlPage() {
             <button onClick={() => setShowModal(false)} className="absolute right-6 top-6 text-gray-400 hover:text-red-500"><FiX className="text-xl" /></button>
             <h2 className="text-xl font-bold text-[#143c7b] mb-2">{activeTab === "pending" ? "Kitobni topshirish" : "Kitobni qabul qilish"}</h2>
             <p className="text-sm text-gray-500 mb-6">Foydalanuvchi: {selectedItem?.user_details?.full_name}</p>
-            
-            {activeTab === "pending" && (
-              <div className="space-y-2 mb-8">
-                <label className="text-xs font-bold text-[#143c7b]">Qaytarish muddati *</label>
-                <input 
-                  type="date" 
-                  className="w-full bg-[#f8f9fa] border border-gray-200 rounded-xl py-3 px-4 outline-none"
-                  value={returnDate}
-                  onChange={(e) => setReturnDate(e.target.value)}
-                />
-              </div>
-            )}
 
             <div className="flex gap-4">
               <button onClick={() => setShowModal(false)} className="flex-1 border border-gray-200 py-3 rounded-xl text-sm font-bold text-gray-500">Bekor qilish</button>
