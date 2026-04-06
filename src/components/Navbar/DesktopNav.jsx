@@ -101,17 +101,17 @@ const DesktopNav = ({categories, subcategories = []}) => {
 				Audio Kitoblar
 			</Link>
 
-			{checkUserLevel("librarian") && (
+		{checkUserLevel("librarian") && (
         <>
         <Link
           to={"/createbook"}
-          className="text-gray-700 hover:text-blue-600 font-medium transition"
+          className="text-green-700 hover:text-blue-600 font-medium transition border rounded-xl py-1 px-2" 
           >
           Kitob qo'shish
         </Link>
         <Link
           to={"/bookControl"}
-          className="text-gray-700 hover:text-blue-600 font-medium transition"
+          className="text-sky-700 hover:text-blue-600 font-medium transition border rounded-xl py-1 px-2"
           >
           Kitoblarni boshqarish
         </Link>
