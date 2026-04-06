@@ -11,6 +11,7 @@ export default function AllBooks() {
   const [tags, setTags] = useState([]);
   const [authors, setAuthors] = useState([]);
   const [categories, setCategories] = useState([]);
+  const data = location.state;
 
   const initialFilters = {
     search: "",
@@ -27,10 +28,12 @@ export default function AllBooks() {
 
   const [stagedFilters, setStagedFilters] = useState(initialFilters);
   const [appliedFilters, setAppliedFilters] = useState(initialFilters);
-
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if (data)
+      console.log("category filter: ", data);
+      // handleApplyFilter(data);
     const fetchSideData = async () => {
       try {
         await Promise.all([

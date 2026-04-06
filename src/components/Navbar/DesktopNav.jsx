@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { BiChevronDown, BiChevronRight } from "react-icons/bi";
 import useRole from "../../hooks/useRole";
 
@@ -14,6 +14,7 @@ const DesktopNav = ({ categories, subcategories = [] }) => {
   const [activeCategory, setActiveCategory] = useState(null);
   const displayCategories = categories.slice(0);
   const { checkUserLevel } = useRole();
+  const navigate = useNavigate();
 
   return (
     <div className="hidden md:flex items-center gap-6">
@@ -51,32 +52,32 @@ const DesktopNav = ({ categories, subcategories = [] }) => {
                   className="relative group"
                   onMouseEnter={() => setActiveCategory(cat.id)}
                 >
-                  <Link
-                    to={`/category/${cat.id}`}
+                  <div
                     className="flex justify-between items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition"
                     onClick={() => {
                       setIsDropdownOpen(false);
                       setActiveCategory(null);
+                      navigate("/books/", {state: {target: {name: "category", value: cat.id}}})
                     }}
                   >
                     {cat?.name}
                     {hasSub && <BiChevronRight />}
-                  </Link>
+                  </div>
 
                   {hasSub && activeCategory === cat.id && (
                     <div className="absolute left-full top-0 w-48 bg-white shadow-lg rounded-lg py-2 border border-gray-100 flex flex-col z-50">
                       {catSubcategories.map((sub) => (
-                        <Link
+                        <div
                           key={sub.id}
-                          to={`/category/${cat.id}?subcategory=${sub.id}`}
                           className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition"
                           onClick={() => {
                             setIsDropdownOpen(false);
                             setActiveCategory(null);
+                            navigate("/books/", {state: {target: {name: "category", value: sub.id}}})
                           }}
                         >
                           {sub?.name}
-                        </Link>
+                        </div>
                       ))}
                     </div>
                   )}
