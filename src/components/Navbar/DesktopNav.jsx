@@ -3,6 +3,12 @@ import { Link } from "react-router";
 import { BiChevronDown, BiChevronRight } from "react-icons/bi";
 import useRole from "../../hooks/useRole";
 
+const StatChip = ({ label, color, borderColor }) => (
+  <div className={`flex items-center gap-2 bg-white border ${borderColor} px-4 py-2 rounded-xl text-xs font-bold ${color} shadow-sm`}>
+	{label}
+  </div>
+);
+
 const DesktopNav = ({ categories, subcategories = [] }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState(null);
@@ -105,15 +111,15 @@ const DesktopNav = ({ categories, subcategories = [] }) => {
         <>
           <Link
             to={"/createbook"}
-            className="text-green-700 hover:text-blue-600 font-medium transition border rounded-xl py-1 px-2"
+            className=""
           >
-            Kitob qo'shish
+			<StatChip label={"Kitob qo'shish"} color={"text-green-600"} borderColor={"border-green-200"}/>
           </Link>
           <Link
             to={"/bookControl"}
-            className="text-sky-700 hover:text-blue-600 font-medium transition border rounded-xl py-1 px-2"
+            className=""
           >
-            Kitoblarni boshqarish
+			<StatChip label={"Kitoblarni boshqarish"} color={"text-sky-600"} borderColor={"border-sky-200"}/>
           </Link>
         </>
       )}
