@@ -62,7 +62,7 @@ export default function BookControlPage() {
     <div className="min-h-screen bg-[#f8f9fa] pb-20 font-sans text-[#143c7b]">
       <div className="bg-[#f2f4f7] py-3">
         <div className="custom-container mx-auto px-4 text-sm font-medium">
-          Home / Book Control
+          <Link to="/">Home</Link> / Book Control
         </div>
       </div>
 

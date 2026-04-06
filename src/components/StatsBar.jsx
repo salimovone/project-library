@@ -48,7 +48,7 @@ export default function StatsBar() {
 				</div>
 
 				<div>
-					<p className="text-2xl font-bold text-red-200 sm:text-3xl">24/4</p>
+					<p className="text-2xl font-bold text-red-200 sm:text-3xl">24/7</p>
 					<p className="text-xs uppercase tracking-wide text-blue-100">
 						Xizmat vaqti
 					</p>

@@ -1,31 +1,73 @@
-import React, { useState } from "react";
-import { Link } from "react-router";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router"; // react-router-dom dan olinishi kerak
+import { fetchCategories, fetchSubcategories } from "../services/additional";
+import { getAuthors } from "../services/bookService";
 
 export default function BookCreatePage() {
-  // Asosiy ma'lumotlar state'i
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+
+  // 1. Asosiy ma'lumotlar state'i
   const [bookData, setBookData] = useState({
     name: "",
-    author: "",
+    author_ids: "",
     isbn: "",
-    genre: "",
+    category_id: "",
+    subcategory_id: "",
     quantity: "",
-    tags: "",
+    tags: "", 
     description: "",
+    pages: "",
+    published_date: new Date().toISOString().split("T")[0],
   });
 
-  // Dinamik rasmlar ro'yxati state'i
+  // 2. API dan keladigan ro'yxatlar
+  const [options, setOptions] = useState({
+    categories: [],
+    subcategories: [],
+    authors: [],
+  });
+
+  // 3. Dinamik rasmlar ro'yxati state'i (order avtomatik 1 dan boshlanadi)
   const [images, setImages] = useState([
-    { id: Date.now(), file: null, order: "" },
+    { id: Date.now(), file: null, order: 1 },
   ]);
 
+  // =====================================================================
+  // API LARDAN MA'LUMOT YUKLASH (Component mount bo'lganda)
+  // =====================================================================
+  useEffect(() => {
+    const fetchOptions = async () => {
+      try {
+        const [catRes, subCatRes, authRes] = await Promise.all([
+          fetchCategories(),
+          fetchSubcategories(),
+          getAuthors(),
+        ]);
+
+        setOptions({
+          categories: catRes || [],
+          subcategories: subCatRes || [],
+          authors: authRes || [],
+        });
+      } catch (error) {
+        console.error("Ma'lumotlarni yuklashda xatolik:", error);
+      }
+    };
+
+    fetchOptions();
+  }, []);
+
+  // Form inputlarini boshqarish
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setBookData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Yangi rasm qatori qo'shish
+  // Yangi rasm qatori qo'shish (Avtomatik order berish)
   const addImageRow = () => {
-    setImages([...images, { id: Date.now(), file: null, order: "" }]);
+    const nextOrder = images.length > 0 ? Math.max(...images.map(i => i.order)) + 1 : 1;
+    setImages([...images, { id: Date.now(), file: null, order: nextOrder }]);
   };
 
   // Rasm qatorini o'chirish
@@ -35,15 +77,78 @@ export default function BookCreatePage() {
     }
   };
 
+  // Rasm qiymatlarini o'zgartirish
   const handleImageChange = (id, field, value) => {
     setImages(
       images.map((img) => (img.id === id ? { ...img, [field]: value } : img))
     );
   };
 
-  const handleSubmit = (e) => {
+  // =====================================================================
+  // FORMANI YUBORISH MANTIG'I (FormData yordamida file + text yuborish)
+  // =====================================================================
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // API ga yuborish logikasi shu yerda bo'ladi
+    setIsLoading(true);
+
+    try {
+      const parsedTags = bookData.tags
+        ? bookData.tags.split(",").map((t) => Number(t.trim())).filter((n) => !isNaN(n))
+        : [0];
+
+      // File va ma'lumotlarni birga yuborish uchun FormData ishlatamiz
+      const formData = new FormData();
+      
+      formData.append("name", bookData.name);
+      formData.append("description", bookData.description);
+      formData.append("isbn", bookData.isbn);
+      formData.append("rating", 0);
+      formData.append("is_available", Number(bookData.quantity) > 0);
+      formData.append("is_frequent", false);
+      formData.append("quantity", Number(bookData.quantity) || 0);
+      formData.append("published_date", bookData.published_date);
+      formData.append("pdf", "");
+      formData.append("audio", "");
+      formData.append("is_physical", true);
+      formData.append("pages", Number(bookData.pages) || 0);
+      formData.append("category_id", Number(bookData.category_id));
+      formData.append("subcategory_id", Number(bookData.subcategory_id));
+      formData.append("author_ids", Number(bookData.author_ids));
+
+      // Array ko'rinishidagi datalarni (masalan tag_ids) qo'shish
+      parsedTags.forEach(tag => {
+        formData.append("tag_ids", tag); 
+      });
+
+      // 1-Rasmni (index 0) FormData'ga qo'shish (Agar tanlangan bo'lsa)
+      if (images.length > 0 && images[0].file) {
+        // Backend img ni file obyekti sifatida kutayotgan deb hisoblaymiz
+        formData.append("img", images[0].file); 
+      }
+
+      // API ga POST qilish
+      const response = await fetch(import.meta.env.VITE_API_BASE+"kitob/", {
+        method: "POST",
+        // DIQQAT: fetch bilan FormData yuborilganda "Content-Type" ni umuman yozmaslik kerak,
+        // Browser o'zi "multipart/form-data" va kerakli "boundary" ni avtomat qo'yib beradi.
+        headers: {
+          // "Authorization": `Bearer ${token}` // Agar token kerak bo'lsa
+        },
+        body: formData,
+      });
+
+      if (response.ok) {
+        alert("Kitob muvaffaqiyatli saqlandi!");
+        navigate("/books"); 
+      } else {
+        alert("Saqlashda xatolik yuz berdi.");
+      }
+    } catch (error) {
+      console.error("Xatolik:", error);
+      alert("Tarmoqda xatolik yuz berdi");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -61,7 +166,7 @@ export default function BookCreatePage() {
           {/* 1. ASOSIY MA'LUMOTLAR FORMASI */}
           <div className="bg-[#f6f8fa] border border-[#d1d9e6] rounded-3xl p-8 shadow-sm">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Kitob nomi */}
+              
               <div className="space-y-1.5">
                 <label className="text-sm font-bold text-[#143c7b]">Kitob nomi *</label>
                 <input
@@ -73,19 +178,25 @@ export default function BookCreatePage() {
                   required
                 />
               </div>
-              {/* Muallifi */}
+
+              {/* Muallifni tanlash (Dropdown) */}
               <div className="space-y-1.5">
                 <label className="text-sm font-bold text-[#143c7b]">Muallifi *</label>
-                <input
-                  name="author"
-                  type="text"
-                  placeholder="Kitob muallifini kiriting ...."
+                <select
+                  name="author_ids"
                   className="w-full bg-white border border-gray-300 rounded-xl py-3 px-4 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   onChange={handleInputChange}
                   required
-                />
+                >
+                  <option value="">Muallifni tanlang</option>
+                  {options.authors.map((author) => (
+                    <option key={author.id} value={author.id}>
+                      {author.name}
+                    </option>
+                  ))}
+                </select>
               </div>
-              {/* ISBN */}
+
               <div className="space-y-1.5">
                 <label className="text-sm font-bold text-[#143c7b]">ISBN *</label>
                 <input
@@ -97,19 +208,55 @@ export default function BookCreatePage() {
                   required
                 />
               </div>
-              {/* Janri */}
+
+              {/* Kategoriyani tanlash */}
               <div className="space-y-1.5">
-                <label className="text-sm font-bold text-[#143c7b]">Janri *</label>
+                <label className="text-sm font-bold text-[#143c7b]">Kategoriya *</label>
+                <select
+                  name="category_id"
+                  className="w-full bg-white border border-gray-300 rounded-xl py-3 px-4 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="">Kategoriyani tanlang</option>
+                  {options.categories.map((cat) => (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+               {/* SubKategoriyani tanlash */}
+               <div className="space-y-1.5">
+                <label className="text-sm font-bold text-[#143c7b]">Ost-kategoriya *</label>
+                <select
+                  name="subcategory_id"
+                  className="w-full bg-white border border-gray-300 rounded-xl py-3 px-4 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="">Ost-kategoriyani tanlang</option>
+                  {options.subcategories.map((subcat) => (
+                    <option key={subcat.id} value={subcat.id}>
+                      {subcat.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-sm font-bold text-[#143c7b]">Sahifalar soni *</label>
                 <input
-                  name="genre"
-                  type="text"
-                  placeholder="Kitob janrini kiriting ...."
+                  name="pages"
+                  type="number"
+                  placeholder="Sahifalar sonini kiriting ...."
                   className="w-full bg-white border border-gray-300 rounded-xl py-3 px-4 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   onChange={handleInputChange}
                   required
                 />
               </div>
-              {/* Miqdori */}
+
               <div className="space-y-1.5">
                 <label className="text-sm font-bold text-[#143c7b]">Miqdori</label>
                 <input
@@ -120,19 +267,19 @@ export default function BookCreatePage() {
                   onChange={handleInputChange}
                 />
               </div>
-              {/* Taglar */}
+
               <div className="space-y-1.5">
-                <label className="text-sm font-bold text-[#143c7b]">Taglar</label>
+                <label className="text-sm font-bold text-[#143c7b]">Taglar (ID larni vergul bilan ajrating)</label>
                 <input
                   name="tags"
                   type="text"
-                  placeholder="Kitob taglarini kiriting ...."
+                  placeholder="Masalan: 1, 2, 5"
                   className="w-full bg-white border border-gray-300 rounded-xl py-3 px-4 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   onChange={handleInputChange}
                 />
               </div>
             </div>
-            {/* Tavsifi */}
+            
             <div className="mt-6 space-y-1.5">
               <label className="text-sm font-bold text-[#143c7b]">Tavsifi</label>
               <textarea
@@ -161,6 +308,7 @@ export default function BookCreatePage() {
                     <td className="p-4">
                       <input
                         type="file"
+                        accept="image/*"
                         className="w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                         onChange={(e) => handleImageChange(imgRow.id, "file", e.target.files[0])}
                       />
@@ -202,9 +350,10 @@ export default function BookCreatePage() {
           <div className="flex justify-end pt-4">
             <button
               type="submit"
-              className="bg-[#003282] text-white px-12 py-3.5 rounded-xl font-bold hover:bg-blue-900 transition shadow-lg"
+              disabled={isLoading}
+              className={`bg-[#003282] text-white px-12 py-3.5 rounded-xl font-bold transition shadow-lg ${isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-900'}`}
             >
-              Kitobni saqlash
+              {isLoading ? "Saqlanmoqda..." : "Kitobni saqlash"}
             </button>
           </div>
         </form>
