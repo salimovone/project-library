@@ -6,6 +6,7 @@ import {
   updateReservationStatus 
 } from "../services/reservations";
 import { fetchMainPageStats } from "../services/additional";
+import { Link } from "react-router";
 
 export default function BookControlPage() {
   const [activeTab, setActiveTab] = useState("pending"); // pending, borrowed, returned
@@ -22,8 +23,28 @@ export default function BookControlPage() {
   // Ma'lumotlarni yuklash
   const loadData = async () => {
     setLoading(true);
+    let status = ""
+    switch (activeTab) {
+      case "pending":
+        status = "pending,approved";
+        break;
+      case "borrowed":
+        status = "given,not_returned";
+        break;
+      case "returned":
+        status = "returned";
+        break;
+      default:
+        setData([]);
+        setLoading(false);
+        return;
+    }
     try {
-      const res = await fetchReservations({ status: activeTab, search: searchTerm });
+      let params = { status };
+      if (searchTerm) {
+        params.search = searchTerm;
+      }
+      const res = await fetchReservations(params);
       setData(res.results || []);
       
       const statRes = await fetchMainPageStats();
