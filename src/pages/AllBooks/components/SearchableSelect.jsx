@@ -39,7 +39,7 @@ export default function SearchableSelect({
   };
 
   const selectedOptionName = useMemo(() => {
-    const selectedOption = options.find((option) => option?.name === value);
+    const selectedOption = options.find((option) => option?.id === value);
     return selectedOption ? selectedOption?.name : "Barchasi";
   }, [options, value]);
 
@@ -81,7 +81,7 @@ export default function SearchableSelect({
               {filteredOptions.map((option) => (
                 <li
                   key={option.id}
-                  onClick={() => handleSelect(option?.name)}
+                  onClick={() => handleSelect(option?.id)}
                   className={`px-4 py-2 text-sm cursor-pointer ${
                     value === option?.name
                       ? "bg-blue-500 text-white"
