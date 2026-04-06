@@ -1,54 +1,52 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router"; // react-router-dom dan olinishi kerak
-import { fetchCategories, fetchSubcategories } from "../services/additional";
+import { fetchCategories, fetchSubcategories, fetchTags } from "../services/additional";
 import { getAuthors } from "../services/bookService";
+import api from "../services/api";
 
 export default function BookCreatePage() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 
-  // 1. Asosiy ma'lumotlar state'i
   const [bookData, setBookData] = useState({
     name: "",
-    author_ids: "",
+    author_ids: [], 
     isbn: "",
     category_id: "",
     subcategory_id: "",
     quantity: "",
-    tags: "", 
+    tag_ids: [], 
     description: "",
     pages: "",
     published_date: new Date().toISOString().split("T")[0],
   });
 
-  // 2. API dan keladigan ro'yxatlar
   const [options, setOptions] = useState({
     categories: [],
     subcategories: [],
     authors: [],
+    tags: [],
   });
 
-  // 3. Dinamik rasmlar ro'yxati state'i (order avtomatik 1 dan boshlanadi)
   const [images, setImages] = useState([
     { id: Date.now(), file: null, order: 1 },
   ]);
 
-  // =====================================================================
-  // API LARDAN MA'LUMOT YUKLASH (Component mount bo'lganda)
-  // =====================================================================
   useEffect(() => {
     const fetchOptions = async () => {
       try {
-        const [catRes, subCatRes, authRes] = await Promise.all([
+        const [catRes, subCatRes, authRes, tagsRes] = await Promise.all([
           fetchCategories(),
           fetchSubcategories(),
           getAuthors(),
+          fetchTags(),
         ]);
 
         setOptions({
           categories: catRes || [],
           subcategories: subCatRes || [],
           authors: authRes || [],
+          tags: tagsRes || [],
         });
       } catch (error) {
         console.error("Ma'lumotlarni yuklashda xatolik:", error);
@@ -58,94 +56,76 @@ export default function BookCreatePage() {
     fetchOptions();
   }, []);
 
-  // Form inputlarini boshqarish
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setBookData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Yangi rasm qatori qo'shish (Avtomatik order berish)
+  const handleMultiSelectChange = (e) => {
+    const { name, options } = e.target;
+    const selectedValues = Array.from(options)
+      .filter(option => option.selected)
+      .map(option => Number(option.value)); 
+    
+    setBookData((prev) => ({ ...prev, [name]: selectedValues }));
+  };
+
   const addImageRow = () => {
     const nextOrder = images.length > 0 ? Math.max(...images.map(i => i.order)) + 1 : 1;
     setImages([...images, { id: Date.now(), file: null, order: nextOrder }]);
   };
 
-  // Rasm qatorini o'chirish
   const removeImageRow = (id) => {
     if (images.length > 1) {
       setImages(images.filter((img) => img.id !== id));
     }
   };
 
-  // Rasm qiymatlarini o'zgartirish
   const handleImageChange = (id, field, value) => {
     setImages(
       images.map((img) => (img.id === id ? { ...img, [field]: value } : img))
     );
   };
 
-  // =====================================================================
-  // FORMANI YUBORISH MANTIG'I (FormData yordamida file + text yuborish)
-  // =====================================================================
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      const parsedTags = bookData.tags
-        ? bookData.tags.split(",").map((t) => Number(t.trim())).filter((n) => !isNaN(n))
-        : [0];
+      // JSON (Payload) obyekti aynan backend kutayotgan tiplar bilan yasalmoqda
+      const payload = {
+        name: bookData.name,
+        description: bookData.description,
+        isbn: bookData.isbn,
+        is_available: Number(bookData.quantity) > 0, // Boolean
+        is_frequent: true,                           // Boolean (Sizning JSON dagi kabi)
+        quantity: Number(bookData.quantity) || 0,    // Number
+        published_date: bookData.published_date,     // String (YYYY-MM-DD)
+        is_physical: true,                           // Boolean
+        pages: Number(bookData.pages) || 0,          // Number
+        category_id: Number(bookData.category_id),   // Number
+        subcategory_id: Number(bookData.subcategory_id), // Number
+        // Array formatidagi ma'lumotlar
+        tag_ids: bookData.tag_ids.length > 0 ? bookData.tag_ids.map(Number) : [0], 
+        author_ids: bookData.author_ids.length > 0 ? bookData.author_ids.map(Number) : [0]
+      };
 
-      // File va ma'lumotlarni birga yuborish uchun FormData ishlatamiz
-      const formData = new FormData();
-      
-      formData.append("name", bookData.name);
-      formData.append("description", bookData.description);
-      formData.append("isbn", bookData.isbn);
-      formData.append("rating", 0);
-      formData.append("is_available", Number(bookData.quantity) > 0);
-      formData.append("is_frequent", false);
-      formData.append("quantity", Number(bookData.quantity) || 0);
-      formData.append("published_date", bookData.published_date);
-      formData.append("pdf", "");
-      formData.append("audio", "");
-      formData.append("is_physical", true);
-      formData.append("pages", Number(bookData.pages) || 0);
-      formData.append("category_id", Number(bookData.category_id));
-      formData.append("subcategory_id", Number(bookData.subcategory_id));
-      formData.append("author_ids", Number(bookData.author_ids));
+      // FormData o'rniga to'g'ridan-to'g'ri JSON yuboramiz
+      await api.post('/kitob/', payload);
 
-      // Array ko'rinishidagi datalarni (masalan tag_ids) qo'shish
-      parsedTags.forEach(tag => {
-        formData.append("tag_ids", tag); 
-      });
+      // Rasmlarni yuklash (Hozircha faqat UI'da turibdi, keyinchalik bu yerga qo'shiladi)
+      // if (images.length > 0 && images[0].file) {
+      //    const imgData = new FormData();
+      //    imgData.append("file", images[0].file);
+      //    await api.post('/upload-image/', imgData);
+      // }
 
-      // 1-Rasmni (index 0) FormData'ga qo'shish (Agar tanlangan bo'lsa)
-      if (images.length > 0 && images[0].file) {
-        // Backend img ni file obyekti sifatida kutayotgan deb hisoblaymiz
-        formData.append("img", images[0].file); 
-      }
+      alert("Kitob muvaffaqiyatli saqlandi!");
+      navigate("/books"); 
 
-      // API ga POST qilish
-      const response = await fetch(import.meta.env.VITE_API_BASE+"kitob/", {
-        method: "POST",
-        // DIQQAT: fetch bilan FormData yuborilganda "Content-Type" ni umuman yozmaslik kerak,
-        // Browser o'zi "multipart/form-data" va kerakli "boundary" ni avtomat qo'yib beradi.
-        headers: {
-          // "Authorization": `Bearer ${token}` // Agar token kerak bo'lsa
-        },
-        body: formData,
-      });
-
-      if (response.ok) {
-        alert("Kitob muvaffaqiyatli saqlandi!");
-        navigate("/books"); 
-      } else {
-        alert("Saqlashda xatolik yuz berdi.");
-      }
     } catch (error) {
       console.error("Xatolik:", error);
-      alert("Tarmoqda xatolik yuz berdi");
+      alert(error.message || "Saqlashda xatolik yuz berdi");
     } finally {
       setIsLoading(false);
     }
@@ -153,7 +133,6 @@ export default function BookCreatePage() {
 
   return (
     <div className="min-h-screen bg-white pb-20 font-sans">
-      {/* Breadcrumb */}
       <div className="bg-[#f2f4f7] py-3">
         <div className="custom-container mx-auto px-4 text-sm font-medium text-[#143c7b]">
           <Link to="/">Home</Link> / Book Create
@@ -163,7 +142,6 @@ export default function BookCreatePage() {
       <div className="custom-container mx-auto px-4 mt-8">
         <form onSubmit={handleSubmit} className="max-w-5xl mx-auto space-y-8">
           
-          {/* 1. ASOSIY MA'LUMOTLAR FORMASI */}
           <div className="bg-[#f6f8fa] border border-[#d1d9e6] rounded-3xl p-8 shadow-sm">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               
@@ -179,16 +157,16 @@ export default function BookCreatePage() {
                 />
               </div>
 
-              {/* Muallifni tanlash (Dropdown) */}
+              {/* Mualliflar (Multiple) */}
               <div className="space-y-1.5">
-                <label className="text-sm font-bold text-[#143c7b]">Muallifi *</label>
+                <label className="text-sm font-bold text-[#143c7b]">Mualliflar * (Ctrl bilan bir nechta tanlang)</label>
                 <select
+                  multiple
                   name="author_ids"
                   className="w-full bg-white border border-gray-300 rounded-xl py-3 px-4 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                  onChange={handleInputChange}
+                  onChange={handleMultiSelectChange}
                   required
                 >
-                  <option value="">Muallifni tanlang</option>
                   {options.authors.map((author) => (
                     <option key={author.id} value={author.id}>
                       {author.name}
@@ -209,7 +187,6 @@ export default function BookCreatePage() {
                 />
               </div>
 
-              {/* Kategoriyani tanlash */}
               <div className="space-y-1.5">
                 <label className="text-sm font-bold text-[#143c7b]">Kategoriya *</label>
                 <select
@@ -227,7 +204,6 @@ export default function BookCreatePage() {
                 </select>
               </div>
 
-               {/* SubKategoriyani tanlash */}
                <div className="space-y-1.5">
                 <label className="text-sm font-bold text-[#143c7b]">Ost-kategoriya *</label>
                 <select
@@ -268,15 +244,21 @@ export default function BookCreatePage() {
                 />
               </div>
 
+              {/* Teglar (Multiple) */}
               <div className="space-y-1.5">
-                <label className="text-sm font-bold text-[#143c7b]">Taglar (ID larni vergul bilan ajrating)</label>
-                <input
-                  name="tags"
-                  type="text"
-                  placeholder="Masalan: 1, 2, 5"
+                <label className="text-sm font-bold text-[#143c7b]">Teglar (Ctrl bilan bir nechta tanlang)</label>
+                <select
+                  multiple
+                  name="tag_ids"
                   className="w-full bg-white border border-gray-300 rounded-xl py-3 px-4 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                  onChange={handleInputChange}
-                />
+                  onChange={handleMultiSelectChange}
+                >
+                  {options.tags.map((tag) => (
+                    <option key={tag.id} value={tag.id}>
+                      {tag.name}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
             
@@ -292,7 +274,6 @@ export default function BookCreatePage() {
             </div>
           </div>
 
-          {/* 2. RASMLAR JADVALI */}
           <div className="bg-[#f6f8fa] border border-[#d1d9e6] rounded-3xl overflow-hidden shadow-sm">
             <table className="w-full text-center border-collapse">
               <thead>
@@ -346,7 +327,6 @@ export default function BookCreatePage() {
             </div>
           </div>
 
-          {/* SAQLASH TUGMASI */}
           <div className="flex justify-end pt-4">
             <button
               type="submit"

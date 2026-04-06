@@ -32,6 +32,7 @@ const stats = [
 
 export default function UserPage() {
 	const [books, setBooks] = useState([]);
+	const [bookmarks, setBookmarks] = useState([]);
 	const [user, setUser] = useState({});
 	const [filters, setFilters] = useState("read");
 	const [userProfileStats, setUserProfileStats] = useState({});
@@ -59,7 +60,9 @@ export default function UserPage() {
 				fetchLatestBooks(4).then(setBooks);
 				break;
 			case "wishlist":
-				fetchBookmarks().then(setBooks);
+				fetchBookmarks().then(data => {
+					setBookmarks(data.results);
+				});
 				break;
 		}
 	}, [filters]);
@@ -125,7 +128,14 @@ export default function UserPage() {
 				</div>
 
 				<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-8 sm:gap-x-6">
-					{books.map(book => (
+					{filters === "read" &&
+
+					books.map(book => (
+						<NewArrivalCard key={book.id} book={book} />
+					))}
+					{filters === "wishlist" &&
+
+					bookmarks.map(book => (
 						<NewArrivalCard key={book.id} book={book} />
 					))}
 				</div>
