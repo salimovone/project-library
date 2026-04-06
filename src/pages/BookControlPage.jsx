@@ -8,6 +8,16 @@ import {
 import { fetchMainPageStats } from "../services/additional";
 import { Link } from "react-router";
 
+
+const formatDateReadable = (date) => {
+
+  return new Date(!!date ? date : new Date()).toLocaleDateString("en-US", {
+				year: "numeric",
+				month: "short",
+				day: "numeric",
+			})
+}
+
 export default function BookControlPage() {
   const [activeTab, setActiveTab] = useState("pending"); // pending, borrowed, returned
   const [data, setData] = useState([]);
@@ -125,7 +135,8 @@ export default function BookControlPage() {
                 <th className="p-5 text-sm font-bold">{activeTab === "pending" ? "Band sanasi" : "Topshirilgan"}</th>
                 {activeTab !== "pending" && <th className="p-5 text-sm font-bold">{activeTab === "borrowed" ? "Muddat" : "Qaytarilgan"}</th>}
                 <th className="p-5 text-sm font-bold text-center">Holat</th>
-                <th className="p-5 text-sm font-bold text-center">Amal</th>
+                {activeTab !== "returned" && <th className="p-5 text-sm font-bold text-center">Amal</th>}
+                {/* <th className="p-5 text-sm font-bold text-center">Amal</th> */}
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
@@ -137,21 +148,21 @@ export default function BookControlPage() {
                 <tr key={item.id} className="hover:bg-gray-50 transition">
                   <td className="p-5">
                     <div className="flex items-center gap-3">
-                      <img src={item.book_details?.img || "placeholder.jpg"} className="w-10 h-14 rounded-md object-cover" />
+                      <img src={item?.img || "placeholder.jpg"} className="w-10 h-14 rounded-md object-cover" />
                       <div>
-                        <div className="font-bold text-sm">{item.book_details?.name}</div>
-                        <div className="text-[11px] text-gray-500">{item.book_details?.author_name}</div>
+                        <div className="font-bold text-sm max-w-36">{item?.book}</div>
+                        <div className="text-[11px] text-gray-500">{item?.author.map(a => a.name + " ")}</div>
                       </div>
                     </div>
                   </td>
                   <td className="p-5">
                     <div className="flex items-center gap-2">
                       <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-400"><FiUser /></div>
-                      <span className="text-sm font-medium">{item.user_details?.full_name}</span>
+                      <span className="text-sm font-medium">{(item?.first_name +" "+item?.last_name) !== " " || item?.user}</span>
                     </div>
                   </td>
-                  <td className="p-5 text-sm text-[#5174ac]">{item.created_at?.split('T')[0]}</td>
-                  {activeTab !== "pending" && <td className="p-5 text-sm text-[#5174ac]">{item.return_date || "---"}</td>}
+                  <td className="p-5 text-sm text-[#5174ac]">{activeTab === "pending" ? formatDateReadable(item?.approved_at) : formatDateReadable(item?.reserved_from)}</td>
+                  {activeTab !== "pending" && <td className="p-5 text-sm text-[#5174ac]">{formatDateReadable(item?.reserved_until) || "---"}</td>}
                   <td className="p-5 text-center">
                     <span className="px-4 py-1.5 border border-blue-200 rounded-lg text-[11px] font-bold">
                       {activeTab === "pending" ? "Band qilingan" : activeTab === "borrowed" ? "Topshirilgan" : "Qaytarilgan"}
