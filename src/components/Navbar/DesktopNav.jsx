@@ -108,21 +108,22 @@ const DesktopNav = ({ categories, subcategories = [] }) => {
         Audio Kitoblar
       </Link>
 
+      {checkUserLevel("teacher") && (
+        <Link
+          to={"/createbook"}
+          className=""
+        >
+          <StatChip label={"Kitob qo'shish"} color={"text-green-600"} borderColor={"border-green-200"}/>
+        </Link>
+      )}
+
       {checkUserLevel("librarian") && (
-        <>
-          <Link
-            to={"/createbook"}
-            className=""
-          >
-			<StatChip label={"Kitob qo'shish"} color={"text-green-600"} borderColor={"border-green-200"}/>
-          </Link>
-          <Link
-            to={"/bookControl"}
-            className=""
-          >
-			<StatChip label={"Kitoblarni boshqarish"} color={"text-sky-600"} borderColor={"border-sky-200"}/>
-          </Link>
-        </>
+        <Link
+          to={"/bookControl"}
+          className=""
+        >
+          <StatChip label={"Kitoblarni boshqarish"} color={"text-sky-600"} borderColor={"border-sky-200"}/>
+        </Link>
       )}
     </div>
   );

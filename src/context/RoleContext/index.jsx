@@ -11,7 +11,7 @@ export const RoleProvider = ({ children }) => {
   const ROLES = {
     guest: 1,
     student: 2,
-    teacher: 4,
+    teacher: 3,
     librarian: 4,
     admin: 5,
   };

@@ -67,6 +67,16 @@ export const getAuthors = async () => {
   return res.results;
 }
 
+export const createAuthor = async (name) => {
+  const res = await api.post("/authors/", { name });
+  return res;
+}
+
+export const createTag = async (name) => {
+  const res = await api.post("/tags/", { name });
+  return res;
+}
+
 export const getBookStats = async (bookId) => {
   const res = await api.get(`/book-detail-stats/`, { params: { book_id: bookId } });
   return res;
@@ -81,5 +91,7 @@ export default {
   deleteBook,
   getTags,
   getAuthors,
+  createAuthor,
+  createTag,
   getBookStats
 };

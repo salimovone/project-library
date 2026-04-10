@@ -64,15 +64,20 @@ export const router = createBrowserRouter([
         ],
       },
       {
+        element: <ProtectedRoute requiredRole="teacher" />,
+        children: [
+          {
+            path: "/createBook",
+            element: <BookCreatePage />,
+          },
+        ],
+      },
+      {
         element: <ProtectedRoute requiredRole="librarian" />,
         children: [
           {
             path: "/bookControl",
             element: <BookControlPage />,
-          },
-          {
-            path: "/createBook",
-            element: <BookCreatePage />,
           },
         ],
       },
