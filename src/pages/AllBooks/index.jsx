@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router";
 import { fetchBooks, getAuthors, getTags } from "../../services/bookService";
 import { fetchCategories } from "../../services/additional";
 import FilterBar from "./components/FilterBar";
@@ -11,12 +12,14 @@ export default function AllBooks() {
   const [tags, setTags] = useState([]);
   const [authors, setAuthors] = useState([]);
   const [categories, setCategories] = useState([]);
-  const data = location.state;
+  const location = useLocation();
+  const stateData = location.state || {};
 
   const initialFilters = {
     search: "",
     sort: "rating-high",
-    category: "",
+    category: stateData.category || "",
+    subcategory: stateData.subcategory || "",
     tag: "",
     author: "",
     book_format: {
@@ -31,9 +34,21 @@ export default function AllBooks() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (data)
-      console.log("category filter: ", data);
-      // handleApplyFilter(data);
+    if (location.state) {
+      setStagedFilters(prev => ({
+        ...prev,
+        category: location.state.category || "",
+        subcategory: location.state.subcategory || ""
+      }));
+      setAppliedFilters(prev => ({
+        ...prev,
+        category: location.state.category || "",
+        subcategory: location.state.subcategory || ""
+      }));
+    }
+  }, [location.state]);
+
+  useEffect(() => {
     const fetchSideData = async () => {
       try {
         await Promise.all([

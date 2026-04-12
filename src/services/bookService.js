@@ -1,7 +1,7 @@
 import api from './api';
 
 export async function fetchLatestBooks(howMany = 8) {
-  let data = await api.get("/kitob/", {params: {"page_size": howMany, "sort": "latest"}})
+  let data = await api.get("/kitob/", { params: { "page_size": howMany, "sort": "latest" } })
   return data.results
 }
 
@@ -17,6 +17,9 @@ export async function fetchBooks(filters) {
   if (filters?.category) {
     params.category = filters.category;
   }
+  if (filters?.subcategory) {
+    params.subcategory = filters.subcategory;
+  }
   if (filters?.tag) {
     params.tag = filters.tag;
   }
@@ -31,7 +34,7 @@ export async function fetchBooks(filters) {
     const formats = Object.keys(filters.book_format).filter(key => !filters.book_format[key]);
     if (formats.length > 0) {
       for (const element of formats) {
-        params[element] = true;   
+        params[element] = true;
       }
     }
   }
@@ -94,7 +97,7 @@ export async function fetchSimilarBooks(id) {
 export default {
   fetchLatestBooks,
   fetchBooks,
-  fetchBook,  
+  fetchBook,
   createBook,
   updateBook,
   deleteBook,

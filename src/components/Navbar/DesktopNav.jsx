@@ -57,7 +57,7 @@ const DesktopNav = ({ categories, subcategories = [] }) => {
                     onClick={() => {
                       setIsDropdownOpen(false);
                       setActiveCategory(null);
-                      navigate("/books/", {state: {target: {name: "category", value: cat.id}}})
+                      navigate("/books", {state: { category: cat.id }});
                     }}
                   >
                     {cat?.name}
@@ -73,7 +73,7 @@ const DesktopNav = ({ categories, subcategories = [] }) => {
                           onClick={() => {
                             setIsDropdownOpen(false);
                             setActiveCategory(null);
-                            navigate("/books/", {state: {target: {name: "category", value: sub.id}}})
+                            navigate("/books", {state: { category: cat.id, subcategory: sub.id }});
                           }}
                         >
                           {sub?.name}

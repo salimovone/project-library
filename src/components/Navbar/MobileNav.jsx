@@ -32,7 +32,8 @@ const MobileNav = ({ categories, subcategories = [], closeMenu }) => {
                   <div key={cat.id} className="flex flex-col">
                     <div className="flex justify-between items-center">
                       <Link 
-                        to={`/category/${cat.id}`} 
+                        to="/books"
+                        state={{ category: cat.id }}
                         className="text-sm text-gray-600 hover:text-blue-600 py-1 flex-1"
                         onClick={closeMenu}
                       >
@@ -52,7 +53,8 @@ const MobileNav = ({ categories, subcategories = [], closeMenu }) => {
                         {catSubcategories.map(sub => (
                           <Link 
                             key={sub.id} 
-                            to={`/category/${cat.id}?subcategory=${sub.id}`} 
+                            to="/books"
+                            state={{ category: cat.id, subcategory: sub.id }}
                             className="text-xs text-gray-500 hover:text-blue-600 py-1"
                             onClick={closeMenu}
                           >
