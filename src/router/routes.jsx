@@ -84,7 +84,7 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: "/login",
+    path: "/",
     element: <ProtectedRoute requiredRole="guest" strict />,
     children: [
       {

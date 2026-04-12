@@ -46,7 +46,7 @@ export async function fetchBook(id) {
 }
 
 export async function createBook(book) {
-  return api.post('/kitob', book);
+  return api.post('/kitob/', book);
 }
 
 export async function updateBook(id, book) {
