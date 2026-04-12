@@ -87,11 +87,11 @@ const MobileNav = ({ categories, subcategories = [], closeMenu }) => {
           Kutubxona
         </Link>
         <Link 
-          to={"/audiobooks"} 
+          to={"/top-books"} 
           className="block text-gray-700 hover:text-blue-600 font-medium py-2 transition"
           onClick={closeMenu}
         >
-          Audio Kitoblar
+          Top Kitoblar
         </Link>
         
         <div className="mt-4 pt-4 border-t border-gray-200">

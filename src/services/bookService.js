@@ -94,6 +94,17 @@ export async function fetchSimilarBooks(id) {
   return data;
 }
 
+export async function fetchTopBooksPaginated(page = 1, pageSize = 26) {
+  let data = await api.get('/kitob', {
+    params: {
+      sort: 'rating-high',
+      page: page,
+      page_size: pageSize
+    }
+  });
+  return data;
+}
+
 export default {
   fetchLatestBooks,
   fetchBooks,
@@ -107,5 +118,6 @@ export default {
   createTag,
   getBookStats,
   patchBook,
-  fetchSimilarBooks
+  fetchSimilarBooks,
+  fetchTopBooksPaginated
 };

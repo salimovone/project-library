@@ -102,10 +102,10 @@ const DesktopNav = ({ categories, subcategories = [] }) => {
       </div>
 
       <Link
-        to={"/audiobooks"}
+        to={"/top-books"}
         className="text-gray-700 hover:text-blue-600 font-medium transition"
       >
-        Audio Kitoblar
+        Top Kitoblar
       </Link>
 
       {checkUserLevel("teacher") && (

@@ -4,7 +4,7 @@ import HomePage from "../pages/HomePage";
 import BookDetailPage from "../pages/BookDetailPage";
 import UserPage from "../pages/UserPage";
 import { AllBooks } from "../pages";
-import AudioPage from "../pages/AllBooks/AudioPage";
+import TopBooks from "../pages/TopBooks";
 import LoginPage from "../pages/Auth/LoginPage";
 import BookCreatePage from "../pages/BookCreatePage";
 import BookEditPage from "../pages/BookEditPage";
@@ -33,8 +33,8 @@ export const router = createBrowserRouter([
             element: <AllBooks />,
           },
           {
-            path: "/audiobooks",
-            element: <AudioPage />,
+            path: "/top-books",
+            element: <TopBooks />,
           },
           {
             path: "/books/:id",
