@@ -7,6 +7,7 @@ import { AllBooks } from "../pages";
 import AudioPage from "../pages/AllBooks/AudioPage";
 import LoginPage from "../pages/Auth/LoginPage";
 import BookCreatePage from "../pages/BookCreatePage";
+import BookEditPage from "../pages/BookEditPage";
 import BookControlPage from "../pages/BookControlPage";
 import ProtectedRoute from "../components/ProtectedRoute";
 
@@ -78,6 +79,10 @@ export const router = createBrowserRouter([
           {
             path: "/bookControl",
             element: <BookControlPage />,
+          },
+          {
+            path: "/books/:id/edit",
+            element: <BookEditPage />,
           },
         ],
       },

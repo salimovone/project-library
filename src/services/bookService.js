@@ -82,6 +82,15 @@ export const getBookStats = async (bookId) => {
   return res;
 };
 
+export async function patchBook(id, book) {
+  return api.patch(`/kitob/${id}/`, book);
+}
+
+export async function fetchSimilarBooks(id) {
+  let data = await api.get(`/kitob/${id}/similar/`);
+  return data;
+}
+
 export default {
   fetchLatestBooks,
   fetchBooks,
@@ -93,5 +102,7 @@ export default {
   getAuthors,
   createAuthor,
   createTag,
-  getBookStats
+  getBookStats,
+  patchBook,
+  fetchSimilarBooks
 };

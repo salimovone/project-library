@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 
-export default function MultiSelectDropdown({ 
-  selectedIds, 
-  items, 
-  onToggleItem, 
+export default function MultiSelectDropdown({
+  selectedIds,
+  items,
+  onToggleItem,
   onOpenCreate,
   label,
   placeholder,
@@ -36,7 +36,7 @@ export default function MultiSelectDropdown({
       <label className="text-sm font-bold text-[#143c7b]">{label}</label>
       <div className="flex gap-2 items-start">
         <div className="relative flex-1 bg-white border border-gray-300 rounded-xl px-3 py-2 min-h-[50px] flex flex-wrap gap-1.5 items-center focus-within:ring-1 focus-within:ring-blue-500 transition-all">
-          
+
           {/* Selected chips inside */}
           {selectedIds.map((id) => {
             const item = items.find((a) => a.id === id);
@@ -79,19 +79,17 @@ export default function MultiSelectDropdown({
                 filteredItems.map((item) => (
                   <div
                     key={item.id}
-                    className={`px-4 py-2.5 text-sm cursor-pointer hover:bg-blue-50 flex items-center gap-2 ${
-                      selectedIds.includes(item.id) ? "bg-blue-100 font-semibold" : ""
-                    }`}
+                    className={`px-4 py-2.5 text-sm cursor-pointer hover:bg-blue-50 flex items-center gap-2 ${selectedIds.includes(item.id) ? "bg-blue-100 font-semibold" : ""
+                      }`}
                     onClick={() => {
                       onToggleItem(item.id);
                     }}
                   >
                     <span
-                      className={`w-4 h-4 rounded border flex items-center justify-center text-xs ${
-                        selectedIds.includes(item.id)
-                          ? "bg-blue-600 border-blue-600 text-white"
-                          : "border-gray-300"
-                      }`}
+                      className={`w-4 h-4 rounded border flex items-center justify-center text-xs ${selectedIds.includes(item.id)
+                        ? "bg-blue-600 border-blue-600 text-white"
+                        : "border-gray-300"
+                        }`}
                     >
                       {selectedIds.includes(item.id) && "✓"}
                     </span>
@@ -106,7 +104,7 @@ export default function MultiSelectDropdown({
         <button
           type="button"
           onClick={() => onOpenCreate(createType)}
-          className="bg-green-600 text-white px-4 py-3 rounded-xl text-sm font-bold hover:bg-green-700 transition whitespace-nowrap min-h-[50px] self-start"
+          className="bg-green-600 text-white px-4 rounded-xl text-sm font-bold hover:bg-green-700 transition whitespace-nowrap min-h-[50px] self-start"
         >
           + Yaratish
         </button>

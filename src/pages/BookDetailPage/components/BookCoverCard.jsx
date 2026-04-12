@@ -1,12 +1,32 @@
 import { useState, useMemo } from "react";
-import { FaBookmark, FaDownload, FaHeadphones, FaCheck, FaClock, FaBookReader, FaUndo } from "react-icons/fa";
+import { useNavigate } from "react-router";
+import { FaBookmark, FaDownload, FaHeadphones, FaCheck, FaClock, FaBookReader, FaUndo, FaEdit, FaTrash } from "react-icons/fa";
 import useRole from "../../../hooks/useRole";
 import { reserveBookStudent } from "../../../services/reservations";
+import { deleteBook } from "../../../services/bookService";
+import Modal from "../../../components/Modal";
 
 export default function BookCoverCard({ book }) {
   const fallbackImg = "https://via.placeholder.com/300x450?text=Kitob+Muqovasi";
   const imageUrl = book.img ? book.img : fallbackImg;
   const { checkUserLevel } = useRole();
+  const navigate = useNavigate();
+  const isLibrarian = checkUserLevel("librarian");
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+
+  const handleDelete = async () => {
+    setDeleteLoading(true);
+    try {
+      await deleteBook(book.id);
+      navigate("/books");
+    } catch (e) {
+      alert("O'chirishda xatolik yuz berdi");
+    } finally {
+      setDeleteLoading(false);
+      setShowDeleteModal(false);
+    }
+  };
 
  const handleDownloadURL = async () => {
   if (!book.pdf) return;
@@ -135,7 +155,51 @@ export default function BookCoverCard({ book }) {
             </>
           )}
         </button>
+
+        {isLibrarian && (
+          <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-gray-100">
+            <button
+              onClick={() => navigate(`/books/${book.id}/edit`)}
+              className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-3 font-semibold text-white transition hover:bg-blue-700"
+            >
+              <FaEdit /> Tahrirlash
+            </button>
+            <button
+              onClick={() => setShowDeleteModal(true)}
+              className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-red-600 px-4 py-3 font-semibold text-white transition hover:bg-red-700"
+            >
+              <FaTrash /> O'chirish
+            </button>
+          </div>
+        )}
       </div>
+
+      <Modal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        title="O'chirishni tasdiqlash"
+      >
+        <div className="text-gray-700">
+          Rostdan ham ushbu kitobni o'chirishni xohlaysizmi? Bu amalni ortga qaytarib bo'lmaydi.
+          <div className="flex justify-end gap-3 mt-6">
+            <button
+              type="button"
+              onClick={() => setShowDeleteModal(false)}
+              className="px-6 py-2.5 rounded-xl border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition"
+            >
+              Bekor qilish
+            </button>
+            <button
+              type="button"
+              onClick={handleDelete}
+              disabled={deleteLoading}
+              className={`px-6 py-2.5 rounded-xl bg-red-600 text-white font-bold hover:bg-red-700 transition ${deleteLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+              {deleteLoading ? "O'chirilmoqda..." : "Ha, o'chirish"}
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }
