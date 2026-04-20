@@ -279,8 +279,8 @@ export default function BookEditPage() {
 
               {/* Teglar */}
               <MultiSelectDropdown
-                label="Teglar"
-                placeholder="Teg qidirish..."
+                label="Adabyot turi"
+                placeholder="Adabyot turi qidirish..."
                 createType="tag"
                 selectedIds={bookData.tag_ids}
                 items={options.tags}
@@ -290,7 +290,7 @@ export default function BookEditPage() {
               />
 
               <div className="space-y-1.5">
-                <label className="text-sm font-bold text-[#143c7b]">Kategoriya *</label>
+                <label className="text-sm font-bold text-[#143c7b]">Fakultetni tanlash *</label>
                 <select
                   name="category_id"
                   value={bookData.category_id || ""}
@@ -298,7 +298,7 @@ export default function BookEditPage() {
                   onChange={handleInputChange}
                   required
                 >
-                  <option value="">Kategoriyani tanlang</option>
+                  <option value="">Fakultetni tanlang</option>
                   {options.categories.map((cat) => (
                     <option key={cat.id} value={cat.id}>
                       {cat.name}
@@ -308,7 +308,7 @@ export default function BookEditPage() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-sm font-bold text-[#143c7b]">Ost-kategoriya *</label>
+                <label className="text-sm font-bold text-[#143c7b]">Yo'nalishlar *</label>
                 <select
                   name="subcategory_id"
                   value={bookData.subcategory_id || ""}
@@ -316,7 +316,7 @@ export default function BookEditPage() {
                   onChange={handleInputChange}
                   required
                 >
-                  <option value="">Ost-kategoriyani tanlang</option>
+                  <option value="">Yo'nalishni tanlang</option>
                   {options.subcategories.map((subcat) => (
                     <option key={subcat.id} value={subcat.id}>
                       {subcat.name}
@@ -354,24 +354,24 @@ export default function BookEditPage() {
 
               {/* ISBN will be next to Joylashuv */}
               <div className="space-y-1.5">
-                <label className="text-sm font-bold text-[#143c7b]">ISBN</label>
+                <label className="text-sm font-bold text-[#143c7b]">Inventor raqam</label>
                 <input
                   name="isbn"
                   type="text"
                   value={bookData.isbn || ""}
-                  placeholder="Kitob isbn kiriting ...."
+                  placeholder="Inventor raqam kiriting ...."
                   className="w-full bg-white border border-gray-300 rounded-xl py-3 px-4 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   onChange={handleInputChange}
                 />
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-sm font-bold text-[#143c7b]">Joylashuv</label>
+                <label className="text-sm font-bold text-[#143c7b]">Javon raqami</label>
                 <input
                   name="location"
                   type="text"
                   value={bookData.location || ""}
-                  placeholder="Joylashuvni kiriting ...."
+                  placeholder="Javon raqamini kiriting ...."
                   className="w-full bg-white border border-gray-300 rounded-xl py-3 px-4 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   onChange={handleInputChange}
                 />
@@ -381,7 +381,7 @@ export default function BookEditPage() {
             </div>
 
             <div className="mt-6 space-y-1.5">
-              <label className="text-sm font-bold text-[#143c7b]">Tavsifi</label>
+              <label className="text-sm font-bold text-[#143c7b]">Kitobning to'liq shakli</label>
               <textarea
                 name="description"
                 rows="6"
