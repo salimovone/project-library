@@ -14,10 +14,18 @@ export default function BookDetailsPanel({book}) {
 	const normalizedRating =
 		book.rating > 5 ? (book.rating / 2).toFixed(1) : book.rating?.toFixed(1) || "0.0";
 
+	const quantity = book.quantity ?? 0;
+	const isAvailable = quantity > 0;
+
 	return (
-		<div className="w-full mx-auto rounded-3xl bg-white p-8 md:p-12 shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-gray-100">
-			<div className="mb-6">
-				<h1 className="text-4xl font-medium text-[#003366] mb-3 tracking-tight">
+		<div className="relative w-full mx-auto rounded-3xl bg-white p-8 md:p-12 shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-gray-100">
+			{/* Quantity Badge */}
+			<div className={`absolute top-6 right-6 md:top-8 md:right-8 px-4 py-1.5 rounded-full text-sm font-bold text-white shadow-sm ${isAvailable ? "bg-green-500" : "bg-red-500"}`}>
+				Kitob soni: {quantity}
+			</div>
+
+			<div className="mb-6 pr-32">
+				<h1 className="text-4xl font-medium text-[#003366] mb-3 tracking-tight leading-snug">
 					{book?.name}
 				</h1>
 				<p className="text-xl text-[#4a90e2] font-medium">
@@ -55,7 +63,7 @@ export default function BookDetailsPanel({book}) {
 					</div>
 					<div className="flex justify-between items-center">
 						<span className="text-gray-500 font-medium">Pages:</span>
-						<span className="font-bold text-gray-800">{book.pages? book.pages : "noma'lum"}</span>
+						<span className="font-bold text-gray-800">{book.pages ? book.pages : "noma'lum"}</span>
 					</div>
 					<div className="flex justify-between items-center">
 						<span className="text-gray-500 font-medium">Publisher:</span>

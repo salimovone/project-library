@@ -28,6 +28,7 @@ export default function BookEditPage() {
     tag_ids: [],
     description: "",
     pages: "",
+    location: "",
     published_date: new Date().toISOString().split("T")[0],
   });
 
@@ -59,6 +60,7 @@ export default function BookEditPage() {
           category_id: bk.category?.id || "",
           subcategory_id: bk.subcategory?.id || "",
           quantity: bk.quantity || "",
+          location: bk.location || "",
           tag_ids: bk.tags?.map(t => t.id) || [],
           description: bk.description || "",
           pages: bk.pages || "",
@@ -194,6 +196,7 @@ export default function BookEditPage() {
       formData.append("pages", Number(bookData.pages) || 0);
       formData.append("category_id", Number(bookData.category_id));
       formData.append("subcategory_id", Number(bookData.subcategory_id));
+      formData.append("location", bookData.location || "");
 
       const tagIds = bookData.tag_ids.length > 0 ? bookData.tag_ids.map(Number) : [0];
       const finalAuthorIds = authorIds.length > 0 ? authorIds.map(Number) : [0];
@@ -237,27 +240,13 @@ export default function BookEditPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
               {/* Kitob nomi */}
-              <div className="space-y-1.5">
+              <div className="space-y-1.5 md:col-span-2">
                 <label className="text-sm font-bold text-[#143c7b]">Kitob nomi *</label>
                 <input
                   name="name"
                   type="text"
                   value={bookData.name || ""}
                   placeholder="Kitob nomi kiriting ...."
-                  className="w-full bg-white border border-gray-300 rounded-xl py-3 px-4 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-
-              {/* ISBN */}
-              <div className="space-y-1.5">
-                <label className="text-sm font-bold text-[#143c7b]">ISBN *</label>
-                <input
-                  name="isbn"
-                  type="text"
-                  value={bookData.isbn || ""}
-                  placeholder="Kitob isbn kiriting ...."
                   className="w-full bg-white border border-gray-300 rounded-xl py-3 px-4 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   onChange={handleInputChange}
                   required
@@ -350,12 +339,40 @@ export default function BookEditPage() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-sm font-bold text-[#143c7b]">Miqdori</label>
+                <label className="text-sm font-bold text-[#143c7b]">Kitob soni *</label>
                 <input
                   name="quantity"
                   type="number"
+                  min="1"
                   value={bookData.quantity || ""}
                   placeholder="Kitob sonini kiriting ...."
+                  className="w-full bg-white border border-gray-300 rounded-xl py-3 px-4 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+
+              {/* ISBN will be next to Joylashuv */}
+              <div className="space-y-1.5">
+                <label className="text-sm font-bold text-[#143c7b]">ISBN *</label>
+                <input
+                  name="isbn"
+                  type="text"
+                  value={bookData.isbn || ""}
+                  placeholder="Kitob isbn kiriting ...."
+                  className="w-full bg-white border border-gray-300 rounded-xl py-3 px-4 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-sm font-bold text-[#143c7b]">Joylashuv</label>
+                <input
+                  name="location"
+                  type="text"
+                  value={bookData.location || ""}
+                  placeholder="Joylashuvni kiriting ...."
                   className="w-full bg-white border border-gray-300 rounded-xl py-3 px-4 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   onChange={handleInputChange}
                 />
@@ -374,6 +391,10 @@ export default function BookEditPage() {
                 className="w-full bg-white border border-gray-300 rounded-xl py-3 px-4 focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"
                 onChange={handleInputChange}
               />
+              <div className="mt-3 p-4 rounded-xl bg-[#f0f4f8] border-l-4 border-l-[#143c7b] border border-[#d1d9e6] text-[13.5px] text-[#143c7b] leading-relaxed shadow-sm">
+                <span className="font-bold block mb-1">Namuna:</span>
+                A.G’. Ahmedov, Odam anatomiyasi: Tibbiyot institutlarining bakalavriat yo’nalishidagi talabalari uchun darslik / A.G’.Ahmedov; O’zbekiston Reaspublikasi Oliy va o’rta maxsus ta’lim vazirligi, O’zbekiston Respublikasi sog’liqni saqlash vazirligi. -T.: “IQTISOD-MOLIYA”, 2007. 444b
+              </div>
             </div>
           </div>
 
