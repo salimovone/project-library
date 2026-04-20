@@ -4,7 +4,7 @@ export default function MostReadCard({ book }) {
   const imageUrl = book.img;
 
   const icons = [];
-  
+
   if (book.is_physical) {
     icons.push(
       <svg key="phys" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="h-4.5 w-4.5 text-[#1a56db]">
@@ -35,12 +35,19 @@ export default function MostReadCard({ book }) {
       className="group flex items-center gap-5 rounded-3xl bg-[#f5f5f5] p-3.5 transition-all duration-300 hover:shadow-md hover:-translate-y-1"
     >
       {/* Kitob rasmi - rasmga mos aspect va radius */}
-      <div className="h-30 w-22.5 shrink-0 overflow-hidden rounded-2xl shadow-sm">
-        <img
-          src={imageUrl}
-          alt={book?.name}
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-        />
+      <div className="h-30 w-22.5 shrink-0 overflow-hidden rounded-2xl shadow-sm relative">
+        {imageUrl ? (
+          <img
+            src={imageUrl}
+            alt={book?.name}
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+          />
+        ) : (
+          <div className="h-full w-full bg-linear-to-br from-[#003366] to-[#1a478e] p-1.5 flex flex-col items-center justify-center text-center relative transition-transform duration-500 group-hover:scale-110">
+            <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] animate-pulse"></div>
+            <h3 className="text-[10px] font-bold text-white line-clamp-3 leading-tight relative z-10 px-0.5">{book?.name}</h3>
+          </div>
+        )}
       </div>
 
       {/* Ma'lumotlar qismi */}

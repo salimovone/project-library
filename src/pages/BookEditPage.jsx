@@ -354,7 +354,7 @@ export default function BookEditPage() {
 
               {/* ISBN will be next to Joylashuv */}
               <div className="space-y-1.5">
-                <label className="text-sm font-bold text-[#143c7b]">ISBN *</label>
+                <label className="text-sm font-bold text-[#143c7b]">ISBN</label>
                 <input
                   name="isbn"
                   type="text"
@@ -362,7 +362,6 @@ export default function BookEditPage() {
                   placeholder="Kitob isbn kiriting ...."
                   className="w-full bg-white border border-gray-300 rounded-xl py-3 px-4 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   onChange={handleInputChange}
-                  required
                 />
               </div>
 

@@ -1,6 +1,6 @@
-import {Link} from "react-router";
+import { Link } from "react-router";
 
-export default function NewArrivalCard({book}) {
+export default function NewArrivalCard({ book }) {
 	const imageUrl = book.img;
 
 	const icons = [];
@@ -65,11 +65,20 @@ export default function NewArrivalCard({book}) {
 			className="group flex flex-col h-full overflow-hidden rounded-[20px] bg-white shadow-[0_8px_24px_rgba(0,0,0,0.05)] transition-all duration-300 hover:shadow-[0_12px_32px_rgba(0,0,0,0.12)] hover:-translate-y-1.5"
 		>
 			<div className="relative w-full aspect-3/4 overflow-hidden bg-gray-50 p-2">
-				<img
-					src={imageUrl}
-					alt={book?.name}
-					className="h-full w-full object-cover rounded-xl transition-transform duration-500 group-hover:scale-105"
-				/>
+				{imageUrl ? (
+					<img
+						src={imageUrl}
+						alt={book?.name}
+						className="h-full w-full object-cover rounded-xl transition-transform duration-500 group-hover:scale-105"
+					/>
+				) : (
+					<div className="h-full w-full rounded-xl bg-linear-to-br from-[#003366] to-[#1a478e] p-3 flex flex-col items-center justify-center text-center shadow-inner relative overflow-hidden transition-transform duration-500 group-hover:scale-105">
+						<div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] animate-pulse"></div>
+						<h3 className="text-[24px] font-bold text-white mb-2 line-clamp-3 leading-snug relative z-10 px-1 drop-shadow-sm">{book?.name}</h3>
+						<div className="h-0.5 w-6 bg-blue-400 rounded-full mb-1.5 relative z-10"></div>
+						<p className="text-blue-200 text-xs font-medium leading-snug relative z-10 line-clamp-2">{book?.author?.[0]?.name || "Noma'lum"}</p>
+					</div>
+				)}
 			</div>
 
 			<div className="flex flex-col grow p-4 pt-2">

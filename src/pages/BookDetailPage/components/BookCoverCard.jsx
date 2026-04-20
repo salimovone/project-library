@@ -8,7 +8,6 @@ import Modal from "../../../components/Modal";
 
 export default function BookCoverCard({ book }) {
   const fallbackImg = "https://via.placeholder.com/300x450?text=Kitob+Muqovasi";
-  const imageUrl = book.img ? book.img : fallbackImg;
   const { checkUserLevel } = useRole();
   const navigate = useNavigate();
   const isLibrarian = checkUserLevel("librarian");
@@ -28,35 +27,35 @@ export default function BookCoverCard({ book }) {
     }
   };
 
- const handleDownloadURL = async () => {
-  if (!book.pdf) return;
+  const handleDownloadURL = async () => {
+    if (!book.pdf) return;
 
-  try {
-    const fileUrl = book.pdf;
-    const fileName = fileUrl.split("/").pop() || "kitob.pdf";
+    try {
+      const fileUrl = book.pdf;
+      const fileName = fileUrl.split("/").pop() || "kitob.pdf";
 
-    const response = await fetch(fileUrl);
-    
-    const blob = await response.blob();
-    
-    const url = window.URL.createObjectURL(blob);
-    
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', fileName); // Fayl nomini beramiz
-    document.body.appendChild(link);
-    
-    link.click();
+      const response = await fetch(fileUrl);
 
-    link.parentNode.removeChild(link);
-    window.URL.revokeObjectURL(url); 
-  } catch (error) {
-    window.open(book.pdf, '_blank');
-  }
-};
+      const blob = await response.blob();
+
+      const url = window.URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', fileName); // Fayl nomini beramiz
+      document.body.appendChild(link);
+
+      link.click();
+
+      link.parentNode.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      window.open(book.pdf, '_blank');
+    }
+  };
 
   // Lokal holatni boshqarish
-  const [currentStatus, setCurrentStatus] = useState(book.reservation_status); 
+  const [currentStatus, setCurrentStatus] = useState(book.reservation_status);
   const [loading, setLoading] = useState(false);
 
   const statusConfig = useMemo(() => {
@@ -108,7 +107,7 @@ export default function BookCoverCard({ book }) {
 
   const handleBookmark = async () => {
     if (loading || statusConfig.disabled) return;
-    
+
     setLoading(true);
     try {
       await reserveBookStudent(book.id);
@@ -121,12 +120,22 @@ export default function BookCoverCard({ book }) {
 
   return (
     <div className="rounded-2xl h-full p-6 shadow-[0_6px_20px_rgba(0,0,0,0.08)] self-start sticky top-24 bg-white">
-      <img
-        src={imageUrl}
-        alt={book?.name}
-        className="h-100 w-full rounded-2xl object-cover shadow-sm"
-      />
-      
+      {book?.img ? (
+        <img
+          src={book.img}
+          alt={book?.name}
+          className="h-100 w-full rounded-2xl object-cover shadow-sm"
+        />
+      ) : (
+        <div className="h-100 w-full rounded-2xl bg-linear-to-br from-[#003366] to-[#1a478e] p-6 flex flex-col items-center justify-center text-center shadow-lg border border-blue-900 border-opacity-30 relative overflow-hidden">
+          <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] animate-pulse"></div>
+          <FaBookReader className="text-6xl text-blue-200/40 mb-5 relative z-10" />
+          <h2 className="text-[22px] font-extrabold text-white mb-3 line-clamp-4 leading-snug relative z-10 px-2 drop-shadow-md">{book?.name}</h2>
+          <div className="h-1 w-12 bg-blue-400 rounded-full mb-3 relative z-10"></div>
+          <p className="text-blue-200 font-semibold text-[16px] leading-snug relative z-10 line-clamp-2 px-4 shadow-sm">{book?.author?.[0]?.name || "Noma'lum muallif"}</p>
+        </div>
+      )}
+
       <div className="mt-6 space-y-3">
         {book.has_pdf && (
           <button onClick={handleDownloadURL} className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-orange-400 px-4 py-3 font-semibold text-white transition hover:bg-orange-500 ">
