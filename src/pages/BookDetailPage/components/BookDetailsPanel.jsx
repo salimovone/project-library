@@ -1,15 +1,15 @@
-import {FaStar, FaRegStar, FaStarHalfAlt} from "react-icons/fa";
+import { FaStar, FaRegStar, FaStarHalfAlt } from "react-icons/fa";
 
-export default function BookDetailsPanel({book}) {
+export default function BookDetailsPanel({ book }) {
 
 	console.log("book", book)
 
 	const pubDate = book.published_date
 		&& new Date(book.published_date).toLocaleDateString("en-US", {
-				year: "numeric",
-				month: "short",
-				day: "numeric",
-			})
+			year: "numeric",
+			month: "short",
+			day: "numeric",
+		})
 
 	const normalizedRating =
 		book.rating > 5 ? (book.rating / 2).toFixed(1) : book.rating?.toFixed(1) || "0.0";
@@ -35,7 +35,7 @@ export default function BookDetailsPanel({book}) {
 
 			<div className="flex items-center gap-2 mb-6">
 				<div className="flex text-[#e63946] text-lg">
-					{Array.from({length: 5}).map((_, index) => {
+					{Array.from({ length: 5 }).map((_, index) => {
 						const step = index + 1;
 						if (normalizedRating >= step) {
 							return <FaStar key={index} />;

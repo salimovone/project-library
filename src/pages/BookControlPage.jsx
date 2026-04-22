@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { CgSearch } from "react-icons/cg";
 import { FiUser, FiClock, FiCheckCircle, FiBookOpen, FiX } from "react-icons/fi";
-import { 
-  fetchReservations, 
-  updateReservationStatus 
+import {
+  fetchReservations,
+  updateReservationStatus
 } from "../services/reservations";
 import { fetchMainPageStats } from "../services/additional";
 import { Link } from "react-router";
+import Modal from "../components/Modal";
 
 
 const formatDateReadable = (date) => {
 
   return new Date(!!date ? date : new Date()).toLocaleDateString("en-US", {
-				year: "numeric",
-				month: "short",
-				day: "numeric",
-			})
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  })
 }
 
 export default function BookControlPage() {
@@ -24,7 +25,7 @@ export default function BookControlPage() {
   const [stats, setStats] = useState({});
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  
+
   // Modal states
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -56,7 +57,7 @@ export default function BookControlPage() {
       }
       const res = await fetchReservations(params);
       setData(res.results || []);
-      
+
       const statRes = await fetchMainPageStats();
       setStats(statRes);
     } catch (err) {
@@ -72,14 +73,14 @@ export default function BookControlPage() {
   // Statusni o'zgartirish (Topshirish yoki Qabul qilish)
   const handleAction = async () => {
     if (!selectedItem) return;
-    
+
     try {
       const newStatus = activeTab === "pending" ? "given" : "returned";
-      const payload = { 
+      const payload = {
         status: newStatus,
-        ...(returnDate && { return_date: returnDate }) 
+        ...(returnDate && { return_date: returnDate })
       };
-      
+
       await updateReservationStatus(selectedItem.id, payload);
       setShowModal(false);
       setSelectedItem(null);
@@ -158,7 +159,7 @@ export default function BookControlPage() {
                   <td className="p-5">
                     <div className="flex items-center gap-2">
                       <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-400"><FiUser /></div>
-                      <span className="text-sm font-medium">{(item?.first_name +" "+item?.last_name) !== " " || item?.user}</span>
+                      <span className="text-sm font-medium">{(item?.first_name + " " + item?.last_name) !== " " || item?.user}</span>
                     </div>
                   </td>
                   <td className="p-5 text-sm text-[#5174ac]">{activeTab === "pending" ? formatDateReadable(item?.approved_at) : formatDateReadable(item?.reserved_from)}</td>
@@ -170,7 +171,7 @@ export default function BookControlPage() {
                   </td>
                   <td className="p-5 text-center">
                     {activeTab !== "returned" && (
-                      <button 
+                      <button
                         onClick={() => { setSelectedItem(item); setShowModal(true); }}
                         className="bg-[#003282] text-white px-5 py-2 rounded-lg text-xs font-bold hover:bg-blue-900 transition flex items-center gap-2 mx-auto"
                       >
@@ -185,21 +186,15 @@ export default function BookControlPage() {
         </div>
       </div>
 
-      {/* MODAL */}
-      {showModal && (
-        <div className="fixed inset-0 z-100 flex items-center justify-center bg-black bg-opacity-40 p-4">
-          <div className="bg-white w-full max-w-md rounded-3xl p-8 shadow-2xl relative">
-            <button onClick={() => setShowModal(false)} className="absolute right-6 top-6 text-gray-400 hover:text-red-500"><FiX className="text-xl" /></button>
-            <h2 className="text-xl font-bold text-[#143c7b] mb-2">{activeTab === "pending" ? "Kitobni topshirish" : "Kitobni qabul qilish"}</h2>
-            <p className="text-sm text-gray-500 mb-6">Foydalanuvchi: {selectedItem?.user_details?.full_name}</p>
+      <Modal isOpen={showModal} onClose={() => setShowModal(false)} title={activeTab === "pending" ? "Kitobni topshirish" : "Kitobni qabul qilish"}>
+        <button onClick={() => setShowModal(false)} className="absolute right-6 top-6 text-gray-400 hover:text-red-500"><FiX className="text-xl" /></button>
+        <p className="text-sm text-gray-500 mb-6">Foydalanuvchi: {selectedItem?.user_details?.first_name} {selectedItem?.user_details?.last_name}</p>
 
-            <div className="flex gap-4">
-              <button onClick={() => setShowModal(false)} className="flex-1 border border-gray-200 py-3 rounded-xl text-sm font-bold text-gray-500">Bekor qilish</button>
-              <button onClick={handleAction} className="flex-1 bg-[#003282] text-white py-3 rounded-xl text-sm font-bold shadow-lg">Tasdiqlash</button>
-            </div>
-          </div>
+        <div className="flex gap-4">
+          <button onClick={() => setShowModal(false)} className="flex-1 border border-gray-200 py-3 rounded-xl text-sm font-bold text-gray-500">Bekor qilish</button>
+          <button onClick={handleAction} className="flex-1 bg-[#003282] text-white py-3 rounded-xl text-sm font-bold shadow-lg">Tasdiqlash</button>
         </div>
-      )}
+      </Modal>
     </div>
   );
 }
