@@ -23,8 +23,8 @@ export default function LoginPage() {
   useEffect(() => {
     if (error) {
       setLocalError(error);
-      setuseId(""); // Inputni tozalash
-      setPassword(""); // Inputni tozalash
+      setuseId("");
+      setPassword("");
     }
   }, [error]);
 
@@ -36,13 +36,13 @@ export default function LoginPage() {
   const handleInputChange = (setter) => (e) => {
     setter(e.target.value);
     if (localError) {
-      setLocalError(null); // Xatoni va UI qizil rangini olib tashlash
+      setLocalError(null);
     }
   };
 
   return (
     <div className="min-h-screen bg-[#f5f6f8] flex flex-col items-center justify-center p-4 font-sans">
-      <div className="mb-8">
+      <div onClick={() => navigate("/")} className="mb-8 cursor-pointer">
         <img
           src={logo}
           alt="Alfraganus Library"
@@ -119,10 +119,9 @@ export default function LoginPage() {
             disabled={loading}
             type="submit"
             className={`w-full flex items-center justify-center gap-2 text-white font-medium py-3.5 rounded-xl transition-colors duration-200 mt-2 
-              ${
-                localError
-                  ? "bg-red-600 hover:bg-red-700 disabled:bg-red-400 active:bg-red-800" 
-                  : "bg-[#003282] hover:bg-blue-900 disabled:bg-blue-400 active:bg-blue-700"
+              ${localError
+                ? "bg-red-600 hover:bg-red-700 disabled:bg-red-400 active:bg-red-800"
+                : "bg-[#003282] hover:bg-blue-900 disabled:bg-blue-400 active:bg-blue-700"
               }`}
           >
             {loading ? "Kutilmoqda..." : "Kirish"}{" "}

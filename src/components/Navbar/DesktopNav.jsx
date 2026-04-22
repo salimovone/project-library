@@ -108,6 +108,13 @@ const DesktopNav = ({ categories, subcategories = [] }) => {
         Top Kitoblar
       </Link>
 
+      <Link
+        to={"/feedback"}
+        className="text-gray-700 hover:text-blue-600 font-medium transition"
+      >
+        Fikr-mulohaza
+      </Link>
+
       {checkUserLevel("teacher") && (
         <Link
           to={"/createbook"}

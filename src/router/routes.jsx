@@ -3,7 +3,7 @@ import MainLayout from "../layouts/MainLayout";
 import HomePage from "../pages/HomePage";
 import BookDetailPage from "../pages/BookDetailPage";
 import UserPage from "../pages/UserPage";
-import { AllBooks } from "../pages";
+import { AllBooks, FeedbackPage } from "../pages";
 import TopBooks from "../pages/TopBooks";
 import LoginPage from "../pages/Auth/LoginPage";
 import BookCreatePage from "../pages/BookCreatePage";
@@ -35,6 +35,10 @@ export const router = createBrowserRouter([
           {
             path: "/top-books",
             element: <TopBooks />,
+          },
+          {
+            path: "/feedback",
+            element: <FeedbackPage />,
           },
           {
             path: "/books/:id",

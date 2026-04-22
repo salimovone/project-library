@@ -93,6 +93,13 @@ const MobileNav = ({ categories, subcategories = [], closeMenu }) => {
         >
           Top Kitoblar
         </Link>
+        <Link 
+          to={"/feedback"} 
+          className="block text-gray-700 hover:text-blue-600 font-medium py-2 transition"
+          onClick={closeMenu}
+        >
+          Fikr-mulohaza
+        </Link>
         
         <div className="mt-4 pt-4 border-t border-gray-200">
           <div className="relative text-[#003282] bg-[#f3f3f3] rounded-full mb-3">
