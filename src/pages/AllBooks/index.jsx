@@ -32,6 +32,10 @@ export default function AllBooks() {
   const [stagedFilters, setStagedFilters] = useState(initialFilters);
   const [appliedFilters, setAppliedFilters] = useState(initialFilters);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const limit = 12;
+  const totalPages = Math.ceil(totalCount / limit);
 
   useEffect(() => {
     if (location.state) {
@@ -63,19 +67,22 @@ export default function AllBooks() {
     fetchSideData();
   }, []);
 
-  useEffect(() => {
-    const loadBooks = async () => {
-      setIsLoading(true);
-      try {
-        const fetchedBooks = await fetchBooks(appliedFilters);
-        setBooks(fetchedBooks);
-      } catch (error) {
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const loadBooks = async (page = 1) => {
+    setIsLoading(true);
 
-    loadBooks();
+    try {
+      const data = await fetchBooks({ ...appliedFilters, page, page_size: limit });
+      setBooks(data.results || []);
+      setTotalCount(data.count || data.results?.length || 0);
+      setCurrentPage(page);
+    } catch (error) {
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadBooks(1);
   }, [appliedFilters]);
 
   const handleInputChange = (e) => {
@@ -118,8 +125,9 @@ export default function AllBooks() {
     setAppliedFilters(initialFilters);
   };
 
-  const handleLoadMore = () => {
-    console.log("Keyingi kitoblar yuklanmoqda...");
+  const handlePageChange = (newPage) => {
+    loadBooks(newPage);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -147,9 +155,58 @@ export default function AllBooks() {
           <SearchBar filters={stagedFilters} handleInputChange={handleInputChange} />
           <BookGrid
             books={books}
-            handleLoadMore={handleLoadMore}
             isLoading={isLoading}
           />
+
+          {totalPages > 1 && (
+            <div className="flex justify-center mt-8 mb-16 gap-2">
+              <button
+                onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+                disabled={currentPage === 1}
+                className="px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 border border-gray-200 bg-white text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 hover:text-[#1a478e] hover:border-gray-300 hover:shadow-sm"
+              >
+                Orqaga
+              </button>
+              <div className="items-center gap-1.5 mx-2 hidden sm:flex">
+                {[...Array(totalPages)].map((_, idx) => {
+                  const pageNum = idx + 1;
+                  if (
+                    pageNum === 1 ||
+                    pageNum === totalPages ||
+                    (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
+                  ) {
+                    return (
+                      <button
+                        key={pageNum}
+                        onClick={() => handlePageChange(pageNum)}
+                        className={`w-11 h-11 flex items-center justify-center rounded-xl font-bold text-[15px] transition-all duration-200 ${
+                          currentPage === pageNum
+                            ? "bg-[#1a478e] text-white shadow-[0_4px_12px_rgba(26,71,142,0.3)]"
+                            : "bg-white text-gray-700 border border-gray-200 hover:border-[#1a478e] hover:text-[#1a478e]"
+                        }`}
+                      >
+                        {pageNum}
+                      </button>
+                    );
+                  } else if (pageNum === currentPage - 2 || pageNum === currentPage + 2) {
+                    return (
+                      <span key={pageNum} className="px-2 text-gray-400 select-none">
+                        ...
+                      </span>
+                    );
+                  }
+                  return null;
+                })}
+              </div>
+              <button
+                onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
+                disabled={currentPage === totalPages}
+                className="px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 border border-gray-200 bg-white text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 hover:text-[#1a478e] hover:border-gray-300 hover:shadow-sm"
+              >
+                Oldinga
+              </button>
+            </div>
+          )}
         </main>
       </div>
     </div>

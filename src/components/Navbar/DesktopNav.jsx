@@ -5,7 +5,7 @@ import useRole from "../../hooks/useRole";
 
 const StatChip = ({ label, color, borderColor }) => (
   <div className={`flex items-center gap-2 bg-white border ${borderColor} px-4 py-2 rounded-xl text-xs font-bold ${color} shadow-sm`}>
-	{label}
+    {label}
   </div>
 );
 
@@ -18,6 +18,12 @@ const DesktopNav = ({ categories, subcategories = [] }) => {
 
   return (
     <div className="hidden md:flex items-center gap-6">
+      <Link
+        to={"/"}
+        className="text-gray-700 hover:text-blue-600 font-medium transition"
+      >
+        Bosh sahifa
+      </Link>
       <Link
         to={"/books"}
         className="text-gray-700 hover:text-blue-600 font-medium transition"
@@ -57,7 +63,7 @@ const DesktopNav = ({ categories, subcategories = [] }) => {
                     onClick={() => {
                       setIsDropdownOpen(false);
                       setActiveCategory(null);
-                      navigate("/books", {state: { category: cat.id }});
+                      navigate("/books", { state: { category: cat.id } });
                     }}
                   >
                     {cat?.name}
@@ -73,7 +79,7 @@ const DesktopNav = ({ categories, subcategories = [] }) => {
                           onClick={() => {
                             setIsDropdownOpen(false);
                             setActiveCategory(null);
-                            navigate("/books", {state: { category: cat.id, subcategory: sub.id }});
+                            navigate("/books", { state: { category: cat.id, subcategory: sub.id } });
                           }}
                         >
                           {sub?.name}
@@ -84,19 +90,6 @@ const DesktopNav = ({ categories, subcategories = [] }) => {
                 </div>
               );
             })}
-
-            {/* {hasMoreCategories && (
-							<Link
-								to="/categories"
-								className="px-4 py-2 mt-1 text-sm font-semibold text-blue-600 border-t border-gray-100 hover:bg-gray-50 transition"
-								onClick={() => {
-									setIsDropdownOpen(false);
-									setActiveCategory(null);
-								}}
-							>
-								Barchasi...
-							</Link>
-						)} */}
           </div>
         )}
       </div>
@@ -120,7 +113,7 @@ const DesktopNav = ({ categories, subcategories = [] }) => {
           to={"/createbook"}
           className=""
         >
-          <StatChip label={"Kitob qo'shish"} color={"text-green-600"} borderColor={"border-green-200"}/>
+          <StatChip label={"Kitob qo'shish"} color={"text-green-600"} borderColor={"border-green-200"} />
         </Link>
       )}
 
@@ -129,7 +122,7 @@ const DesktopNav = ({ categories, subcategories = [] }) => {
           to={"/bookControl"}
           className=""
         >
-          <StatChip label={"Kitoblarni boshqarish"} color={"text-sky-600"} borderColor={"border-sky-200"}/>
+          <StatChip label={"Kitoblarni boshqarish"} color={"text-sky-600"} borderColor={"border-sky-200"} />
         </Link>
       )}
     </div>

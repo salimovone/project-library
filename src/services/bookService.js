@@ -8,10 +8,17 @@ export async function fetchLatestBooks(howMany = 8) {
 export async function fetchBooks(filters) {
   const params = {};
 
+  if (filters?.page) {
+    params.page = filters.page;
+  }
+  if (filters?.page_size) {
+    params.page_size = filters.page_size;
+  }
+
   if (filters?.search) {
     params.search = filters.search;
     let data = await api.get('/kitob', { params });
-    return data.results;
+    return data;
   }
 
   if (filters?.category) {
@@ -40,7 +47,7 @@ export async function fetchBooks(filters) {
   }
 
   let data = await api.get('/kitob', { params });
-  return data.results;
+  return data;
 }
 
 export async function fetchBook(id) {
