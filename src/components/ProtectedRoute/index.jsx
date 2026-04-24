@@ -1,9 +1,19 @@
-import { Navigate, Outlet, useNavigate } from 'react-router';
+import { Outlet, useNavigate } from 'react-router';
+import { useEffect } from 'react';
 import useRole from '../../hooks/useRole';
 
 export default function ProtectedRoute({ requiredRole, strict = false }) {
   const { checkUserLevel, role } = useRole();
   const navigate = useNavigate();
-  if (strict && role != requiredRole) return navigate(-1);
-  return checkUserLevel(requiredRole) ? <Outlet /> : navigate(-1);
+
+  const shouldRedirect = (strict && role != requiredRole) || !checkUserLevel(requiredRole);
+
+  useEffect(() => {
+    if (shouldRedirect) {
+      navigate(-1);
+    }
+  }, [shouldRedirect, navigate]);
+
+  if (shouldRedirect) return null;
+  return <Outlet />;
 }
