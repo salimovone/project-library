@@ -36,7 +36,7 @@ const BookCard = ({
           />
         ) : (
           <div className="w-full h-80 bg-linear-to-br from-[#003366] to-[#1a478e] p-4 flex flex-col items-center justify-center text-center shadow-inner relative overflow-hidden transition-transform duration-500 group-hover:scale-105">
-            <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] animate-pulse"></div>
+            <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] animate-pulse bg-repeat"></div>
             <FaBook className="text-4xl text-blue-200/40 mb-3 relative z-10" />
             <h3 className="text-lg font-bold text-white mb-2 line-clamp-3 leading-snug relative z-10 px-1 drop-shadow-sm">{title}</h3>
             <div className="h-0.5 w-8 bg-blue-400 rounded-full mb-2 relative z-10"></div>

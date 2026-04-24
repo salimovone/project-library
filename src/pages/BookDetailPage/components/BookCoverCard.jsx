@@ -95,7 +95,7 @@ export default function BookCoverCard({ book }) {
           icon: <FaUndo />,
           disabled: true,
         };
-      default: // null yoki bo'sh bo'lsa (ya'ni hali band qilinmagan)
+      default:
         return {
           text: "Band qilish",
           color: "bg-blue-600",
@@ -111,7 +111,7 @@ export default function BookCoverCard({ book }) {
     setLoading(true);
     try {
       await reserveBookStudent(book.id);
-      setCurrentStatus("pending"); // Band qilinganda srazu "pending"ga o'tadi
+      setCurrentStatus("pending");
     } catch (error) {
     } finally {
       setLoading(false);
@@ -128,7 +128,7 @@ export default function BookCoverCard({ book }) {
         />
       ) : (
         <div className="h-100 w-full rounded-2xl bg-linear-to-br from-[#003366] to-[#1a478e] p-6 flex flex-col items-center justify-center text-center shadow-lg border border-blue-900 border-opacity-30 relative overflow-hidden">
-          <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] animate-pulse"></div>
+          <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] animate-pulse bg-repeat"></div>
           <FaBookReader className="text-6xl text-blue-200/40 mb-5 relative z-10" />
           <h2 className="text-[22px] font-extrabold text-white mb-3 line-clamp-4 leading-snug relative z-10 px-2 drop-shadow-md">{book?.name}</h2>
           <div className="h-1 w-12 bg-blue-400 rounded-full mb-3 relative z-10"></div>

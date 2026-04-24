@@ -7,7 +7,7 @@ import { Link } from 'react-router';
 // Helper component for List Row View
 const BookRowItem = ({ book }) => {
   const imageUrl = book.img;
-  
+
   const icons = [];
   if (book.is_physical) {
     icons.push(
@@ -37,8 +37,15 @@ const BookRowItem = ({ book }) => {
   return (
     <Link to={`/books/${book.id}`} className="group flex flex-col md:flex-row md:items-center justify-between p-4 bg-white rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] transition-all duration-300 border border-gray-100/80 hover:-translate-y-0.5">
       <div className="flex flex-1 items-center gap-5">
-        <div className="w-[72px] h-[96px] flex-shrink-0 bg-gray-50 rounded-lg overflow-hidden border border-gray-100 relative shadow-sm">
-          <img src={imageUrl} alt={book.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+        <div className="w-18 h-24 shrink-0 bg-gray-50 rounded-lg overflow-hidden border border-gray-100 relative shadow-sm">
+          {book?.img ? (
+            <img src={book?.img} alt={book.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          ) : (
+            <div className="w-full h-full rounded-md bg-linear-to-br from-[#003366] to-[#1a478e] flex items-center justify-center shadow-inner relative overflow-hidden shrink-0">
+              <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] animate-pulse bg-repeat"></div>
+              <span className="text-[8px] font-bold text-white leading-tight line-clamp-3 relative z-10 text-center wrap-break-word px-0.5" >{book?.name}</span>
+            </div>
+          )}
         </div>
         <div className="flex flex-col">
           <h3 className="text-[17px] font-bold text-gray-800 line-clamp-1 mb-1.5 group-hover:text-[#1a478e] transition-colors">{book.name}</h3>
@@ -105,14 +112,14 @@ export default function TopBooks() {
       <div className="custom-container mx-auto px-4 lg:px-8">
         <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 bg-white p-4 rounded-2xl shadow-sm border border-gray-200/60">
           <h1 className="text-2xl font-extrabold text-[#1e293b] flex items-center gap-3">
-             <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-[#F59E0B]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-[#F59E0B]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
             </svg>
             Top Kitoblar
           </h1>
-          
+
           <div className="flex items-center bg-gray-50 rounded-xl shadow-inner border border-gray-200/80 p-1.5">
-            <button 
+            <button
               onClick={() => setViewMode('grid')}
               className={`p-2.5 rounded-lg transition-all duration-200 flex items-center gap-2 ${viewMode === 'grid' ? 'bg-white text-[#1a478e] shadow-sm font-semibold' : 'text-gray-500 hover:text-[#1a478e] hover:bg-white/50'}`}
               title="Grid View"
@@ -120,7 +127,7 @@ export default function TopBooks() {
               <BiGridAlt className="text-xl" />
               <span className="text-sm hidden sm:block">Setka</span>
             </button>
-            <button 
+            <button
               onClick={() => setViewMode('row')}
               className={`p-2.5 rounded-lg transition-all duration-200 flex items-center gap-2 ${viewMode === 'row' ? 'bg-white text-[#1a478e] shadow-sm font-semibold' : 'text-gray-500 hover:text-[#1a478e] hover:bg-white/50'}`}
               title="List View"
@@ -147,24 +154,24 @@ export default function TopBooks() {
         ) : (
           <>
             <div className={`transition-all duration-300 ${viewMode === 'grid' ? 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 xl:gap-8' : 'flex flex-col gap-4'}`}>
-              {viewMode === 'grid' 
+              {viewMode === 'grid'
                 ? books.map((book, idx) => (
-                    <div key={book.id} style={{ animationDelay: `${idx * 50}ms` }} className="animate-fade-in-up">
-                      <NewArrivalCard book={book} />
-                    </div>
-                  ))
+                  <div key={book.id} style={{ animationDelay: `${idx * 50}ms` }} className="animate-fade-in-up">
+                    <NewArrivalCard book={book} />
+                  </div>
+                ))
                 : books.map((book, idx) => (
-                    <div key={book.id} style={{ animationDelay: `${idx * 50}ms` }} className="animate-fade-in-up">
-                      <BookRowItem book={book} />
-                    </div>
-                  ))
+                  <div key={book.id} style={{ animationDelay: `${idx * 50}ms` }} className="animate-fade-in-up">
+                    <BookRowItem book={book} />
+                  </div>
+                ))
               }
             </div>
 
             {/* Pagination Controls */}
             {totalPages > 1 && (
               <div className="flex justify-center mt-14 gap-2">
-                <button 
+                <button
                   onClick={() => {
                     setPage(p => Math.max(1, p - 1));
                     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -174,12 +181,12 @@ export default function TopBooks() {
                 >
                   Orqaga
                 </button>
-                <div className="flex items-center gap-1.5 mx-2 hidden sm:flex">
+                <div className="items-center gap-1.5 mx-2 hidden sm:flex">
                   {[...Array(totalPages)].map((_, idx) => {
                     const pageNum = idx + 1;
                     if (pageNum === 1 || pageNum === totalPages || (pageNum >= page - 1 && pageNum <= page + 1)) {
                       return (
-                        <button 
+                        <button
                           key={pageNum}
                           onClick={() => {
                             setPage(pageNum);
@@ -196,7 +203,7 @@ export default function TopBooks() {
                     return null;
                   })}
                 </div>
-                <button 
+                <button
                   onClick={() => {
                     setPage(p => Math.min(totalPages, p + 1));
                     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -212,7 +219,8 @@ export default function TopBooks() {
         )}
       </div>
 
-      <style dangerouslySetInnerHTML={{__html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         @keyframes fadeInUp {
           from { opacity: 0; transform: translateY(10px); }
           to { opacity: 1; transform: translateY(0); }

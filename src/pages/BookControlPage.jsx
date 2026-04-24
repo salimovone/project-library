@@ -149,7 +149,14 @@ export default function BookControlPage() {
                 <tr key={item.id} className="hover:bg-gray-50 transition">
                   <td className="p-5">
                     <div className="flex items-center gap-3">
-                      <img src={item?.img || "placeholder.jpg"} className="w-10 h-14 rounded-md object-cover" />
+                      {item?.img ? (
+                        <img src={item.img} alt={item.book} className="w-10 h-14 rounded-md object-cover shrink-0" />
+                      ) : (
+                        <div className="w-10 h-14 rounded-md bg-linear-to-br from-[#003366] to-[#1a478e] flex items-center justify-center shadow-inner relative overflow-hidden shrink-0">
+                          <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] animate-pulse bg-repeat"></div>
+                          <span className="text-[8px] font-bold text-white leading-tight line-clamp-3 relative z-10 text-center wrap-break-word px-0.5" title={item?.book}>{item?.book}</span>
+                        </div>
+                      )}
                       <div>
                         <div className="font-bold text-sm max-w-36">{item?.book}</div>
                         <div className="text-[11px] text-gray-500">{item?.author.map(a => a.name + " ")}</div>

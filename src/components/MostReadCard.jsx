@@ -44,7 +44,7 @@ export default function MostReadCard({ book }) {
           />
         ) : (
           <div className="h-full w-full bg-linear-to-br from-[#003366] to-[#1a478e] p-1.5 flex flex-col items-center justify-center text-center relative transition-transform duration-500 group-hover:scale-110">
-            <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] animate-pulse"></div>
+            <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] animate-pulse bg-repeat"></div>
             <h3 className="text-[10px] font-bold text-white line-clamp-3 leading-tight relative z-10 px-0.5">{book?.name}</h3>
           </div>
         )}
