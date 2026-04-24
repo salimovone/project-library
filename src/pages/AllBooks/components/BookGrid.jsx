@@ -2,9 +2,9 @@ import { NewArrivalCard } from "../../../components";
 
 const BookCardSkeleton = () => (
   <div className="animate-pulse">
-    <div className="bg-gray-200 rounded-lg h-48 w-full"></div>
-    <div className="mt-2 h-4 bg-gray-200 rounded w-3/4"></div>
-    <div className="mt-1 h-4 bg-gray-200 rounded w-1/2"></div>
+    <div className="bg-gray-200 dark:bg-gray-700 rounded-lg h-48 w-full transition-colors duration-300"></div>
+    <div className="mt-2 h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 transition-colors duration-300"></div>
+    <div className="mt-1 h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2 transition-colors duration-300"></div>
   </div>
 );
 

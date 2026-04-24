@@ -119,7 +119,7 @@ export default function BookCoverCard({ book }) {
   };
 
   return (
-    <div className="rounded-2xl h-full p-6 shadow-[0_6px_20px_rgba(0,0,0,0.08)] self-start sticky top-24 bg-white">
+    <div className="rounded-2xl h-full p-6 shadow-[0_6px_20px_rgba(0,0,0,0.08)] self-start sticky top-24 bg-white dark:bg-[#1e1e1e] transition-colors duration-300">
       {book?.img ? (
         <img
           src={book.img}
@@ -188,13 +188,13 @@ export default function BookCoverCard({ book }) {
         onClose={() => setShowDeleteModal(false)}
         title="O'chirishni tasdiqlash"
       >
-        <div className="text-gray-700">
+        <div className="text-gray-700 dark:text-gray-300 transition-colors">
           Rostdan ham ushbu kitobni o'chirishni xohlaysizmi? Bu amalni ortga qaytarib bo'lmaydi.
           <div className="flex justify-end gap-3 mt-6">
             <button
               type="button"
               onClick={() => setShowDeleteModal(false)}
-              className="px-6 py-2.5 rounded-xl border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition"
+              className="px-6 py-2.5 rounded-xl border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-medium hover:bg-gray-50 dark:hover:bg-[#252525] transition-colors"
             >
               Bekor qilish
             </button>

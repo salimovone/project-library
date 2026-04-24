@@ -77,11 +77,11 @@ export default function UserPage() {
       });
   }, [activeTab]);
 
-  const activeTabFilter = "bg-white font-semibold text-[#143c7b] shadow-sm border border-gray-100 transition hover:bg-gray-50";
-  const inactiveTabFilter = "bg-transparent font-medium text-[#5174ac] hover:bg-white hover:shadow-sm";
+  const activeTabFilter = "bg-white dark:bg-[#1e1e1e] font-semibold text-[#143c7b] dark:text-blue-300 shadow-sm border border-gray-100 dark:border-gray-800 transition-colors hover:bg-gray-50 dark:hover:bg-[#252525]";
+  const inactiveTabFilter = "bg-transparent font-medium text-[#5174ac] dark:text-blue-400 hover:bg-white dark:hover:bg-[#1e1e1e] hover:shadow-sm transition-colors";
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] py-8 font-sans">
+    <div className="min-h-screen bg-[#f8f9fa] dark:bg-[#121212] py-8 font-sans transition-colors duration-300">
       <div className="max-w-300 mx-auto px-4 sm:px-6 space-y-6">
         {/* Yuqori Profil va Statistika */}
         <ProfileHeader user={user} />
@@ -170,14 +170,14 @@ export default function UserPage() {
         {/* KITOBLAR RO'YXATI */}
         {isLoading ? (
           <div className="flex justify-center py-10">
-            <p className="text-gray-500 font-medium">Kitoblar yuklanmoqda...</p>
+            <p className="text-gray-500 dark:text-gray-400 font-medium transition-colors">Kitoblar yuklanmoqda...</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-8 sm:gap-x-6">
             {books.length > 0 ? (
               books.map((book) => <NewArrivalCard key={book.id} book={book} />)
             ) : (
-              <div className="col-span-full py-8 text-center text-gray-400">
+              <div className="col-span-full py-8 text-center text-gray-400 dark:text-gray-500 transition-colors">
                 Bu bo'limda hozircha kitoblar yo'q
               </div>
             )}

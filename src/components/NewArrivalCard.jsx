@@ -62,9 +62,9 @@ export default function NewArrivalCard({ book }) {
 	return (
 		<Link
 			to={`/books/${book.id}`}
-			className="group flex flex-col h-full overflow-hidden rounded-[20px] bg-white shadow-[0_8px_24px_rgba(0,0,0,0.05)] transition-all duration-300 hover:shadow-[0_12px_32px_rgba(0,0,0,0.12)] hover:-translate-y-1.5"
+			className="group flex flex-col h-full overflow-hidden rounded-[20px] bg-white dark:bg-[#1e1e1e] shadow-[0_8px_24px_rgba(0,0,0,0.05)] dark:shadow-none transition-all duration-300 hover:shadow-[0_12px_32px_rgba(0,0,0,0.12)] dark:hover:bg-[#252525] hover:-translate-y-1.5 border border-transparent dark:border-gray-800"
 		>
-			<div className="relative w-full aspect-3/4 overflow-hidden bg-gray-50 p-2">
+			<div className="relative w-full aspect-3/4 overflow-hidden bg-gray-50 dark:bg-[#2a2a2a] p-2 transition-colors duration-300">
 				{imageUrl ? (
 					<img
 						src={imageUrl}
@@ -83,7 +83,7 @@ export default function NewArrivalCard({ book }) {
 
 			<div className="flex flex-col grow p-4 pt-2">
 				<h3
-					className="text-[15px] font-bold text-[#1e293b] line-clamp-1 mb-0.5"
+					className="text-[15px] font-bold text-[#1e293b] dark:text-gray-100 line-clamp-1 mb-0.5 transition-colors duration-300"
 					title={book?.name}
 				>
 					{book?.name}
@@ -108,14 +108,14 @@ export default function NewArrivalCard({ book }) {
 							<div key={index} className="flex items-center gap-2">
 								{icon}
 								{index < icons.length - 1 && (
-									<div className="h-3 w-[1.5px] bg-gray-300 rounded-full" />
+									<div className="h-3 w-[1.5px] bg-gray-300 dark:bg-gray-600 rounded-full" />
 								)}
 							</div>
 						))}
 					</div>
 
-					<div className="flex items-center gap-1.5 rounded-xl bg-[#FFFBEB] px-3 py-1.5 border border-[#FEF3C7]">
-						<span className="text-xs font-black text-[#B45309]">
+					<div className="flex items-center gap-1.5 rounded-xl bg-[#FFFBEB] dark:bg-yellow-900/20 px-3 py-1.5 border border-[#FEF3C7] dark:border-yellow-700/30 transition-colors duration-300">
+						<span className="text-xs font-black text-[#B45309] dark:text-yellow-500">
 							{book.rating?.toFixed(1) || "0.0"}
 						</span>
 						<svg

@@ -131,9 +131,9 @@ export default function AllBooks() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] font-sans">
-      <div className="bg-[#f2f4f7] py-3">
-        <div className="custom-container mx-auto px-4 text-sm font-medium text-[#143c7b]">
+    <div className="min-h-screen bg-[#f8f9fa] dark:bg-[#121212] font-sans transition-colors duration-300">
+      <div className="bg-[#f2f4f7] dark:bg-[#1a1a1a] py-3 transition-colors duration-300">
+        <div className="custom-container mx-auto px-4 text-sm font-medium text-[#143c7b] dark:text-blue-300 transition-colors">
           Home / Book List
         </div>
       </div>
@@ -163,7 +163,7 @@ export default function AllBooks() {
               <button
                 onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
                 disabled={currentPage === 1}
-                className="px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 border border-gray-200 bg-white text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 hover:text-[#1a478e] hover:border-gray-300 hover:shadow-sm"
+                className="px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1e1e] text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-[#252525] hover:text-[#1a478e] dark:hover:text-blue-400 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-sm"
               >
                 Orqaga
               </button>
@@ -181,8 +181,8 @@ export default function AllBooks() {
                         onClick={() => handlePageChange(pageNum)}
                         className={`w-11 h-11 flex items-center justify-center rounded-xl font-bold text-[15px] transition-all duration-200 ${
                           currentPage === pageNum
-                            ? "bg-[#1a478e] text-white shadow-[0_4px_12px_rgba(26,71,142,0.3)]"
-                            : "bg-white text-gray-700 border border-gray-200 hover:border-[#1a478e] hover:text-[#1a478e]"
+                            ? "bg-[#1a478e] dark:bg-blue-600 text-white shadow-[0_4px_12px_rgba(26,71,142,0.3)]"
+                            : "bg-white dark:bg-[#1e1e1e] text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-[#1a478e] dark:hover:border-blue-500 hover:text-[#1a478e] dark:hover:text-blue-400"
                         }`}
                       >
                         {pageNum}
@@ -201,7 +201,7 @@ export default function AllBooks() {
               <button
                 onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
                 disabled={currentPage === totalPages}
-                className="px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 border border-gray-200 bg-white text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 hover:text-[#1a478e] hover:border-gray-300 hover:shadow-sm"
+                className="px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1e1e] text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-[#252525] hover:text-[#1a478e] dark:hover:text-blue-400 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-sm"
               >
                 Oldinga
               </button>

@@ -32,7 +32,7 @@ export default function MostReadCard({ book }) {
   return (
     <Link
       to={`/books/${book.id}`}
-      className="group flex items-center gap-5 rounded-3xl bg-[#f5f5f5] p-3.5 transition-all duration-300 hover:shadow-md hover:-translate-y-1"
+      className="group flex items-center gap-5 rounded-3xl bg-[#f5f5f5] dark:bg-[#1e1e1e] p-3.5 transition-all duration-300 hover:shadow-md hover:-translate-y-1 border border-transparent dark:border-gray-800"
     >
       {/* Kitob rasmi - rasmga mos aspect va radius */}
       <div className="h-30 w-22.5 shrink-0 overflow-hidden rounded-2xl shadow-sm relative">
@@ -53,7 +53,7 @@ export default function MostReadCard({ book }) {
       {/* Ma'lumotlar qismi */}
       <div className="flex flex-col justify-between py-1 h-full">
         <div>
-          <h3 className="text-[16px] font-bold text-[#143c7b] leading-tight line-clamp-2 mb-1">
+          <h3 className="text-[16px] font-bold text-[#143c7b] dark:text-blue-300 leading-tight line-clamp-2 mb-1 transition-colors duration-300">
             {book?.name}
           </h3>
 
@@ -72,15 +72,15 @@ export default function MostReadCard({ book }) {
               <div key={index} className="flex items-center gap-2">
                 {icon}
                 {index < icons.length - 1 && (
-                  <div className="h-3 w-[1.5px] bg-gray-300 rounded-full" />
+                  <div className="h-3 w-[1.5px] bg-gray-300 dark:bg-gray-600 rounded-full" />
                 )}
               </div>
             ))}
           </div>
 
           {/* Reyting qismi - 0 bo'lsa 0.0 ko'rsatadi */}
-          <div className="flex items-center gap-1.5 rounded-lg bg-white px-2 py-1 shadow-sm border border-gray-50">
-            <span className="text-[14px] font-black text-[#143c7b]">
+          <div className="flex items-center gap-1.5 rounded-lg bg-white dark:bg-[#252525] px-2 py-1 shadow-sm border border-gray-50 dark:border-gray-700 transition-colors duration-300">
+            <span className="text-[14px] font-black text-[#143c7b] dark:text-blue-400">
               {book.rating?.toFixed(1) || "0.0"}
             </span>
             <span className="text-[#ef4444] text-xs">★</span>

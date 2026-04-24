@@ -31,7 +31,7 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-50">
+    <nav className="bg-white dark:bg-[#1e1e1e] shadow-md sticky top-0 z-50 transition-colors duration-300">
       <div className="custom-container mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
           <Logo />
@@ -41,7 +41,7 @@ const Navbar = () => {
           <div className="flex md:hidden items-center">
             <button 
               onClick={toggleMenu}
-              className="text-2xl text-[#003282] p-2"
+              className="text-2xl text-[#003282] dark:text-blue-400 p-2"
             >
               {isMenuOpen ? <MdClose /> : <GiHamburgerMenu />}
             </button>

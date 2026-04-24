@@ -47,9 +47,9 @@ export default function HomePage() {
 				</div>
 			</section>
 
-			<section className="bg-[#f4f4f4] py-10">
+			<section className="bg-[#f4f4f4] dark:bg-[#1a1a1a] py-10 transition-colors duration-300">
 				<div className="custom-container space-y-6">
-					<h2 className="text-xl font-semibold text-[#1a478e]">
+					<h2 className="text-xl font-semibold text-[#1a478e] dark:text-blue-300">
 						Sizni nima qiziqtiradi?
 					</h2>
 					<div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">

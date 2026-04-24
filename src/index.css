@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  body {
+    @apply bg-white text-gray-900 transition-colors duration-300 dark:bg-[#121212] dark:text-gray-100;
+  }
+}
+
 @layer components {
   .custom-container {
     width: 100%;

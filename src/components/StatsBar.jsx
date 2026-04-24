@@ -18,7 +18,7 @@ export default function StatsBar() {
 		};
 	}, []);
 	return (
-		<section className="bg-[#123a7b] py-10">
+		<section className="bg-[#123a7b] dark:bg-[#0a1e3f] py-10 transition-colors duration-300">
 			<div className="custom-container grid grid-cols-2 gap-6 text-center text-white sm:grid-cols-4">
 				<div>
 					<p className="text-2xl font-bold text-red-200 sm:text-3xl">

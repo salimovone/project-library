@@ -25,22 +25,22 @@ const LanguageSwitcher = () => {
     <div className="relative">
       <button
         onClick={toggleDropdown}
-        className="flex-1 h-10 rounded px-3 py-2 bg-[#f3f3f3] text-[#003282] text-sm font-medium flex items-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-blue-600"
+        className="flex-1 h-10 rounded px-3 py-2 bg-[#f3f3f3] dark:bg-gray-800 text-[#003282] dark:text-blue-300 text-sm font-medium flex items-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-colors duration-300"
       >
-        <img src={selectedLanguage?.flag} alt={selectedLanguage?.name} className="w-[18px] h-auto object-contain rounded-[2px]" />
+        <img src={selectedLanguage?.flag} alt={selectedLanguage?.name} className="w-4.5 h-auto object-contain rounded-xs" />
         <span>{selectedLanguage?.name}</span>
         <BiChevronDown className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       {isOpen && (
-        <div className="absolute top-full right-0 mt-2 w-full bg-white shadow-lg rounded-lg py-1 border border-gray-100 z-50">
+        <div className="absolute top-full right-0 mt-2 w-full bg-white dark:bg-gray-800 shadow-lg rounded-lg py-1 border border-gray-100 dark:border-gray-700 z-50 transition-colors duration-300">
           {languages.map((lang) => (
             <button
               key={lang.code}
               onClick={() => selectLanguage(lang)}
-              className="w-full flex items-center gap-2  text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition"
+              className="w-full flex items-center gap-2 text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400 transition"
             >
-              <img src={lang?.flag} alt={lang?.name} className="w-[18px] h-auto object-contain rounded-[2px]" />
+              <img src={lang?.flag} alt={lang?.name} className="w-4.5 h-auto object-contain rounded-xs" />
               <span>{lang?.name}</span>
             </button>
           ))}

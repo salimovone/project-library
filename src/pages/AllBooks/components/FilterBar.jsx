@@ -17,7 +17,7 @@ export default function FilterBar({
     <>
       <button
         onClick={() => setIsMobileFilterOpen(!isMobileFilterOpen)}
-        className="md:hidden flex items-center justify-center gap-2 w-full rounded-xl bg-white border border-[#003282] py-3 text-sm font-semibold text-[#003282] transition shadow-sm"
+        className="md:hidden flex items-center justify-center gap-2 w-full rounded-xl bg-white dark:bg-[#1e1e1e] border border-[#003282] dark:border-blue-400 py-3 text-sm font-semibold text-[#003282] dark:text-blue-400 transition shadow-sm"
       >
         <BiFilterAlt className="text-lg" />
         {isMobileFilterOpen ? "Filtrni yopish" : "Filtrlash"}
@@ -28,8 +28,8 @@ export default function FilterBar({
           isMobileFilterOpen ? "block" : "hidden"
         } md:block`}
       >
-        <div className="bg-white rounded-2xl p-5 lg:p-6 shadow-sm border border-gray-100 md:sticky md:top-24 md:max-h-[calc(100vh-120px)] md:overflow-y-auto">
-          <h2 className="text-[18px] font-bold text-[#143c7b] mb-4 border-b border-gray-100 pb-4">
+        <div className="bg-white dark:bg-[#1e1e1e] rounded-2xl p-5 lg:p-6 shadow-sm border border-gray-100 dark:border-gray-800 md:sticky md:top-24 md:max-h-[calc(100vh-120px)] md:overflow-y-auto transition-colors duration-300">
+          <h2 className="text-[18px] font-bold text-[#143c7b] dark:text-blue-300 mb-4 border-b border-gray-100 dark:border-gray-800 pb-4 transition-colors">
             Filtrlash
           </h2>
 
@@ -62,13 +62,13 @@ export default function FilterBar({
           <div className="mt-8 flex flex-col gap-3">
             <button
               onClick={handleResetFilter}
-              className="w-full rounded-lg border border-[#143c7b] bg-white py-2.5 text-sm font-semibold text-[#143c7b] transition hover:bg-gray-50"
+              className="w-full rounded-lg border border-[#143c7b] dark:border-blue-400 bg-white dark:bg-transparent py-2.5 text-sm font-semibold text-[#143c7b] dark:text-blue-400 transition hover:bg-gray-50 dark:hover:bg-gray-800"
             >
               Filterni qaytarish
             </button>
             <button
               onClick={handleApplyFilter}
-              className="w-full rounded-lg bg-[#003282] py-2.5 text-sm font-semibold text-white transition hover:bg-blue-800 shadow-md"
+              className="w-full rounded-lg bg-[#003282] dark:bg-blue-600 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-800 dark:hover:bg-blue-500 shadow-md"
             >
               Natijani ko'rsatish
             </button>

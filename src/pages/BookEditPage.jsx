@@ -226,9 +226,9 @@ export default function BookEditPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white pb-20 font-sans">
-      <div className="bg-[#f2f4f7] py-3">
-        <div className="custom-container mx-auto px-4 text-sm font-medium text-[#143c7b]">
+    <div className="min-h-screen bg-white dark:bg-[#121212] pb-20 font-sans transition-colors duration-300">
+      <div className="bg-[#f2f4f7] dark:bg-[#1a1a1a] py-3 transition-colors duration-300">
+        <div className="custom-container mx-auto px-4 text-sm font-medium text-[#143c7b] dark:text-blue-300 transition-colors">
           <Link to="/">Home</Link> / Book Edit
         </div>
       </div>
@@ -236,18 +236,18 @@ export default function BookEditPage() {
       <div className="custom-container mx-auto px-4 mt-8">
         <form onSubmit={handleSubmit} className="max-w-5xl mx-auto space-y-8">
 
-          <div className="bg-[#f6f8fa] border border-[#d1d9e6] rounded-3xl p-8 shadow-sm">
+          <div className="bg-[#f6f8fa] dark:bg-[#1e1e1e] border border-[#d1d9e6] dark:border-gray-800 rounded-3xl p-8 shadow-sm transition-colors duration-300">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
               {/* Kitob nomi */}
               <div className="space-y-1.5 md:col-span-2">
-                <label className="text-sm font-bold text-[#143c7b]">Kitob nomi *</label>
+                <label className="text-sm font-bold text-[#143c7b] dark:text-blue-300 transition-colors">Kitob nomi *</label>
                 <input
                   name="name"
                   type="text"
                   value={bookData.name || ""}
                   placeholder="Kitob nomi kiriting ...."
-                  className="w-full bg-white border border-gray-300 rounded-xl py-3 px-4 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="w-full bg-white dark:bg-[#252525] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-4 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors"
                   onChange={handleInputChange}
                   required
                 />
@@ -270,8 +270,8 @@ export default function BookEditPage() {
               {/* Teacher info notice */}
               {isTeacher && userData && (
                 <div className="space-y-1.5">
-                  <label className="text-sm font-bold text-[#143c7b]">Muallif</label>
-                  <div className="w-full bg-gray-100 border border-gray-300 rounded-xl py-3 px-4 text-gray-600">
+                  <label className="text-sm font-bold text-[#143c7b] dark:text-blue-300 transition-colors">Muallif</label>
+                  <div className="w-full bg-gray-100 dark:bg-[#2a2a2a] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-4 text-gray-600 dark:text-gray-300 transition-colors">
                     {`${userData.first_name || ""} ${userData.last_name || ""}`.trim() || "Avtomatik to'ldiriladi"}
                   </div>
                 </div>
@@ -290,11 +290,11 @@ export default function BookEditPage() {
               />
 
               <div className="space-y-1.5">
-                <label className="text-sm font-bold text-[#143c7b]">Fakultetni tanlash *</label>
+                <label className="text-sm font-bold text-[#143c7b] dark:text-blue-300 transition-colors">Fakultetni tanlash *</label>
                 <select
                   name="category_id"
                   value={bookData.category_id || ""}
-                  className="w-full bg-white border border-gray-300 rounded-xl py-3 px-4 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="w-full bg-white dark:bg-[#252525] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-4 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors"
                   onChange={handleInputChange}
                   required
                 >
@@ -308,11 +308,11 @@ export default function BookEditPage() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-sm font-bold text-[#143c7b]">Yo'nalishlar *</label>
+                <label className="text-sm font-bold text-[#143c7b] dark:text-blue-300 transition-colors">Yo'nalishlar *</label>
                 <select
                   name="subcategory_id"
                   value={bookData.subcategory_id || ""}
-                  className="w-full bg-white border border-gray-300 rounded-xl py-3 px-4 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="w-full bg-white dark:bg-[#252525] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-4 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors"
                   onChange={handleInputChange}
                   required
                 >
@@ -326,27 +326,27 @@ export default function BookEditPage() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-sm font-bold text-[#143c7b]">Sahifalar soni *</label>
+                <label className="text-sm font-bold text-[#143c7b] dark:text-blue-300 transition-colors">Sahifalar soni *</label>
                 <input
                   name="pages"
                   type="number"
                   value={bookData.pages || ""}
                   placeholder="Sahifalar sonini kiriting ...."
-                  className="w-full bg-white border border-gray-300 rounded-xl py-3 px-4 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="w-full bg-white dark:bg-[#252525] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-4 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors"
                   onChange={handleInputChange}
                   required
                 />
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-sm font-bold text-[#143c7b]">Kitob soni *</label>
+                <label className="text-sm font-bold text-[#143c7b] dark:text-blue-300 transition-colors">Kitob soni *</label>
                 <input
                   name="quantity"
                   type="number"
                   min="1"
                   value={bookData.quantity || ""}
                   placeholder="Kitob sonini kiriting ...."
-                  className="w-full bg-white border border-gray-300 rounded-xl py-3 px-4 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="w-full bg-white dark:bg-[#252525] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-4 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors"
                   onChange={handleInputChange}
                   required
                 />
@@ -354,25 +354,25 @@ export default function BookEditPage() {
 
               {/* ISBN will be next to Joylashuv */}
               <div className="space-y-1.5">
-                <label className="text-sm font-bold text-[#143c7b]">Inventor raqam</label>
+                <label className="text-sm font-bold text-[#143c7b] dark:text-blue-300 transition-colors">Inventor raqam</label>
                 <input
                   name="isbn"
                   type="text"
                   value={bookData.isbn || ""}
                   placeholder="Inventor raqam kiriting ...."
-                  className="w-full bg-white border border-gray-300 rounded-xl py-3 px-4 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="w-full bg-white dark:bg-[#252525] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-4 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors"
                   onChange={handleInputChange}
                 />
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-sm font-bold text-[#143c7b]">Javon raqami</label>
+                <label className="text-sm font-bold text-[#143c7b] dark:text-blue-300 transition-colors">Javon raqami</label>
                 <input
                   name="location"
                   type="text"
                   value={bookData.location || ""}
                   placeholder="Javon raqamini kiriting ...."
-                  className="w-full bg-white border border-gray-300 rounded-xl py-3 px-4 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="w-full bg-white dark:bg-[#252525] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-4 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors"
                   onChange={handleInputChange}
                 />
               </div>
@@ -381,16 +381,16 @@ export default function BookEditPage() {
             </div>
 
             <div className="mt-6 space-y-1.5">
-              <label className="text-sm font-bold text-[#143c7b]">Kitobning to'liq shakli</label>
+              <label className="text-sm font-bold text-[#143c7b] dark:text-blue-300 transition-colors">Kitobning to'liq shakli</label>
               <textarea
                 name="description"
                 rows="6"
                 value={bookData.description || ""}
                 placeholder="Kitob haqida kiriting ...."
-                className="w-full bg-white border border-gray-300 rounded-xl py-3 px-4 focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"
+                className="w-full bg-white dark:bg-[#252525] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-4 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none transition-colors"
                 onChange={handleInputChange}
               />
-              <div className="mt-3 p-4 rounded-xl bg-[#f0f4f8] border-l-4 border-l-[#143c7b] border border-[#d1d9e6] text-[13.5px] text-[#143c7b] leading-relaxed shadow-sm">
+              <div className="mt-3 p-4 rounded-xl bg-[#f0f4f8] dark:bg-[#2a2a2a] border-l-4 border-l-[#143c7b] dark:border-l-blue-500 border border-[#d1d9e6] dark:border-gray-700 text-[13.5px] text-[#143c7b] dark:text-blue-300 leading-relaxed shadow-sm transition-colors">
                 <span className="font-bold block mb-1">Namuna:</span>
                 A.G’. Ahmedov, Odam anatomiyasi: Tibbiyot institutlarining bakalavriat yo’nalishidagi talabalari uchun darslik / A.G’.Ahmedov; O’zbekiston Reaspublikasi Oliy va o’rta maxsus ta’lim vazirligi, O’zbekiston Respublikasi sog’liqni saqlash vazirligi. -T.: “IQTISOD-MOLIYA”, 2007. 444b
               </div>
@@ -409,7 +409,7 @@ export default function BookEditPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className={`bg-[#003282] text-white px-12 py-3.5 rounded-xl font-bold transition shadow-lg ${isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-900'}`}
+              className={`bg-[#003282] dark:bg-blue-600 text-white px-12 py-3.5 rounded-xl font-bold transition shadow-lg ${isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-900 dark:hover:bg-blue-500'}`}
             >
               {isLoading ? "Saqlanmoqda..." : "Kitobni o'zgartirish"}
             </button>

@@ -95,29 +95,29 @@ export default function CustomerReviewsSection({ book, onUpdate, setCommentCount
 
   // Sharh komponenti (ichma-ich render bo'ladi)
   const CommentItem = ({ comment, depth = 0 }) => (
-    <div className={`group ${depth > 0 ? "ml-8 md:ml-12 mt-6 border-l-2 border-gray-100 pl-4 md:pl-6" : "border-b border-gray-50 pb-8 mb-8 last:border-0"}`}>
+    <div className={`group ${depth > 0 ? "ml-8 md:ml-12 mt-6 border-l-2 border-gray-100 dark:border-gray-800 pl-4 md:pl-6 transition-colors" : "border-b border-gray-50 dark:border-gray-800 pb-8 mb-8 last:border-0 transition-colors"}`}>
       <div className="flex justify-between items-start mb-3">
         <div className="flex items-center gap-3">
           <img
             src={comment.user?.avatar || `https://ui-avatars.com/api/?name=${comment.user?.first_name}+${comment.user?.last_name}&background=random`}
-            className="w-10 h-10 rounded-full object-cover border border-gray-100"
+            className="w-10 h-10 rounded-full object-cover border border-gray-100 dark:border-gray-700 transition-colors"
             alt="avatar"
           />
           <div>
-            <h4 className="font-bold text-gray-800 text-sm">{comment.user?.first_name} {comment.user?.last_name}</h4>
+            <h4 className="font-bold text-gray-800 dark:text-gray-200 text-sm transition-colors">{comment.user?.first_name} {comment.user?.last_name}</h4>
             {comment.rating > 0 && (
               <div className="flex text-yellow-400 text-[10px] mt-0.5">
                 {[...Array(5)].map((_, i) => (
-                  i < comment.rating ? <FaStar key={i} /> : <FaRegStar key={i} className="text-gray-200" />
+                  i < comment.rating_score ? <FaStar key={i} /> : <FaRegStar key={i} className="text-gray-200" />
                 ))}
               </div>
             )}
           </div>
         </div>
-        <span className="text-gray-400 text-[11px] italic">{dateReadableConverter(comment.c_at)}</span>
+        <span className="text-gray-400 dark:text-gray-500 text-[11px] italic transition-colors">{dateReadableConverter(comment.c_at)}</span>
       </div>
 
-      <p className="text-gray-600 leading-relaxed text-sm mb-3">
+      <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-sm mb-3 transition-colors">
         {comment.content}
       </p>
 
@@ -149,28 +149,28 @@ export default function CustomerReviewsSection({ book, onUpdate, setCommentCount
   );
 
   return (
-    <div className={`w-full mx-auto bg-white rounded-3xl p-8 shadow-sm border border-gray-100`}>
+    <div className={`w-full mx-auto bg-white dark:bg-[#1e1e1e] rounded-3xl p-8 shadow-sm border border-gray-100 dark:border-gray-800 transition-colors duration-300`}>
 
       {/* 1. Header */}
       <div className="flex justify-between items-center mb-10">
-        <h2 className="text-2xl font-bold text-gray-800">Customer Reviews</h2>
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 transition-colors">Izohlar</h2>
         <button
           onClick={() => { setShowCommentForm(true); setReplyTo(null); }}
           disabled={!checkUserLevel("student")}
           className="bg-[#5c56f1] hover:bg-[#4a44d1] disabled:bg-gray-300 text-white px-6 py-2.5 rounded-lg font-semibold transition-all"
         >
-          Write a Review
+          Izoh yozish
         </button>
       </div>
 
       {/* 2. Form (Sharh yoki Javob uchun) */}
       {showCommentForm && (
-        <div className="mb-12 p-6 bg-indigo-50/30 rounded-2xl border border-indigo-100 animate-in fade-in slide-in-from-top-4 duration-300">
+        <div className="mb-12 p-6 bg-indigo-50/30 dark:bg-indigo-900/10 rounded-2xl border border-indigo-100 dark:border-indigo-900/30 animate-in fade-in slide-in-from-top-4 duration-300 transition-colors">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="font-bold text-indigo-900">
+            <h3 className="font-bold text-indigo-900 dark:text-indigo-300 transition-colors">
               {replyTo ? `${replyTo.user?.first_name}ga javob yozish` : "Kitobga sharh qoldirish"}
             </h3>
-            <button onClick={() => { setShowCommentForm(false); setReplyTo(null); }} className="text-gray-400 hover:text-red-500">
+            <button onClick={() => { setShowCommentForm(false); setReplyTo(null); }} className="text-gray-400 hover:text-red-500 transition-colors">
               <FiX size={20} />
             </button>
           </div>
@@ -178,7 +178,7 @@ export default function CustomerReviewsSection({ book, onUpdate, setCommentCount
           <form onSubmit={handlePostComment}>
             {!replyTo && (
               <div className="flex items-center gap-2 mb-4">
-                <span className="text-sm text-gray-600">Baho:</span>
+                <span className="text-sm text-gray-600 dark:text-gray-300 transition-colors">Baho:</span>
                 <div className="flex gap-1">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button key={star} type="button" onClick={() => setRating(star)} onMouseEnter={() => setHover(star)} onMouseLeave={() => setHover(0)}>
@@ -193,7 +193,7 @@ export default function CustomerReviewsSection({ book, onUpdate, setCommentCount
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
               placeholder={replyTo ? "Javobingizni yozing..." : "Fikringizni yozing..."}
-              className="w-full p-4 rounded-xl border-0 bg-white shadow-sm focus:ring-2 focus:ring-indigo-500 outline-none text-sm min-h-25 mb-4"
+              className="w-full p-4 rounded-xl border-0 bg-white dark:bg-[#252525] dark:text-gray-100 shadow-sm focus:ring-2 focus:ring-indigo-500 outline-none text-sm min-h-25 mb-4 transition-colors"
               required
             />
 
@@ -207,20 +207,20 @@ export default function CustomerReviewsSection({ book, onUpdate, setCommentCount
       )}
 
       {/* 3. Stats Section */}
-      <div className="flex flex-col md:flex-row items-center gap-12 mb-12 pb-12 border-b border-gray-100">
+      <div className="flex flex-col md:flex-row items-center gap-12 mb-12 pb-12 border-b border-gray-100 dark:border-gray-800 transition-colors">
         <div className="text-center md:w-1/3">
-          <div className="text-6xl font-bold text-gray-900 mb-2">{Number(stats.avg).toFixed(1)}</div>
+          <div className="text-6xl font-bold text-gray-900 dark:text-white mb-2 transition-colors">{Number(stats.avg).toFixed(1)}</div>
           <div className="flex justify-center text-yellow-400 text-xl mb-2">
             {[...Array(5)].map((_, i) => (i < Math.floor(stats.avg) ? <FaStar key={i} /> : <FaRegStar key={i} />))}
           </div>
-          <p className="text-gray-500 text-sm font-medium">Based on {stats.total.toLocaleString()} reviews</p>
+          <p className="text-gray-500 text-sm font-medium">{stats?.total.toLocaleString()} ta sharh asosida</p>
         </div>
 
         <div className="flex-1 w-full space-y-3">
           {stats.dist.map((item, idx) => (
             <div key={idx} className="flex items-center gap-4 text-sm">
-              <span className="w-12 text-gray-500 whitespace-nowrap">{item.label}</span>
-              <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+              <span className="w-12 text-gray-500 dark:text-gray-400 whitespace-nowrap transition-colors">{item.label}</span>
+              <div className="flex-1 h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden transition-colors">
                 <div className="h-full bg-yellow-400 rounded-full transition-all duration-500" style={{ width: `${item.percent}%` }} />
               </div>
               <span className="w-10 text-right text-gray-400">{item.percent}%</span>
@@ -236,7 +236,7 @@ export default function CustomerReviewsSection({ book, onUpdate, setCommentCount
             <CommentItem key={comment.id} comment={comment} />
           ))
         ) : (
-          <p className="text-center text-gray-400 py-10 italic text-sm">Hozircha sharhlar mavjud emas.</p>
+          <p className="text-center text-gray-400 dark:text-gray-500 py-10 italic text-sm transition-colors">Hozircha sharhlar mavjud emas.</p>
         )}
       </div>
 

@@ -36,17 +36,17 @@ const Search = () => {
       {/* Search for Large Screens and up */}
       <div ref={searchContainerRef} className="hidden md:flex relative items-center h-10">
         <div 
-          className={`relative flex h-10 items-center justify-end transition-all duration-300 ease-in-out rounded bg-[#f3f3f3] ${isSearchOpen ? 'w-48' : 'w-10'}`}
+          className={`relative flex h-10 items-center justify-end transition-all duration-300 ease-in-out rounded bg-[#f3f3f3] dark:bg-gray-800 ${isSearchOpen ? 'w-48' : 'w-10'}`}
         >
           <input
             ref={inputRef}
             type="search"
             placeholder="Qidiruv"
-            className={`h-full pl-10 pr-4 py-2.5 text-sm bg-transparent focus:outline-none text-[#003282] transition-opacity duration-200 ${isSearchOpen ? 'w-full opacity-100' : 'w-0 opacity-0'}`}
+            className={`h-full pl-10 pr-4 py-2.5 text-sm bg-transparent focus:outline-none text-[#003282] dark:text-blue-300 dark:placeholder:text-gray-400 transition-opacity duration-200 ${isSearchOpen ? 'w-full opacity-100' : 'w-0 opacity-0'}`}
           />
           <button
             onClick={() => setIsSearchOpen(true)}
-            className="absolute left-0 top-0 h-full w-10 flex items-center justify-center text-[#003282]"
+            className="absolute left-0 top-0 h-full w-10 flex items-center justify-center text-[#003282] dark:text-blue-300"
           >
             <CgSearch className="text-lg" />
           </button>

@@ -36,7 +36,7 @@ export default function BookDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] py-8 font-sans">
+    <div className="min-h-screen bg-[#f8f9fa] dark:bg-[#121212] py-8 font-sans transition-colors duration-300">
       <div className="custom-container mx-auto px-4 md:px-6 space-y-8">
         <div className="grid gap-6 lg:grid-cols-[300px_1fr] xl:grid-cols-[340px_1fr]">
           <BookCoverCard book={book} />
