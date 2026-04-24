@@ -48,6 +48,7 @@ export default function CommentForm({
       <textarea
         className="w-full border rounded-lg p-3 text-sm"
         rows="4"
+        maxLength={500}
         placeholder="Write your comment here..."
         value={comment}
         onChange={(e) => setComment(e.target.value)}
