@@ -4,6 +4,7 @@ import { fetchCategories, fetchSubcategories, fetchTags } from "../services/addi
 import { getAuthors, createAuthor, createTag, createBook } from "../services/bookService";
 import { getMe } from "../services/userService";
 import useRole from "../hooks/useRole";
+import { useNotification } from "../context/NotificationContext";
 
 import MultiSelectDropdown from "../components/BookCreate/MultiSelectDropdown";
 import FileUploadTable from "../components/BookCreate/FileUploadTable";
@@ -15,6 +16,7 @@ export default function BookCreatePage() {
   const isTeacher = role === "teacher";
   const [isLoading, setIsLoading] = useState(false);
   const [userData, setUserData] = useState(null);
+  const { showNotification } = useNotification();
 
   const [bookData, setBookData] = useState({
     name: "",
@@ -238,7 +240,25 @@ export default function BookCreatePage() {
 
       await createBook(formData);
 
-      navigate("/books");
+      // Reset form fields
+      setBookData({
+        name: "",
+        author_ids: [],
+        isbn: "",
+        category_id: "",
+        subcategory_id: "",
+        quantity: "",
+        tag_ids: [],
+        description: "",
+        pages: "",
+        location: "",
+        published_date: new Date().toISOString().split("T")[0],
+      });
+      setImageFile(null);
+      setPdfFile(null);
+
+      // Show success notification
+      showNotification("Kitob muvaffaqiyatli saqlandi!", "success");
 
     } catch (error) {
       console.error("Xatolik:", error);
@@ -268,6 +288,7 @@ export default function BookCreatePage() {
                 <input
                   name="name"
                   type="text"
+                  value={bookData.name}
                   placeholder="Kitob nomi kiriting ...."
                   className="w-full bg-white dark:bg-[#252525] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-4 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors"
                   onChange={handleInputChange}
@@ -319,6 +340,7 @@ export default function BookCreatePage() {
                 <label className="text-sm font-bold text-[#143c7b] dark:text-blue-300 transition-colors">Fakultetni tanlash *</label>
                 <select
                   name="category_id"
+                  value={bookData.category_id}
                   className="w-full bg-white dark:bg-[#252525] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-4 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors"
                   onChange={handleInputChange}
                   required
@@ -336,6 +358,7 @@ export default function BookCreatePage() {
                 <label className="text-sm font-bold text-[#143c7b] dark:text-blue-300 transition-colors">Yo'nalishlar *</label>
                 <select
                   name="subcategory_id"
+                  value={bookData.subcategory_id}
                   className="w-full bg-white dark:bg-[#252525] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-4 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors"
                   onChange={handleInputChange}
                   required
@@ -354,6 +377,7 @@ export default function BookCreatePage() {
                 <input
                   name="pages"
                   type="number"
+                  value={bookData.pages}
                   placeholder="Sahifalar sonini kiriting ...."
                   className="w-full bg-white dark:bg-[#252525] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-4 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors"
                   onChange={handleInputChange}
@@ -367,6 +391,7 @@ export default function BookCreatePage() {
                   name="quantity"
                   type="number"
                   min="0"
+                  value={bookData.quantity}
                   placeholder="Kitob sonini kiriting ...."
                   className="w-full bg-white dark:bg-[#252525] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-4 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors"
                   onChange={handleInputChange}
@@ -380,6 +405,7 @@ export default function BookCreatePage() {
                 <input
                   name="isbn"
                   type="text"
+                  value={bookData.isbn}
                   placeholder="Inventor raqam kiriting ...."
                   className="w-full bg-white dark:bg-[#252525] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-4 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors"
                   onChange={handleInputChange}
@@ -391,6 +417,7 @@ export default function BookCreatePage() {
                 <input
                   name="location"
                   type="text"
+                  value={bookData.location}
                   placeholder="Javon raqamini kiriting ...."
                   className="w-full bg-white dark:bg-[#252525] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-4 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors"
                   onChange={handleInputChange}
@@ -405,6 +432,7 @@ export default function BookCreatePage() {
               <textarea
                 name="description"
                 rows="6"
+                value={bookData.description}
                 placeholder="Kitob haqida kiriting ...."
                 className="w-full bg-white dark:bg-[#252525] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-4 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none transition-colors"
                 onChange={handleInputChange}
