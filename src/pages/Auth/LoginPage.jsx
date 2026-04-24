@@ -41,7 +41,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f5f6f8] flex flex-col items-center justify-center p-4 font-sans">
+    <div className="min-h-screen bg-[#f5f6f8] dark:bg-[#121212] flex flex-col items-center justify-center p-4 font-sans transition-colors duration-300">
       <div onClick={() => navigate("/")} className="mb-8 cursor-pointer">
         <img
           src={logo}
@@ -50,29 +50,29 @@ export default function LoginPage() {
         />
       </div>
 
-      <div className="w-full max-w-120 bg-white border border-[#e5e7eb] rounded-2xl px-6 py-10 md:px-10 md:py-12 shadow-sm">
+      <div className="w-full max-w-120 bg-white dark:bg-[#1e1e1e] border border-[#e5e7eb] dark:border-gray-800 rounded-2xl px-6 py-10 md:px-10 md:py-12 shadow-sm transition-colors duration-300">
         <div className="text-center mb-8">
-          <h1 className="text-xl md:text-2xl font-bold text-[#143c7b] mb-2">
+          <h1 className="text-xl md:text-2xl font-bold text-[#143c7b] dark:text-blue-300 mb-2 transition-colors">
             Qaytib kelganingizdan xursandmiz
           </h1>
-          <p className="text-[#5174ac] font-medium text-sm md:text-base">
+          <p className="text-[#5174ac] dark:text-blue-400 font-medium text-sm md:text-base transition-colors">
             O'qishni davom ettirish uchun tizimga kiring
           </p>
         </div>
 
         {localError && (
-          <div className="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-r-xl">
-            <p className="text-sm text-red-700 font-medium">{localError}</p>
+          <div className="mb-6 bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-4 rounded-r-xl transition-colors">
+            <p className="text-sm text-red-700 dark:text-red-400 font-medium">{localError}</p>
           </div>
         )}
 
         <form onSubmit={handleLogin} className="space-y-6">
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-[#143c7b]">
+            <label className="block text-sm font-medium text-[#143c7b] dark:text-blue-300 transition-colors">
               Hemis Id
             </label>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#5174ac]">
+              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#5174ac] dark:text-blue-400 transition-colors">
                 <FiUser className="text-lg" />
               </div>
               <input
@@ -80,18 +80,18 @@ export default function LoginPage() {
                 value={useId}
                 onChange={handleInputChange(setuseId)}
                 placeholder="457000007876"
-                className="w-full bg-[#f8f9fa] border border-gray-300 rounded-xl py-3 pl-10 pr-4 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#143c7b] focus:ring-1 focus:ring-[#143c7b] transition-colors"
+                className="w-full bg-[#f8f9fa] dark:bg-[#252525] border border-gray-300 dark:border-gray-700 rounded-xl py-3 pl-10 pr-4 text-gray-800 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:border-[#143c7b] dark:focus:border-blue-500 focus:ring-1 focus:ring-[#143c7b] dark:focus:ring-blue-500 transition-colors"
                 required
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-[#143c7b]">
+            <label className="block text-sm font-medium text-[#143c7b] dark:text-blue-300 transition-colors">
               Parol
             </label>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-[#5174ac]">
+              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-[#5174ac] dark:text-blue-400 transition-colors">
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
@@ -109,7 +109,7 @@ export default function LoginPage() {
                 value={password}
                 onChange={handleInputChange(setPassword)}
                 placeholder="••••••••"
-                className="w-full bg-[#f8f9fa] border border-gray-300 rounded-xl py-3 pl-10 pr-4 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#143c7b] focus:ring-1 focus:ring-[#143c7b] transition-colors"
+                className="w-full bg-[#f8f9fa] dark:bg-[#252525] border border-gray-300 dark:border-gray-700 rounded-xl py-3 pl-10 pr-4 text-gray-800 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:border-[#143c7b] dark:focus:border-blue-500 focus:ring-1 focus:ring-[#143c7b] dark:focus:ring-blue-500 transition-colors"
                 required
               />
             </div>
@@ -121,7 +121,7 @@ export default function LoginPage() {
             className={`w-full flex items-center justify-center gap-2 text-white font-medium py-3.5 rounded-xl transition-colors duration-200 mt-2 
               ${localError
                 ? "bg-red-600 hover:bg-red-700 disabled:bg-red-400 active:bg-red-800"
-                : "bg-[#003282] hover:bg-blue-900 disabled:bg-blue-400 active:bg-blue-700"
+                : "bg-[#003282] dark:bg-blue-600 hover:bg-blue-900 dark:hover:bg-blue-700 disabled:bg-blue-400 active:bg-blue-700"
               }`}
           >
             {loading ? "Kutilmoqda..." : "Kirish"}{" "}
