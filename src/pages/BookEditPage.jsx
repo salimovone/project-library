@@ -76,15 +76,15 @@ export default function BookEditPage() {
           setOptions(prev => {
             const newAuthors = [...prev.authors];
             const newTags = [...prev.tags];
-            
+
             (bk.author || []).forEach(a => {
               if (!newAuthors.find(existing => existing.id === a.id)) newAuthors.push(a);
             });
-            
+
             (bk.tags || []).forEach(t => {
               if (!newTags.find(existing => existing.id === t.id)) newTags.push(t);
             });
-            
+
             return { ...prev, authors: newAuthors, tags: newTags };
           });
         }
@@ -408,7 +408,7 @@ export default function BookEditPage() {
                 <input
                   name="quantity"
                   type="number"
-                  min="1"
+                  min="0"
                   value={bookData.quantity || ""}
                   placeholder="Kitob sonini kiriting ...."
                   className="w-full bg-white dark:bg-[#252525] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-4 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors"

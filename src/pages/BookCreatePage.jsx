@@ -366,7 +366,7 @@ export default function BookCreatePage() {
                 <input
                   name="quantity"
                   type="number"
-                  min="1"
+                  min="0"
                   placeholder="Kitob sonini kiriting ...."
                   className="w-full bg-white dark:bg-[#252525] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-4 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors"
                   onChange={handleInputChange}
