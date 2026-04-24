@@ -5,12 +5,12 @@ import { FiThumbsUp, FiMessageSquare, FiChevronDown, FiX } from "react-icons/fi"
 import useRole from "../../../hooks/useRole";
 import { postRatingComment, fetchComments } from "../../../services/commentService";
 import { getBookStats } from "../../../services/bookService";
-import { buildCommentTree } from "../../../utils/comments"; 
+import { buildCommentTree } from "../../../utils/comments";
 
-export default function CustomerReviewsSection({ book, onUpdate }) {
+export default function CustomerReviewsSection({ book, onUpdate, setCommentCountCallback }) {
   const { id } = useParams();
   const { checkUserLevel } = useRole();
-  
+
   const [showCommentForm, setShowCommentForm] = useState(false);
   const [replyTo, setReplyTo] = useState(null); // Qaysi sharhga javob yozilayotgani
   const [apiStats, setApiStats] = useState(null);
@@ -32,6 +32,7 @@ export default function CustomerReviewsSection({ book, onUpdate }) {
       ]);
       setApiStats(stats);
       setCommentsData(comments.results || []);
+      setCommentCountCallback(comments.count);
     } catch (error) {
     } finally {
       setIsLoading(false);
@@ -40,10 +41,10 @@ export default function CustomerReviewsSection({ book, onUpdate }) {
 
   const dateReadableConverter = (x) => {
     const dateString = new Date(x).toLocaleDateString("en-US", {
-				year: "numeric",
-				month: "short",
-				day: "numeric",
-			})
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    })
     return dateString;
   }
 
@@ -56,7 +57,7 @@ export default function CustomerReviewsSection({ book, onUpdate }) {
 
 
   const stats = useMemo(() => {
-    const data = apiStats || { total_ratings: 0, star1:0, star2:0, star3:0, star4:0, star5:0 };
+    const data = apiStats || { total_ratings: 0, star1: 0, star2: 0, star3: 0, star4: 0, star5: 0 };
     const total = data.total_ratings || 1;
     return {
       total: data.total_ratings || 0,
@@ -79,7 +80,7 @@ export default function CustomerReviewsSection({ book, onUpdate }) {
       setIsSubmitting(true);
       // Agar replyTo bo'lsa, parent ID bilan yuboramiz
       await postRatingComment(id, commentText, rating, replyTo?.id);
-      
+
       setCommentText("");
       setRating(0);
       setShowCommentForm(false);
@@ -97,8 +98,8 @@ export default function CustomerReviewsSection({ book, onUpdate }) {
     <div className={`group ${depth > 0 ? "ml-8 md:ml-12 mt-6 border-l-2 border-gray-100 pl-4 md:pl-6" : "border-b border-gray-50 pb-8 mb-8 last:border-0"}`}>
       <div className="flex justify-between items-start mb-3">
         <div className="flex items-center gap-3">
-          <img 
-            src={comment.user?.avatar || `https://ui-avatars.com/api/?name=${comment.user?.first_name}+${comment.user?.last_name}&background=random`} 
+          <img
+            src={comment.user?.avatar || `https://ui-avatars.com/api/?name=${comment.user?.first_name}+${comment.user?.last_name}&background=random`}
             className="w-10 h-10 rounded-full object-cover border border-gray-100"
             alt="avatar"
           />
@@ -107,7 +108,7 @@ export default function CustomerReviewsSection({ book, onUpdate }) {
             {comment.rating > 0 && (
               <div className="flex text-yellow-400 text-[10px] mt-0.5">
                 {[...Array(5)].map((_, i) => (
-                  i < comment.rating ? <FaStar key={i}/> : <FaRegStar key={i} className="text-gray-200"/>
+                  i < comment.rating ? <FaStar key={i} /> : <FaRegStar key={i} className="text-gray-200" />
                 ))}
               </div>
             )}
@@ -122,9 +123,9 @@ export default function CustomerReviewsSection({ book, onUpdate }) {
 
       <div className="flex items-center gap-6 text-gray-400 text-[11px] font-bold uppercase tracking-wider">
         <button className="flex items-center gap-1.5 hover:text-indigo-600 transition">
-          <FiThumbsUp size={14}/> Helpful ({comment.likes_count || 0})
+          <FiThumbsUp size={14} /> Helpful ({comment.likes_count || 0})
         </button>
-        <button 
+        <button
           onClick={() => {
             setReplyTo(comment);
             setShowCommentForm(true);
@@ -132,7 +133,7 @@ export default function CustomerReviewsSection({ book, onUpdate }) {
           }}
           className="flex items-center gap-1.5 hover:text-indigo-600 transition"
         >
-          <FiMessageSquare size={14}/> Reply
+          <FiMessageSquare size={14} /> Reply
         </button>
       </div>
 
@@ -149,11 +150,11 @@ export default function CustomerReviewsSection({ book, onUpdate }) {
 
   return (
     <div className={`w-full mx-auto bg-white rounded-3xl p-8 shadow-sm border border-gray-100`}>
-      
+
       {/* 1. Header */}
       <div className="flex justify-between items-center mb-10">
         <h2 className="text-2xl font-bold text-gray-800">Customer Reviews</h2>
-        <button 
+        <button
           onClick={() => { setShowCommentForm(true); setReplyTo(null); }}
           disabled={!checkUserLevel("student")}
           className="bg-[#5c56f1] hover:bg-[#4a44d1] disabled:bg-gray-300 text-white px-6 py-2.5 rounded-lg font-semibold transition-all"
@@ -210,7 +211,7 @@ export default function CustomerReviewsSection({ book, onUpdate }) {
         <div className="text-center md:w-1/3">
           <div className="text-6xl font-bold text-gray-900 mb-2">{Number(stats.avg).toFixed(1)}</div>
           <div className="flex justify-center text-yellow-400 text-xl mb-2">
-            {[...Array(5)].map((_, i) => (i < Math.floor(stats.avg) ? <FaStar key={i}/> : <FaRegStar key={i}/>))}
+            {[...Array(5)].map((_, i) => (i < Math.floor(stats.avg) ? <FaStar key={i} /> : <FaRegStar key={i} />))}
           </div>
           <p className="text-gray-500 text-sm font-medium">Based on {stats.total.toLocaleString()} reviews</p>
         </div>
