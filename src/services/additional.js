@@ -20,15 +20,15 @@ export async function fetchUserProfileStats(user_id) {
   return data
 }
 
-export async function fetchTags() {
-  let data = await api.get("/tags/")
+export async function fetchTags(search) {
+  let data = await api.get("/tags/", { params: { "search": search } })
   return data.results
 }
 
 export default {
-    fetchCategories,
-    fetchSubcategories,
-    fetchMainPageStats,
-    fetchUserProfileStats,
-    fetchTags
+  fetchCategories,
+  fetchSubcategories,
+  fetchMainPageStats,
+  fetchUserProfileStats,
+  fetchTags
 }

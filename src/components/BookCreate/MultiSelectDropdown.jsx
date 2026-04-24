@@ -3,7 +3,9 @@ import { useState, useRef, useEffect } from 'react';
 export default function MultiSelectDropdown({
   selectedIds,
   items,
+  searchResults,
   onToggleItem,
+  onSearchChange,
   onOpenCreate,
   label,
   placeholder,
@@ -24,9 +26,20 @@ export default function MultiSelectDropdown({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const filteredItems = items.filter((item) =>
-    item.name.toLowerCase().includes(search.toLowerCase())
-  );
+  useEffect(() => {
+    if (onSearchChange) {
+      const timeoutId = setTimeout(() => {
+        onSearchChange(search);
+      }, 300);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [search, onSearchChange]);
+
+  const displayedItems = searchResults !== undefined 
+    ? searchResults 
+    : items.filter((item) =>
+        item.name.toLowerCase().includes(search.toLowerCase())
+      );
 
   const chipBg = colorTheme === "blue" ? "bg-blue-100 text-blue-800" : "bg-green-100 text-green-800";
   const chipBtnColor = colorTheme === "blue" ? "text-blue-600 hover:text-blue-900" : "text-green-600 hover:text-green-900";
@@ -73,10 +86,10 @@ export default function MultiSelectDropdown({
           {/* Dropdown */}
           {dropdownOpen && (
             <div className="absolute top-[calc(100%+4px)] left-0 w-full z-20 bg-white dark:bg-[#1e1e1e] border border-gray-300 dark:border-gray-700 rounded-xl shadow-lg max-h-48 overflow-y-auto transition-colors">
-              {filteredItems.length === 0 ? (
+              {displayedItems.length === 0 ? (
                 <div className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">Topilmadi</div>
               ) : (
-                filteredItems.map((item) => (
+                displayedItems.map((item) => (
                   <div
                     key={item.id}
                     className={`px-4 py-2.5 text-sm cursor-pointer hover:bg-blue-50 dark:hover:bg-gray-800 flex items-center gap-2 transition-colors ${selectedIds.includes(item.id) ? "bg-blue-100 dark:bg-blue-900/30 text-blue-900 dark:text-blue-100 font-semibold" : "text-gray-700 dark:text-gray-300"

@@ -72,8 +72,8 @@ export const getTags = async () => {
   return res.results;
 }
 
-export const getAuthors = async () => {
-  const res = await api.get("/authors/");
+export const getAuthors = async (search) => {
+  const res = await api.get("/authors/", { params: { search } });
   return res.results;
 }
 

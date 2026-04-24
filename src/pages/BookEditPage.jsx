@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router";
 import { Link, useNavigate } from "react-router";
 import { fetchCategories, fetchSubcategories, fetchTags } from "../services/additional";
@@ -46,6 +46,11 @@ export default function BookEditPage() {
     tags: [],
   });
 
+  const [searchOptions, setSearchOptions] = useState({
+    authors: [],
+    tags: [],
+  });
+
   const [imageFile, setImageFile] = useState(null);
 
   useEffect(() => {
@@ -66,6 +71,23 @@ export default function BookEditPage() {
           pages: bk.pages || "",
           published_date: bk.published_date || new Date().toISOString().split("T")[0],
         });
+
+        if (bk.author?.length || bk.tags?.length) {
+          setOptions(prev => {
+            const newAuthors = [...prev.authors];
+            const newTags = [...prev.tags];
+            
+            (bk.author || []).forEach(a => {
+              if (!newAuthors.find(existing => existing.id === a.id)) newAuthors.push(a);
+            });
+            
+            (bk.tags || []).forEach(t => {
+              if (!newTags.find(existing => existing.id === t.id)) newTags.push(t);
+            });
+            
+            return { ...prev, authors: newAuthors, tags: newTags };
+          });
+        }
       } catch (e) {
         console.error("Kitobni yuklashda xatolik:", e);
       }
@@ -102,12 +124,49 @@ export default function BookEditPage() {
           authors: authRes || [],
           tags: tagsRes || [],
         });
+
+        setSearchOptions({
+          authors: authRes || [],
+          tags: tagsRes || [],
+        });
       } catch (error) {
         console.error("Ma'lumotlarni yuklashda xatolik:", error);
       }
     };
 
     fetchOptions();
+  }, []);
+
+  const handleAuthorSearch = useCallback(async (searchValue) => {
+    try {
+      const res = await getAuthors(searchValue);
+      setSearchOptions((prev) => ({ ...prev, authors: res || [] }));
+      setOptions((prev) => {
+        const newAuthors = [...prev.authors];
+        (res || []).forEach((item) => {
+          if (!newAuthors.find((a) => a.id === item.id)) newAuthors.push(item);
+        });
+        return { ...prev, authors: newAuthors };
+      });
+    } catch (e) {
+      console.error("Avtorlarni qidirishda xatolik:", e);
+    }
+  }, []);
+
+  const handleTagSearch = useCallback(async (searchValue) => {
+    try {
+      const res = await fetchTags(searchValue);
+      setSearchOptions((prev) => ({ ...prev, tags: res || [] }));
+      setOptions((prev) => {
+        const newTags = [...prev.tags];
+        (res || []).forEach((item) => {
+          if (!newTags.find((t) => t.id === item.id)) newTags.push(item);
+        });
+        return { ...prev, tags: newTags };
+      });
+    } catch (e) {
+      console.error("Teglarni qidirishda xatolik:", e);
+    }
   }, []);
 
   const handleInputChange = (e) => {
@@ -144,10 +203,12 @@ export default function BookEditPage() {
       if (createModalType === "author") {
         const newAuthor = await createAuthor(value);
         setOptions((prev) => ({ ...prev, authors: [...prev.authors, newAuthor] }));
+        setSearchOptions((prev) => ({ ...prev, authors: [...prev.authors, newAuthor] }));
         setBookData((prev) => ({ ...prev, author_ids: [...prev.author_ids, newAuthor.id] }));
       } else {
         const newTag = await createTag(value);
         setOptions((prev) => ({ ...prev, tags: [...prev.tags, newTag] }));
+        setSearchOptions((prev) => ({ ...prev, tags: [...prev.tags, newTag] }));
         setBookData((prev) => ({ ...prev, tag_ids: [...prev.tag_ids, newTag.id] }));
       }
       setShowCreateModal(false);
@@ -261,6 +322,8 @@ export default function BookEditPage() {
                   createType="author"
                   selectedIds={bookData.author_ids}
                   items={options.authors}
+                  searchResults={searchOptions.authors}
+                  onSearchChange={handleAuthorSearch}
                   onToggleItem={toggleAuthor}
                   onOpenCreate={openCreateModal}
                   colorTheme="blue"
@@ -284,6 +347,8 @@ export default function BookEditPage() {
                 createType="tag"
                 selectedIds={bookData.tag_ids}
                 items={options.tags}
+                searchResults={searchOptions.tags}
+                onSearchChange={handleTagSearch}
                 onToggleItem={toggleTag}
                 onOpenCreate={openCreateModal}
                 colorTheme="green"
