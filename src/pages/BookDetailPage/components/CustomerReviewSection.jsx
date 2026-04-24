@@ -191,6 +191,8 @@ export default function CustomerReviewsSection({ book, onUpdate, setCommentCount
 
             <textarea
               value={commentText}
+              maxLength={500}
+              minLength={10}
               onChange={(e) => setCommentText(e.target.value)}
               placeholder={replyTo ? "Javobingizni yozing..." : "Fikringizni yozing..."}
               className="w-full p-4 rounded-xl border-0 bg-white dark:bg-[#252525] dark:text-gray-100 shadow-sm focus:ring-2 focus:ring-indigo-500 outline-none text-sm min-h-25 mb-4 transition-colors"

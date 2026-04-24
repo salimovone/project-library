@@ -49,7 +49,8 @@ export default function CommentForm({
         className="w-full border rounded-lg p-3 text-sm"
         rows="4"
         maxLength={500}
-        placeholder="Write your comment here..."
+        minLength={10}
+        placeholder="Bu yerga o'z fikringizni yozing..."
         value={comment}
         onChange={(e) => setComment(e.target.value)}
         required
@@ -61,7 +62,7 @@ export default function CommentForm({
             className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300"
             onClick={onCancel}
           >
-            Cancel
+            Bekor qilish
           </button>
         )}
         <button

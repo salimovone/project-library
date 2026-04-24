@@ -95,7 +95,6 @@ export default function AllBooks() {
         sort: stagedFilters.sort,
       };
       setStagedFilters(newFilters);
-      setAppliedFilters(newFilters);
     } else if (name === "sort") {
       const newFilters = { ...stagedFilters, sort: value };
       setStagedFilters(newFilters);
@@ -129,6 +128,18 @@ export default function AllBooks() {
     loadBooks(newPage);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setAppliedFilters((prev) => {
+        if (prev.search !== stagedFilters.search) {
+          return { ...stagedFilters };
+        }
+        return prev;
+      });
+    }, 600);
+    return () => clearTimeout(timer);
+  }, [stagedFilters.search]);
 
   return (
     <div className="min-h-screen bg-[#f8f9fa] dark:bg-[#121212] font-sans transition-colors duration-300">

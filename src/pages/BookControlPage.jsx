@@ -25,6 +25,14 @@ export default function BookControlPage() {
   const [stats, setStats] = useState({});
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 600);
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
 
   // Modal states
   const [showModal, setShowModal] = useState(false);
@@ -52,8 +60,8 @@ export default function BookControlPage() {
     }
     try {
       let params = { status };
-      if (searchTerm) {
-        params.search = searchTerm;
+      if (debouncedSearchTerm) {
+        params.search = debouncedSearchTerm;
       }
       const res = await fetchReservations(params);
       setData(res.results || []);
@@ -68,7 +76,7 @@ export default function BookControlPage() {
 
   useEffect(() => {
     loadData();
-  }, [activeTab, searchTerm]);
+  }, [activeTab, debouncedSearchTerm]);
 
   // Statusni o'zgartirish (Topshirish yoki Qabul qilish)
   const handleAction = async () => {

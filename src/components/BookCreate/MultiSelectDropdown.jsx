@@ -30,16 +30,16 @@ export default function MultiSelectDropdown({
     if (onSearchChange) {
       const timeoutId = setTimeout(() => {
         onSearchChange(search);
-      }, 300);
+      }, 600);
       return () => clearTimeout(timeoutId);
     }
   }, [search, onSearchChange]);
 
-  const displayedItems = searchResults !== undefined 
-    ? searchResults 
+  const displayedItems = searchResults !== undefined
+    ? searchResults
     : items.filter((item) =>
-        item.name.toLowerCase().includes(search.toLowerCase())
-      );
+      item.name.toLowerCase().includes(search.toLowerCase())
+    );
 
   const chipBg = colorTheme === "blue" ? "bg-blue-100 text-blue-800" : "bg-green-100 text-green-800";
   const chipBtnColor = colorTheme === "blue" ? "text-blue-600 hover:text-blue-900" : "text-green-600 hover:text-green-900";
