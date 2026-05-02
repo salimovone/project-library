@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-export default function CreateModal({ type, onClose, onSubmit, isLoading }) {
-  const [value, setValue] = useState("");
+export default function CreateModal({ type, onClose, onSubmit, isLoading, initialValue = "" }) {
+  const [value, setValue] = useState(initialValue);
 
   const handleSubmit = () => {
     if (value.trim()) {

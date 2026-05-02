@@ -38,6 +38,7 @@ export default function BookEditPage() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [createModalType, setCreateModalType] = useState(""); // "author" or "tag"
   const [createModalLoading, setCreateModalLoading] = useState(false);
+  const [createModalInitialValue, setCreateModalInitialValue] = useState("");
 
   const [options, setOptions] = useState({
     categories: [],
@@ -192,8 +193,9 @@ export default function BookEditPage() {
     });
   };
 
-  const openCreateModal = (type) => {
+  const openCreateModal = (type, initialValue = "") => {
     setCreateModalType(type);
+    setCreateModalInitialValue(initialValue);
     setShowCreateModal(true);
   };
 
@@ -485,6 +487,7 @@ export default function BookEditPage() {
       {showCreateModal && (
         <CreateModal
           type={createModalType}
+          initialValue={createModalInitialValue}
           onClose={() => setShowCreateModal(false)}
           onSubmit={handleCreateSubmit}
           isLoading={createModalLoading}

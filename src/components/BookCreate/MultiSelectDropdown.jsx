@@ -110,17 +110,24 @@ export default function MultiSelectDropdown({
                   </div>
                 ))
               )}
+              {search.trim() && (
+                <div className="border-t border-gray-200 dark:border-gray-700 p-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onOpenCreate(createType, search.trim());
+                      setDropdownOpen(false);
+                      setSearch("");
+                    }}
+                    className="w-full text-left px-4 py-2 text-sm text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg font-medium transition-colors flex items-center gap-2"
+                  >
+                    <span>+</span> "{search.trim()}" yaratish
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </div>
-
-        <button
-          type="button"
-          onClick={() => onOpenCreate(createType)}
-          className="bg-green-600 text-white px-4 rounded-xl text-sm font-bold hover:bg-green-700 transition whitespace-nowrap min-h-12.5 self-start"
-        >
-          + Yaratish
-        </button>
       </div>
     </div>
   );
