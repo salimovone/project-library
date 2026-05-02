@@ -28,7 +28,7 @@ export async function fetchBooks(filters) {
     params.subcategory = filters.subcategory;
   }
   if (filters?.tag) {
-    params.tag = filters.tag;
+    params.tags = filters.tag;
   }
   if (filters?.author) {
     params.author = filters.author;
