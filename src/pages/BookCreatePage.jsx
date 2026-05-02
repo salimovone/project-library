@@ -23,7 +23,7 @@ export default function BookCreatePage() {
     author_ids: [],
     isbn: "",
     category_id: "",
-    subcategory_id: "",
+    subcategory_ids: [],
     quantity: "",
     tag_ids: [],
     description: "",
@@ -151,6 +151,15 @@ export default function BookCreatePage() {
     });
   };
 
+  const toggleSubcategory = (subcategoryId) => {
+    setBookData((prev) => {
+      const ids = prev.subcategory_ids.includes(subcategoryId)
+        ? prev.subcategory_ids.filter((id) => id !== subcategoryId)
+        : [...prev.subcategory_ids, subcategoryId];
+      return { ...prev, subcategory_ids: ids };
+    });
+  };
+
   const openCreateModal = (type, initialValue = "") => {
     setCreateModalType(type);
     setCreateModalInitialValue(initialValue);
@@ -222,13 +231,15 @@ export default function BookCreatePage() {
       formData.append("is_physical", true);
       formData.append("pages", Number(bookData.pages) || 0);
       formData.append("category_id", Number(bookData.category_id));
-      formData.append("subcategory_id", Number(bookData.subcategory_id));
       formData.append("location", bookData.location || "");
 
       const tagIds = bookData.tag_ids.length > 0 ? bookData.tag_ids.map(Number) : [0];
       const finalAuthorIds = authorIds.length > 0 ? authorIds.map(Number) : [0];
+      const subcatIds = bookData.subcategory_ids.length > 0 ? bookData.subcategory_ids.map(Number) : [0];
+      
       tagIds.forEach((id) => formData.append("tag_ids", id));
       finalAuthorIds.forEach((id) => formData.append("author_ids", id));
+      subcatIds.forEach((id) => formData.append("subcategory_ids", id));
 
       // PDF fayl
       if (pdfFile) {
@@ -248,7 +259,7 @@ export default function BookCreatePage() {
         author_ids: [],
         isbn: "",
         category_id: "",
-        subcategory_id: "",
+        subcategory_ids: [],
         quantity: "",
         tag_ids: [],
         description: "",
@@ -356,23 +367,14 @@ export default function BookCreatePage() {
                 </select>
               </div>
 
-              <div className="space-y-1.5">
-                <label className="text-sm font-bold text-[#143c7b] dark:text-blue-300 transition-colors">Yo'nalishlar *</label>
-                <select
-                  name="subcategory_id"
-                  value={bookData.subcategory_id}
-                  className="w-full bg-white dark:bg-[#252525] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-4 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors"
-                  onChange={handleInputChange}
-                  required
-                >
-                  <option value="">Yo'nalishni tanlang</option>
-                  {options.subcategories.map((subcat) => (
-                    <option key={subcat.id} value={subcat.id}>
-                      {subcat.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              <MultiSelectDropdown
+                label="Yo'nalishlar *"
+                placeholder="Yo'nalish qidirish..."
+                selectedIds={bookData.subcategory_ids}
+                items={options.subcategories}
+                onToggleItem={toggleSubcategory}
+                colorTheme="blue"
+              />
 
               <div className="space-y-1.5">
                 <label className="text-sm font-bold text-[#143c7b] dark:text-blue-300 transition-colors">Sahifalar soni *</label>
