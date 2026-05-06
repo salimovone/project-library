@@ -4,6 +4,8 @@ import { fetchBook } from "../../services/bookService";
 import {
   BookCoverCard,
   BookDetailsPanel,
+  LoadingScreen,
+  NotFoundScreen,
 } from "./components";
 import CustomerReviewsSection from "./components/CustomerReviewSection";
 
@@ -32,18 +34,14 @@ export default function BookDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-[#1a478e] font-semibold">
-        Yuklanmoqda...
-      </div>
+      <LoadingScreen />
     );
   }
 
   // Agar ma'lumot kelmagan bo'lsa
   if (!book) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-red-500 font-semibold">
-        Kitob topilmadi.
-      </div>
+      <NotFoundScreen/>
     );
   }
 
