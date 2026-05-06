@@ -5,4 +5,3 @@ export { default as ReviewList } from './ReviewList';
 export { default as CommentForm } from './CommentForm';
 export { default as Comment } from './Comment';
 export { default as NotFoundScreen } from './NotFoundScreen';
-export { default as LoadingScreen } from './LoadingScreen';

@@ -4,10 +4,10 @@ import { fetchBook } from "../../services/bookService";
 import {
   BookCoverCard,
   BookDetailsPanel,
-  LoadingScreen,
   NotFoundScreen,
 } from "./components";
 import CustomerReviewsSection from "./components/CustomerReviewSection";
+import LoadingScreen from "../../components/LoadingScreen";
 
 export default function BookDetailPage() {
   const [book, setBook] = useState(null);

@@ -18,6 +18,11 @@ export const RoleProvider = ({ children }) => {
 
   useEffect(() => {
     if (hasFetched.current) return;
+    if (localStorage.getItem("access") === null) {
+      setRole("guest");
+      setIsLoading(false);
+      return;
+    }
 
     const getCurrentUserRole = async () => {
       try {
