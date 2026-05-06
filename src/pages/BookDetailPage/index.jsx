@@ -10,14 +10,25 @@ import CustomerReviewsSection from "./components/CustomerReviewSection";
 export default function BookDetailPage() {
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
-  const { id } = useParams();
   const [commentCount, setCommentCount] = useState(0);
+  const { id } = useParams();
 
   useEffect(() => {
-    setLoading(true);
-    fetchBook(id).then(setBook);
-    setLoading(false);
-  }, []);
+    const loadBook = async () => {
+      setLoading(true);
+      try {
+        const data = await fetchBook(id);
+        setBook(data);
+      } catch (error) {
+        console.error("Kitobni yuklashda xatolik:", error);
+        setBook(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadBook();
+  }, [id]); // ID o'zgarganda qayta yuklaydi
 
   if (loading) {
     return (
@@ -27,7 +38,8 @@ export default function BookDetailPage() {
     );
   }
 
-  if (!loading && !book) {
+  // Agar ma'lumot kelmagan bo'lsa
+  if (!book) {
     return (
       <div className="min-h-screen flex items-center justify-center text-red-500 font-semibold">
         Kitob topilmadi.
@@ -44,7 +56,10 @@ export default function BookDetailPage() {
         </div>
 
         <div className="space-y-6 w-full">
-          <CustomerReviewsSection setCommentCountCallback={setCommentCount} book={book} />
+          <CustomerReviewsSection 
+            setCommentCountCallback={setCommentCount} 
+            book={book} 
+          />
         </div>
       </div>
     </div>
