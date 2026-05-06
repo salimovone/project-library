@@ -4,7 +4,7 @@ import { BiChevronDown, BiChevronRight } from "react-icons/bi";
 import useRole from "../../hooks/useRole";
 
 const StatChip = ({ label, color, borderColor }) => (
-  <div className={`flex items-center gap-2 bg-white dark:bg-gray-800 border ${borderColor} dark:border-opacity-30 px-4 py-2 rounded-xl text-xs font-bold ${color} dark:text-opacity-90 shadow-sm transition-colors duration-300`}>
+  <div className={`flex items-center gap-2 bg-white dark:bg-gray-800 border ${borderColor} dark:border-opacity-30 px-3 xl:px-4 py-1.5 xl:py-2 rounded-full text-xs font-bold ${color} dark:text-opacity-90 shadow-sm transition-colors duration-300 whitespace-nowrap`}>
     {label}
   </div>
 );
@@ -17,7 +17,7 @@ const DesktopNav = ({ categories, subcategories = [] }) => {
   const navigate = useNavigate();
 
   return (
-    <div className="hidden md:flex items-center gap-6">
+    <div className="hidden lg:flex items-center gap-4 xl:gap-6 text-sm xl:text-base">
       <Link
         to={"/"}
         className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition"
@@ -46,7 +46,7 @@ const DesktopNav = ({ categories, subcategories = [] }) => {
         </button>
 
         {isDropdownOpen && (
-          <div className="absolute top-full left-0 w-56 bg-white dark:bg-gray-800 shadow-lg rounded-lg py-2 border border-gray-100 dark:border-gray-700 flex flex-col z-50">
+          <div className="absolute top-full left-0 w-56 bg-white dark:bg-gray-800 shadow-lg rounded-xl py-2 border border-gray-100 dark:border-gray-700 flex flex-col z-50">
             {displayCategories.map((cat) => {
               const catSubcategories = subcategories.filter(
                 (sub) => sub.category === cat.id,
@@ -59,7 +59,7 @@ const DesktopNav = ({ categories, subcategories = [] }) => {
                   onMouseEnter={() => setActiveCategory(cat.id)}
                 >
                   <div
-                    className="flex justify-between items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400 transition"
+                    className="flex justify-between items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400 transition cursor-pointer"
                     onClick={() => {
                       setIsDropdownOpen(false);
                       setActiveCategory(null);
@@ -71,11 +71,11 @@ const DesktopNav = ({ categories, subcategories = [] }) => {
                   </div>
 
                   {hasSub && activeCategory === cat.id && (
-                    <div className="absolute left-full top-0 w-48 bg-white dark:bg-gray-800 shadow-lg rounded-lg py-2 border border-gray-100 dark:border-gray-700 flex flex-col z-50">
+                    <div className="absolute left-full top-0 w-48 bg-white dark:bg-gray-800 shadow-lg rounded-xl py-2 border border-gray-100 dark:border-gray-700 flex flex-col z-50">
                       {catSubcategories.map((sub) => (
                         <div
                           key={sub.id}
-                          className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400 transition"
+                          className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400 transition cursor-pointer"
                           onClick={() => {
                             setIsDropdownOpen(false);
                             setActiveCategory(null);
@@ -96,7 +96,7 @@ const DesktopNav = ({ categories, subcategories = [] }) => {
 
       <Link
         to={"/top-books"}
-        className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition"
+        className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition whitespace-nowrap"
       >
         Top Kitoblar
       </Link>
@@ -109,20 +109,14 @@ const DesktopNav = ({ categories, subcategories = [] }) => {
       </Link>
 
       {checkUserLevel("teacher") && (
-        <Link
-          to={"/createbook"}
-          className=""
-        >
+        <Link to={"/createbook"}>
           <StatChip label={"Kitob qo'shish"} color={"text-green-600"} borderColor={"border-green-200"} />
         </Link>
       )}
 
       {checkUserLevel("librarian") && (
-        <Link
-          to={"/bookControl"}
-          className=""
-        >
-          <StatChip label={"Kitoblarni boshqarish"} color={"text-sky-600"} borderColor={"border-sky-200"} />
+        <Link to={"/bookControl"}>
+          <StatChip label={"Boshqaruv"} color={"text-sky-600"} borderColor={"border-sky-200"} />
         </Link>
       )}
     </div>
