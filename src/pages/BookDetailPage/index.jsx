@@ -5,7 +5,9 @@ import {
   BookCoverCard,
   BookDetailsPanel,
   NotFoundScreen,
+  BookHistoryCard,
 } from "./components";
+import useRole from "../../hooks/useRole";
 import CustomerReviewsSection from "./components/CustomerReviewSection";
 import LoadingScreen from "../../components/LoadingScreen";
 
@@ -14,6 +16,8 @@ export default function BookDetailPage() {
   const [loading, setLoading] = useState(true);
   const [commentCount, setCommentCount] = useState(0);
   const { id } = useParams();
+  const { checkUserLevel } = useRole();
+  const isAdmin = checkUserLevel("admin");
 
   useEffect(() => {
     const loadBook = async () => {
@@ -50,7 +54,10 @@ export default function BookDetailPage() {
       <div className="custom-container mx-auto px-4 md:px-6 space-y-8">
         <div className="grid gap-6 lg:grid-cols-[300px_1fr] xl:grid-cols-[340px_1fr]">
           <BookCoverCard book={book} />
-          <BookDetailsPanel commentCount={commentCount} book={book} />
+          <div className="space-y-6">
+            <BookDetailsPanel commentCount={commentCount} book={book} />
+            {isAdmin && <BookHistoryCard book={book} />}
+          </div>
         </div>
 
         <div className="space-y-6 w-full">
