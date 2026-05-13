@@ -67,7 +67,7 @@ export async function fetchBookActionLogs(book_id, page = 1) {
 }
 
 export async function fetchUserActionHistory(user_id, page = 1) {
-    let data = await api.get(`/audit/logs/book-logs/`, { params: { user_id, page } })
+    let data = await api.get(`/audit/logs/book_logs/`, { params: { user_id, page } })
     return data
 
     // example return data

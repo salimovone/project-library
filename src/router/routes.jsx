@@ -3,7 +3,7 @@ import MainLayout from "../layouts/MainLayout";
 import HomePage from "../pages/HomePage";
 import BookDetailPage from "../pages/BookDetailPage";
 import UserPage from "../pages/UserPage";
-import { AllBooks, FeedbackPage } from "../pages";
+import { AllBooks, FeedbackPage, UserLogsPage } from "../pages";
 import TopBooks from "../pages/TopBooks";
 import LoginPage from "../pages/Auth/LoginPage";
 import BookCreatePage from "../pages/BookCreatePage";
@@ -87,6 +87,15 @@ export const router = createBrowserRouter([
           {
             path: "/books/:id/edit",
             element: <BookEditPage />,
+          },
+        ],
+      },
+      {
+        element: <ProtectedRoute requiredRole="admin" />,
+        children: [
+          {
+            path: "/user-logs",
+            element: <UserLogsPage />,
           },
         ],
       },

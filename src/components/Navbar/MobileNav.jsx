@@ -4,12 +4,14 @@ import { CgSearch } from 'react-icons/cg';
 import { BiBell, BiChevronDown } from 'react-icons/bi';
 import { IoPersonOutline } from 'react-icons/io5';
 import LanguageSwitcher from './LanguageSwitcher';
+import useRole from "../../hooks/useRole";
 
 const MobileNav = ({ categories, subcategories = [], closeMenu }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState(null);
   const displayCategories = categories.slice(0, 5);
   const hasMoreCategories = categories.length > 5;
+  const { checkUserLevel } = useRole();
 
   return (
     <div className="lg:hidden mt-4 pb-4 border-t border-gray-200 dark:border-gray-700">
@@ -110,6 +112,15 @@ const MobileNav = ({ categories, subcategories = [], closeMenu }) => {
         >
           Fikr-mulohaza
         </Link>
+        {checkUserLevel("admin") && (
+          <Link 
+            to={"/user-logs"} 
+            className="block text-purple-600 dark:text-purple-400 font-medium py-2 px-2 rounded-lg hover:bg-purple-50 dark:hover:bg-gray-800 transition"
+            onClick={closeMenu}
+          >
+            Foydalanuvchilar tarixi
+          </Link>
+        )}
         
         <div className="mt-4 pt-6 border-t border-gray-200 dark:border-gray-700">
           {/* <div className="relative text-[#003282] dark:text-blue-300 bg-[#f3f3f3] dark:bg-gray-800 rounded-full mb-6">

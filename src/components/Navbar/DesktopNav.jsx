@@ -119,6 +119,12 @@ const DesktopNav = ({ categories, subcategories = [] }) => {
           <StatChip label={"Boshqaruv"} color={"text-sky-600"} borderColor={"border-sky-200"} />
         </Link>
       )}
+
+      {checkUserLevel("admin") && (
+        <Link to={"/user-logs"}>
+          <StatChip label={"Foydalanuvchilar tarixi"} color={"text-purple-600"} borderColor={"border-purple-200"} />
+        </Link>
+      )}
     </div>
   );
 };

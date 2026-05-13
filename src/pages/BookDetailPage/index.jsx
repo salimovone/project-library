@@ -45,7 +45,7 @@ export default function BookDetailPage() {
   // Agar ma'lumot kelmagan bo'lsa
   if (!book) {
     return (
-      <NotFoundScreen/>
+      <NotFoundScreen />
     );
   }
 
@@ -56,14 +56,14 @@ export default function BookDetailPage() {
           <BookCoverCard book={book} />
           <div className="space-y-6">
             <BookDetailsPanel commentCount={commentCount} book={book} />
-            {isAdmin && <BookHistoryCard book={book} />}
           </div>
         </div>
+        {isAdmin && <BookHistoryCard book={book} />}
 
         <div className="space-y-6 w-full">
-          <CustomerReviewsSection 
-            setCommentCountCallback={setCommentCount} 
-            book={book} 
+          <CustomerReviewsSection
+            setCommentCountCallback={setCommentCount}
+            book={book}
           />
         </div>
       </div>
