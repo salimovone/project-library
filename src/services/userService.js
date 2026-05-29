@@ -10,13 +10,16 @@ export async function fetchBookmarks() {
   return data
 }
 
-export async function fetchUsersList(filterByRole, page) {
+export async function fetchUsersList(filterByRole, page, search) {
   const params = {}
   if (filterByRole) {
     params.role = filterByRole
   }
   if (page) {
     params.page = page
+  }
+  if (search) {
+    params.search = search
   }
   let data = await api.get("/users", { params })
   return data

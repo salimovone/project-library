@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { fetchUsersList } from "../services/userService";
 import { fetchUserActionHistory } from "../services/auditLogs";
-import { FaUser, FaHistory, FaChevronLeft, FaChevronRight, FaChevronUp, FaChevronDown } from "react-icons/fa";
+import { FaUser, FaHistory, FaChevronLeft, FaChevronRight, FaChevronUp, FaChevronDown, FaSearch } from "react-icons/fa";
 
 import { Link } from "react-router";
 
@@ -108,12 +108,27 @@ export default function UserLogsPage() {
 
     const [expandedLogId, setExpandedLogId] = useState(null);
 
+    const [searchQuery, setSearchQuery] = useState("");
+    const [debouncedSearch, setDebouncedSearch] = useState("");
+    const [roleFilter, setRoleFilter] = useState("");
+
+    // Debounce search query
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedSearch(searchQuery);
+        }, 400);
+
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [searchQuery]);
+
     // Load users
     useEffect(() => {
         const loadUsers = async () => {
             setUsersLoading(true);
             try {
-                const response = await fetchUsersList(null, userPage);
+                const response = await fetchUsersList(roleFilter || null, userPage, debouncedSearch || null);
                 const data = response?.data || response;
                 if (data && data.results) {
                     setUsers(data.results);
@@ -121,15 +136,20 @@ export default function UserLogsPage() {
                 } else if (Array.isArray(data)) {
                     setUsers(data);
                     setUserTotalPages(1);
+                } else {
+                    setUsers([]);
+                    setUserTotalPages(1);
                 }
             } catch (err) {
                 console.error("Foydalanuvchilarni yuklashda xatolik:", err);
+                setUsers([]);
+                setUserTotalPages(1);
             } finally {
                 setUsersLoading(false);
             }
         };
         loadUsers();
-    }, [userPage]);
+    }, [userPage, roleFilter, debouncedSearch]);
 
     // Load logs when user or logsPage changes
     useEffect(() => {
@@ -176,8 +196,43 @@ export default function UserLogsPage() {
                 <div className="grid gap-6 lg:grid-cols-[350px_1fr]">
                     {/* Users List Sidebar */}
                     <div className="bg-white dark:bg-[#1e1e1e] rounded-2xl shadow-[0_6px_20px_rgba(0,0,0,0.08)] overflow-hidden flex flex-col h-[calc(100vh-180px)] transition-colors duration-300">
-                        <div className="p-4 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-[#252525]">
+                        <div className="p-4 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-[#252525] space-y-3">
                             <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200">Foydalanuvchilar ro'yxati</h2>
+                            
+                            {/* Qidiruv */}
+                            <div className="relative">
+                                <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400 dark:text-gray-500">
+                                    <FaSearch className="w-3.5 h-3.5" />
+                                </span>
+                                <input
+                                    type="text"
+                                    placeholder="Qidirish..."
+                                    value={searchQuery}
+                                    onChange={(e) => {
+                                        setSearchQuery(e.target.value);
+                                        setUserPage(1);
+                                    }}
+                                    className="w-full pl-9 pr-3 py-2 text-sm bg-white dark:bg-[#121212] border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white transition-all"
+                                />
+                            </div>
+
+                            {/* Rol filteri */}
+                            <div>
+                                <select
+                                    value={roleFilter}
+                                    onChange={(e) => {
+                                        setRoleFilter(e.target.value);
+                                        setUserPage(1);
+                                    }}
+                                    className="w-full px-3 py-2 text-sm bg-white dark:bg-[#121212] border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white transition-all"
+                                >
+                                    <option value="">Barcha rollar</option>
+                                    <option value="student">Talaba (student)</option>
+                                    <option value="teacher">O'qituvchi (teacher)</option>
+                                    <option value="librarian">Kutubxonachi (librarian)</option>
+                                    <option value="admin">Admin (admin)</option>
+                                </select>
+                            </div>
                         </div>
 
                         <div className="flex-1 overflow-y-auto p-2">
@@ -196,8 +251,22 @@ export default function UserLogsPage() {
                                             <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 flex items-center justify-center shrink-0">
                                                 {user.img ? <img src={user.img} className="w-full h-full rounded-full object-cover" alt="" /> : <FaUser />}
                                             </div>
-                                            <div className="overflow-hidden">
-                                                <p className="font-semibold text-gray-900 dark:text-white truncate">{user.first_name || user.username || "Noma'lum"}</p>
+                                            <div className="overflow-hidden flex-1 min-w-0">
+                                                <div className="flex items-center gap-1.5 flex-wrap">
+                                                    <p className="font-semibold text-gray-900 dark:text-white truncate max-w-[120px] sm:max-w-none">{user.first_name || user.username || "Noma'lum"}</p>
+                                                    {user.role && (
+                                                        <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium shrink-0 ${
+                                                            user.role === 'admin' ? 'bg-red-50 text-red-600 dark:bg-red-950/30 dark:text-red-400' :
+                                                            user.role === 'librarian' ? 'bg-blue-50 text-blue-600 dark:bg-blue-950/30 dark:text-blue-400' :
+                                                            user.role === 'teacher' ? 'bg-green-50 text-green-600 dark:bg-green-950/30 dark:text-green-400' :
+                                                            'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400'
+                                                        }`}>
+                                                            {user.role === 'admin' ? 'Admin' :
+                                                             user.role === 'librarian' ? 'Kutubxonachi' :
+                                                             user.role === 'teacher' ? "O'qituvchi" : 'Talaba'}
+                                                        </span>
+                                                    )}
+                                                </div>
                                                 <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user.email || user.username}</p>
                                             </div>
                                         </button>

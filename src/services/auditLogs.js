@@ -146,3 +146,54 @@ export async function fetchUserActionHistory(user_id, page = 1) {
     //   }
     // ]
 }
+
+
+
+export async function fetchFullLogData(log_id) {
+    let data = await api.get(`/audit/logs/${log_id}/`)
+    return data
+
+    // example return data
+
+    // {
+    //   "id": 0,
+    //   "user": 0,
+    //   "user_username": "string",
+    //   "action": "CREATE",
+    //   "action_display": "string",
+    //   "model_name": "string",
+    //   "object_id": 0,
+    //   "description": "string",
+    //   "changes": "string",
+    //   "ip_address": "string",
+    //   "user_agent": "string",
+    //   "timestamp": "2026-05-29T13:56:46.262Z",
+    //   "user_fname": "string",
+    //   "user_lname": "string"
+    // }
+}
+
+
+export async function fetchMyAuditLogs() {
+    let data = await api.get(`/audit/logs/my_actions/`)
+    return data
+
+    // example return data
+
+    // {
+    //   "id": 0,
+    //   "user": 0,
+    //   "user_username": "string",
+    //   "action": "CREATE",
+    //   "action_display": "string",
+    //   "model_name": "string",
+    //   "object_id": 0,
+    //   "description": "string",
+    //   "changes": "string",
+    //   "ip_address": "string",
+    //   "user_agent": "string",
+    //   "timestamp": "2026-05-29T14:13:14.572Z",
+    //   "user_fname": "string",
+    //   "user_lname": "string"
+    // }
+}
