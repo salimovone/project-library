@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<aside style="width:256px; flex:0 0 auto; background:#1b3f7a; display:flex; flex-direction:column; padding:20px 14px; font-family:Manrope, system-ui, sans-serif; height:100%; min-height:100%;">
+  <div style="display:flex; align-items:center; gap:11px; padding:4px 8px 20px;">
+    <img src="{{ logoSrc }}" alt="Alfraganus University Library" style="height:30px; width:auto; filter:brightness(0) invert(1); opacity:0.94;" />
+  </div>
+
+  <div style="display:flex; align-items:center; gap:9px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.10); border-radius:10px; padding:9px 11px; margin-bottom:20px;">
+    <span style="width:7px; height:7px; border-radius:50%; background:#5fd28a;"></span>
+    <span style="font-size:11.5px; font-weight:700; color:#dbe3f1; letter-spacing:0.02em;">Boshqaruv paneli</span>
+    <span style="margin-left:auto; font-size:10px; font-weight:800; letter-spacing:0.06em; color:#f0b64a; background:rgba(240,182,74,0.14); border-radius:5px; padding:3px 6px;">{{ roleLabel }}</span>
+  </div>
+
+  <div style="display:flex; flex-direction:column; gap:2px;">
+    <sc-for list="{{ items }}" as="it" hint-placeholder-count="7">
+      <sc-if value="{{ it.heading }}" hint-placeholder-val="{{ false }}">
+        <span style="font-size:10px; font-weight:800; letter-spacing:0.14em; text-transform:uppercase; color:#5f7093; padding:16px 10px 7px; display:block;">{{ it.label }}</span>
+      </sc-if>
+      <sc-if value="{{ it.active }}" hint-placeholder-val="{{ false }}">
+        <span style="display:flex; align-items:center; gap:11px; padding:11px 12px; border-radius:10px; background:#ffffff; color:#0f1f42; font-size:13.5px; font-weight:700;">
+          <span style="width:6px; height:20px; border-radius:3px; background:#9e1b32; margin-left:-4px;"></span>
+          {{ it.label }}
+          <sc-if value="{{ it.badge }}" hint-placeholder-val="{{ false }}">
+            <span style="margin-left:auto; font-size:11px; font-weight:800; color:#fff; background:#9e1b32; border-radius:999px; padding:2px 7px;">{{ it.badge }}</span>
+          </sc-if>
+        </span>
+      </sc-if>
+      <sc-if value="{{ it.link }}" hint-placeholder-val="{{ true }}">
+        <span style="display:flex; align-items:center; gap:11px; padding:11px 12px; border-radius:10px; color:#a8b6cf; font-size:13.5px; font-weight:600; cursor:pointer;" style-hover="background:rgba(255,255,255,0.07); color:#fff;">
+          <span style="width:6px; height:20px; border-radius:3px; background:transparent; margin-left:-4px;"></span>
+          {{ it.label }}
+          <sc-if value="{{ it.badge }}" hint-placeholder-val="{{ false }}">
+            <span style="margin-left:auto; font-size:11px; font-weight:800; color:#f0b64a; background:rgba(240,182,74,0.16); border-radius:999px; padding:2px 7px;">{{ it.badge }}</span>
+          </sc-if>
+        </span>
+      </sc-if>
+    </sc-for>
+  </div>
+
+  <div style="flex:1; min-height:24px;"></div>
+
+  <div style="display:flex; flex-direction:column; gap:10px;">
+    <span style="display:flex; align-items:center; gap:9px; padding:11px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.14); color:#dbe3f1; font-size:13px; font-weight:700;">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M19 12H6M12 5l-7 7 7 7" /></svg>
+      Saytga qaytish
+    </span>
+    <div style="display:flex; align-items:center; gap:10px; padding:10px; border-radius:12px; background:rgba(255,255,255,0.06);">
+      <span style="width:34px; height:34px; border-radius:50%; background:#2f5fa8; color:#fff; font-size:12px; font-weight:800; display:flex; align-items:center; justify-content:center;">{{ initials }}</span>
+      <div style="display:flex; flex-direction:column; gap:1px; min-width:0;">
+        <span style="font-size:12.5px; font-weight:700; color:#fff; display:block;">{{ userName }}</span>
+        <span style="font-size:11px; color:#8fa1c2;">{{ userRole }}</span>
+      </div>
+      <span style="margin-left:auto; color:#8fa1c2;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" /></svg>
+      </span>
+    </div>
+  </div>
+</aside>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:256,&quot;height&quot;:760},&quot;active&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;dashboard&quot;,&quot;reservations&quot;,&quot;overdue&quot;,&quot;books&quot;,&quot;create&quot;,&quot;users&quot;,&quot;logs&quot;,&quot;reports&quot;],&quot;default&quot;:&quot;dashboard&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;role&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;teacher&quot;,&quot;librarian&quot;,&quot;admin&quot;],&quot;default&quot;:&quot;admin&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;userName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Sardor Salimov&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;userRole&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Administrator&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;initials&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;SS&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const active = this.props.active ?? "dashboard";
+    const role = this.props.role ?? "admin";
+    const defs = [
+      { key: "h1", label: "Kunlik ish", heading: true },
+      { key: "dashboard", label: "Dashboard" },
+      { key: "reservations", label: "Bandlovlar", badge: "12" },
+      { key: "overdue", label: "Muddati o'tganlar", badge: "5" },
+      { key: "h2", label: "Fond", heading: true },
+      { key: "books", label: "Kitob fondi" },
+      { key: "create", label: "Kitob qo'shish" },
+      { key: "h3", label: "Nazorat", heading: true },
+      { key: "users", label: "Foydalanuvchilar" },
+      { key: "logs", label: "Audit log" },
+      { key: "reports", label: "Hisobotlar" },
+    ];
+    const allowed = role === "teacher"
+      ? ["h2", "books", "create", "h1", "dashboard"]
+      : role === "librarian"
+        ? defs.map(d => d.key).filter(k => k !== "logs" && k !== "users")
+        : defs.map(d => d.key);
+    const res = typeof window !== "undefined" ? window.__resources : null;
+    return {
+      logoSrc: (res && res["src/assets/logo.png"]) || "src/assets/logo.png",
+      items: defs.filter(d => allowed.includes(d.key)).map(d => ({
+        ...d,
+        heading: !!d.heading,
+        active: !d.heading && d.key === active,
+        link: !d.heading && d.key !== active,
+        badge: d.badge || "",
+      })),
+      roleLabel: { admin: "ADMIN", librarian: "KUTUBXONACHI", teacher: "O'QITUVCHI" }[role] || "ADMIN",
+      userName: this.props.userName ?? "Sardor Salimov",
+      userRole: this.props.userRole ?? "Administrator",
+      initials: this.props.initials ?? "SS",
+    };
+  }
+}
+</script>
+</body>
+</html>

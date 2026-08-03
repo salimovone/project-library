@@ -2,10 +2,133 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+:root {
+  /* Centralized Color Tokens */
+  --navy-primary: #16305e;
+  --navy-dark: #0f1f42;
+  --navy-mid: #1b3f7a;
+  --navy-light: #eef1f7;
+  --navy-light-border: #dbe3f1;
+
+  --crimson-primary: #9e1b32;
+  --crimson-light: #fdf0f2;
+  --crimson-border: #f2ced5;
+  --crimson-accent: #c23b52;
+
+  --green-success: #3f9e5f;
+  --green-light: #eef7f0;
+  --green-border: #cbe6d3;
+
+  --amber-warning: #e0a32e;
+  --amber-light: #fff8ec;
+  --amber-border: #f2ddb4;
+  --amber-text: #8a6413;
+
+  --orange-pdf: #c2571c;
+  --orange-pdf-bg: #fff4ed;
+  --orange-pdf-border: #f6d9c5;
+
+  /* Semantic UI Tokens - Light Mode */
+  --bg-page: #f6f5f2;
+  --bg-card: #ffffff;
+  --bg-subtle: #faf9f6;
+  --bg-input: #faf9f6;
+  --border-main: #e6e3dc;
+  --border-strong: #dcd8d0;
+
+  --text-main: #14203a;
+  --text-muted: #4a5872;
+  --text-subtle: #8a93a6;
+  --text-dim: #7b8497;
+}
+
+.dark {
+  /* Semantic UI Tokens - Dark Mode */
+  --bg-page: #0b1120;
+  --bg-card: #131c30;
+  --bg-subtle: #0f172a;
+  --bg-input: #131c30;
+  --border-main: #1e2c4b;
+  --border-strong: #263453;
+
+  --text-main: #ffffff;
+  --text-muted: #95a2ba;
+  --text-subtle: #6f7d97;
+  --text-dim: #7d8ba6;
+
+  --navy-light: #1a2540;
+  --navy-light-border: #263453;
+  --crimson-light: #2a1c12;
+  --crimson-border: #4a2228;
+}
+
 @layer base {
-  body {
-    @apply bg-white text-gray-900 transition-colors duration-300 dark:bg-[#121212] dark:text-gray-100;
+  html {
+    color-scheme: dark;
   }
+
+  /* PDF.js Native Text Selection Layer Styles */
+  .pdf-text-layer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    opacity: 1;
+    line-height: 1;
+  }
+
+  .pdf-text-layer span {
+    color: transparent;
+    position: absolute;
+    white-space: pre;
+    cursor: text;
+    transform-origin: 0% 0%;
+  }
+
+  .pdf-text-layer ::selection {
+    background: rgba(30, 80, 180, 0.35);
+    color: transparent;
+  }
+
+  html {
+    font-size: 16px;
+  }
+
+  @media (min-width: 1920px) {
+    html {
+      font-size: 17.5px;
+    }
+  }
+
+  @media (min-width: 2560px) {
+    html {
+      font-size: 19.5px;
+    }
+  }
+
+  @media (min-width: 3200px) {
+    html {
+      font-size: 22px;
+    }
+  }
+
+  body {
+    background-color: var(--bg-page);
+    color: var(--text-main);
+    font-family: 'Manrope', system-ui, sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    margin: 0;
+  }
+}
+
+.font-editorial {
+  font-family: 'Newsreader', Georgia, serif;
+}
+
+.font-interface {
+  font-family: 'Manrope', system-ui, sans-serif;
 }
 
 @layer components {
@@ -30,21 +153,33 @@
     }
 
     @media (min-width: 1024px) {
-      padding-left: 3rem;
-      padding-right: 3rem;
+      padding-left: 2.5rem;
+      padding-right: 2.5rem;
       max-width: 1024px;
     }
 
     @media (min-width: 1280px) {
-      padding-left: 4rem;
-      padding-right: 4rem;
+      padding-left: 3rem;
+      padding-right: 3rem;
       max-width: 1280px;
     }
 
     @media (min-width: 1536px) {
+      padding-left: 3.5rem;
+      padding-right: 3.5rem;
+      max-width: 1536px;
+    }
+
+    @media (min-width: 1920px) {
+      padding-left: 4rem;
+      padding-right: 4rem;
+      max-width: 1800px;
+    }
+
+    @media (min-width: 2560px) {
       padding-left: 5rem;
       padding-right: 5rem;
-      max-width: 1480px; 
+      max-width: 2200px;
     }
   }
 }

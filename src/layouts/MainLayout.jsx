@@ -4,13 +4,11 @@ import Footer from '../components/Footer';
 
 export default function MainLayout() {
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-[#121212] transition-colors duration-300">
+    <div className="min-h-screen flex flex-col bg-[var(--bg-page)] transition-colors duration-300 font-interface">
       <Navbar />
 
-      <main className="flex-1 overflow-y-auto">
-        <div className="mx-auto">
-          <Outlet />
-        </div>
+      <main className="flex-1">
+        <Outlet />
       </main>
 
       <Footer />

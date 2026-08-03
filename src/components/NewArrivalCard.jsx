@@ -76,7 +76,11 @@ export default function NewArrivalCard({ book }) {
 						<div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] animate-pulse bg-repeat"></div>
 						<h3 className="text-[24px] font-bold text-white mb-2 line-clamp-3 leading-snug relative z-10 px-1 drop-shadow-sm">{book?.name}</h3>
 						<div className="h-0.5 w-6 bg-blue-400 rounded-full mb-1.5 relative z-10"></div>
-						<p className="text-blue-200 text-xs font-medium leading-snug relative z-10 line-clamp-2">{book?.author?.[0]?.name || "Noma'lum"}</p>
+						<p className="text-blue-200 text-xs font-medium leading-snug relative z-10 line-clamp-2">
+							{typeof book?.author?.[0] === "object"
+								? book.author[0].name || book.author[0].sortingname || "Noma'lum"
+								: book?.author?.[0] || "Noma'lum"}
+						</p>
 					</div>
 				)}
 			</div>
@@ -96,7 +100,7 @@ export default function NewArrivalCard({ book }) {
 								key={idx + 1}
 								className="text-[13px] text-gray-400 font-medium"
 							>
-								{author?.name}
+								{typeof author === "object" ? author.name || author.sortingname || "" : author}
 								{idx < book.author.length - 1 ? "," : ""}
 							</span>
 						))}
@@ -116,7 +120,7 @@ export default function NewArrivalCard({ book }) {
 
 					<div className="flex items-center gap-1.5 rounded-xl bg-[#FFFBEB] dark:bg-yellow-900/20 px-3 py-1.5 border border-[#FEF3C7] dark:border-yellow-700/30 transition-colors duration-300">
 						<span className="text-xs font-black text-[#B45309] dark:text-yellow-500">
-							{book.rating?.toFixed(1) || "0.0"}
+							{typeof book.rating === "number" ? book.rating.toFixed(1) : (book.rating || "0.0")}
 						</span>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"

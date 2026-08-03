@@ -1,21 +1,23 @@
-import { FaBrain } from "react-icons/fa";
+import React from "react";
 
-export default function CategoryCard({ icon, label }) {
-  const hasIcon = icon && typeof icon === 'string' && icon.trim() !== 'default';
+export default function CategoryCard({ label, code = "TB", count, onClick }) {
+  // Generate 2-letter uppercase code if not provided
+  const categoryCode = code || (label ? label.substring(0, 2).toUpperCase() : "TB");
 
   return (
-    <div className="flex flex-col items-center justify-center gap-3 rounded-2xl bg-white dark:bg-[#1e1e1e] p-6 text-center shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] transition-all duration-300 hover:scale-105 cursor-pointer border border-transparent dark:border-gray-800">
-      <span className="flex h-14 w-14 items-center justify-center rounded-full bg-[#edf2f7] dark:bg-[#252525] text-[#1a478e] dark:text-blue-400 transition-colors duration-300">
-        {hasIcon ? (
-          <div 
-            className="flex items-center justify-center w-8 h-8 dynamic-svg-wrapper"
-            dangerouslySetInnerHTML={{ __html: icon }} 
-          />
-        ) : (
-          <FaBrain size={24} />
-        )}
+    <div
+      onClick={onClick}
+      className="flex flex-col gap-2.5 p-4 md:p-4.5 border border-[var(--border-main)] rounded-2xl bg-[var(--bg-subtle)] hover:bg-[var(--bg-card)] hover:border-[var(--navy-primary)] transition-all duration-300 cursor-pointer group shadow-xs font-interface"
+    >
+      <span className="w-9.5 h-9.5 rounded-xl bg-[var(--navy-light)] text-[var(--navy-primary)] font-extrabold text-sm flex items-center justify-center group-hover:bg-[var(--navy-primary)] group-hover:text-white transition-colors">
+        {categoryCode}
       </span>
-      <p className="text-sm font-bold text-[#1a478e] dark:text-blue-300 leading-tight transition-colors duration-300">{label}</p>
+      <span className="text-[13.5px] font-bold text-[var(--text-main)] leading-snug line-clamp-1">
+        {label}
+      </span>
+      <span className="text-[11.5px] font-semibold text-[var(--text-subtle)]">
+        {count ? `${count} kitob` : "Bo'lim"}
+      </span>
     </div>
   );
 }

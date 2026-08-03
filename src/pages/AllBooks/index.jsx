@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router";
+import { Link, useLocation } from "react-router";
 import { fetchBooks, getAuthors, getTags } from "../../services/bookService";
 import { fetchCategories } from "../../services/additional";
 import FilterBar from "./components/FilterBar";
@@ -16,7 +16,7 @@ export default function AllBooks() {
   const stateData = location.state || {};
 
   const initialFilters = {
-    search: "",
+    search: stateData.search || "",
     sort: "rating-high",
     category: stateData.category || "",
     subcategory: stateData.subcategory || "",
@@ -39,15 +39,17 @@ export default function AllBooks() {
 
   useEffect(() => {
     if (location.state) {
-      setStagedFilters(prev => ({
+      setStagedFilters((prev) => ({
         ...prev,
-        category: location.state.category || "",
-        subcategory: location.state.subcategory || ""
+        category: location.state.category || prev.category,
+        subcategory: location.state.subcategory || prev.subcategory,
+        search: location.state.search || prev.search,
       }));
-      setAppliedFilters(prev => ({
+      setAppliedFilters((prev) => ({
         ...prev,
-        category: location.state.category || "",
-        subcategory: location.state.subcategory || ""
+        category: location.state.category || prev.category,
+        subcategory: location.state.subcategory || prev.subcategory,
+        search: location.state.search || prev.search,
       }));
     }
   }, [location.state]);
@@ -61,6 +63,7 @@ export default function AllBooks() {
           getTags().then(setTags),
         ]);
       } catch (error) {
+        console.error("Side data error:", error);
       }
     };
 
@@ -76,6 +79,7 @@ export default function AllBooks() {
       setTotalCount(data.count || data.results?.length || 0);
       setCurrentPage(page);
     } catch (error) {
+      console.error("Books load error:", error);
     } finally {
       setIsLoading(false);
     }
@@ -86,32 +90,21 @@ export default function AllBooks() {
   }, [appliedFilters]);
 
   const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value } = e.target;
 
     if (name === "search") {
-      const newFilters = {
-        ...initialFilters,
-        search: value,
-        sort: stagedFilters.sort,
-      };
-      setStagedFilters(newFilters);
+      setStagedFilters((prev) => ({ ...prev, search: value }));
+      if (value === "") {
+        setAppliedFilters((prev) => ({ ...prev, search: "" }));
+      }
     } else if (name === "sort") {
       const newFilters = { ...stagedFilters, sort: value };
       setStagedFilters(newFilters);
       setAppliedFilters(newFilters);
     } else if (name === "book_format") {
-      // CheckboxGroup passes a value object, not a simple value
-      setStagedFilters((prev) => ({
-        ...prev,
-        search: "",
-        book_format: value,
-      }));
+      setStagedFilters((prev) => ({ ...prev, book_format: value }));
     } else {
-      setStagedFilters((prev) => ({
-        ...prev,
-        search: "",
-        [name]: value,
-      }));
+      setStagedFilters((prev) => ({ ...prev, [name]: value }));
     }
   };
 
@@ -133,23 +126,29 @@ export default function AllBooks() {
     const timer = setTimeout(() => {
       setAppliedFilters((prev) => {
         if (prev.search !== stagedFilters.search) {
-          return { ...stagedFilters };
+          return { ...stagedFilters, search: stagedFilters.search };
         }
         return prev;
       });
-    }, 600);
+    }, 400);
     return () => clearTimeout(timer);
   }, [stagedFilters.search]);
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] dark:bg-[#121212] font-sans transition-colors duration-300">
-      <div className="bg-[#f2f4f7] dark:bg-[#1a1a1a] py-3 transition-colors duration-300">
-        <div className="custom-container mx-auto px-4 text-sm font-medium text-[#143c7b] dark:text-blue-300 transition-colors">
-          Home / Book List
+    <div className="min-h-screen bg-[var(--bg-page)] font-interface transition-colors duration-300">
+      {/* Breadcrumbs Bar */}
+      <div className="bg-[var(--bg-card)] border-b border-[var(--border-main)] py-3 px-4 md:px-10">
+        <div className="max-w-[1320px] mx-auto flex items-center gap-2 text-xs md:text-sm font-semibold text-[var(--text-subtle)]">
+          <Link to="/" className="text-[var(--navy-primary)] dark:text-blue-300 hover:underline">
+            Bosh sahifa
+          </Link>
+          <span>/</span>
+          <span className="text-[var(--text-main)] font-bold">Kutubxona</span>
         </div>
       </div>
 
-      <div className="custom-container mx-auto px-4 py-8 flex flex-col md:flex-row gap-6 lg:gap-8 relative">
+      {/* Main Content Area */}
+      <div className="max-w-[1320px] 2xl:max-w-[1680px] min-[1920px]:max-w-[1840px] min-[2560px]:max-w-[2240px] mx-auto px-4 md:px-10 py-8 grid grid-cols-1 lg:grid-cols-[280px_1fr] 2xl:grid-cols-[300px_1fr] gap-8 items-start min-w-0">
         <FilterBar
           filters={stagedFilters}
           handleInputChange={handleInputChange}
@@ -162,23 +161,37 @@ export default function AllBooks() {
           setIsMobileFilterOpen={setIsMobileFilterOpen}
         />
 
-        <main className="flex-1 w-full">
-          <SearchBar filters={stagedFilters} handleInputChange={handleInputChange} />
-          <BookGrid
-            books={books}
-            isLoading={isLoading}
+        <main className="flex flex-col gap-4.5 w-full">
+          <SearchBar
+            filters={stagedFilters}
+            handleInputChange={handleInputChange}
+            handleSearchSubmit={() => setAppliedFilters({ ...stagedFilters })}
           />
 
+          {/* Results Summary Bar */}
+          <div className="flex items-center justify-between px-1">
+            <span className="text-sm text-[var(--text-muted)] font-medium">
+              <b className="text-[var(--text-main)] font-extrabold">{totalCount}</b> natija topildi
+            </span>
+            <span className="text-xs text-[var(--text-subtle)] font-semibold">
+              {(currentPage - 1) * limit + 1}–{Math.min(currentPage * limit, totalCount)} ko'rsatilmoqda
+            </span>
+          </div>
+
+          <BookGrid books={books} isLoading={isLoading} />
+
+          {/* Pagination Controls */}
           {totalPages > 1 && (
-            <div className="flex justify-center mt-8 mb-16 gap-2">
+            <div className="flex justify-center items-center gap-2 my-6">
               <button
                 onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
                 disabled={currentPage === 1}
-                className="px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1e1e] text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-[#252525] hover:text-[#1a478e] dark:hover:text-blue-400 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-sm"
+                className="h-10 px-4 rounded-xl font-bold text-xs border border-[var(--border-strong)] bg-[var(--bg-card)] text-[var(--text-muted)] disabled:opacity-40 disabled:cursor-not-allowed hover:border-[var(--navy-primary)] transition cursor-pointer"
               >
                 Orqaga
               </button>
-              <div className="items-center gap-1.5 mx-2 hidden sm:flex">
+
+              <div className="flex items-center gap-1.5 mx-2">
                 {[...Array(totalPages)].map((_, idx) => {
                   const pageNum = idx + 1;
                   if (
@@ -190,10 +203,10 @@ export default function AllBooks() {
                       <button
                         key={pageNum}
                         onClick={() => handlePageChange(pageNum)}
-                        className={`w-11 h-11 flex items-center justify-center rounded-xl font-bold text-[15px] transition-all duration-200 ${
+                        className={`w-10 h-10 rounded-xl font-extrabold text-xs transition cursor-pointer ${
                           currentPage === pageNum
-                            ? "bg-[#1a478e] dark:bg-blue-600 text-white shadow-[0_4px_12px_rgba(26,71,142,0.3)]"
-                            : "bg-white dark:bg-[#1e1e1e] text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-[#1a478e] dark:hover:border-blue-500 hover:text-[#1a478e] dark:hover:text-blue-400"
+                            ? "bg-[var(--navy-primary)] text-white shadow-xs"
+                            : "bg-[var(--bg-card)] text-[var(--text-muted)] border border-[var(--border-main)] hover:border-[var(--navy-primary)]"
                         }`}
                       >
                         {pageNum}
@@ -201,7 +214,7 @@ export default function AllBooks() {
                     );
                   } else if (pageNum === currentPage - 2 || pageNum === currentPage + 2) {
                     return (
-                      <span key={pageNum} className="px-2 text-gray-400 select-none">
+                      <span key={pageNum} className="px-1 text-[var(--text-subtle)] font-bold">
                         ...
                       </span>
                     );
@@ -209,10 +222,11 @@ export default function AllBooks() {
                   return null;
                 })}
               </div>
+
               <button
                 onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
                 disabled={currentPage === totalPages}
-                className="px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1e1e] text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-[#252525] hover:text-[#1a478e] dark:hover:text-blue-400 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-sm"
+                className="h-10 px-4 rounded-xl font-bold text-xs border border-[var(--border-strong)] bg-[var(--bg-card)] text-[var(--navy-primary)] dark:text-white disabled:opacity-40 disabled:cursor-not-allowed hover:border-[var(--navy-primary)] transition cursor-pointer"
               >
                 Oldinga
               </button>

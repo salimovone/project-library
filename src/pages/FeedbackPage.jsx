@@ -11,7 +11,7 @@ const FeedbackPage = () => {
     message: "",
   });
 
-  const [status, setStatus] = useState("idle"); // 'idle', 'submitting', 'success', 'error'
+  const [status, setStatus] = useState("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (e) => {
@@ -27,10 +27,9 @@ const FeedbackPage = () => {
     const botToken = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
     const chatId = import.meta.env.VITE_TELEGRAM_CHAT_ID;
 
-    console.log("telegram", botToken, chatId);
-
     if (!botToken || !chatId) {
       setStatus("error");
+      setErrorMessage("Telegram bot sozlamalari topilmadi.");
       return;
     }
 
@@ -75,39 +74,43 @@ ${formData.message}
   };
 
   return (
-    <div className="py-12 bg-gray-50 dark:bg-[#121212] min-h-[calc(100vh-64px)] transition-colors duration-300">
-      <div className="custom-container mx-auto px-4 max-w-2xl">
+    <div className="py-12 bg-[var(--bg-page)] font-interface min-h-screen transition-colors duration-300">
+      <div className="max-w-2xl mx-auto px-4">
         <Link
           to="/"
-          className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors mb-6"
+          className="inline-flex items-center gap-1 text-xs font-bold text-[var(--navy-primary)] dark:text-blue-300 hover:underline mb-6"
         >
-          <BiChevronLeft className="text-xl" /> Ortga qaytish
+          <BiChevronLeft className="text-xl" /> Bosh sahifaga qaytish
         </Link>
 
-        <div className="bg-white dark:bg-[#1e1e1e] rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-8 transition-colors duration-300">
+        <div className="bg-[var(--bg-card)] border border-[var(--border-main)] rounded-2xl shadow-xs p-7 md:p-9 transition-colors duration-300">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2 transition-colors">Fikr va Mulohaza</h1>
-            <p className="text-gray-500 dark:text-gray-400 transition-colors">Sayt bo'yicha takliflar, xatoliklar yoki qandaydir savollaringiz bo'lsa bizga tezkor murojaat yo'llashingiz mumkin.</p>
+            <h1 className="font-editorial text-3xl font-normal text-[var(--text-main)] mb-2">
+              Fikr va mulohazalar
+            </h1>
+            <p className="text-xs md:text-sm text-[var(--text-muted)] font-medium">
+              Sayt bo'yicha takliflar, xatoliklar yoki savollaringiz bo'lsa bizga tezkor murojaat yo'llashingiz mumkin.
+            </p>
           </div>
 
           {status === "success" && (
-            <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 px-6 py-4 rounded-xl flex items-center gap-3 mb-6 transition-all">
-              <FaCheckCircle className="text-xl shrink-0" />
+            <div className="bg-[#eaf7ee] dark:bg-[#12281a] border border-[#a2e0b5] text-[#2d7a46] dark:text-[#5fd28a] px-4 py-3.5 rounded-xl flex items-center gap-3 mb-6 text-xs font-bold">
+              <FaCheckCircle className="text-base shrink-0" />
               <p>Murojaatingiz muvaffaqiyatli yuborildi. Rahmat!</p>
             </div>
           )}
 
           {status === "error" && (
-            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-6 py-4 rounded-xl flex items-center gap-3 mb-6 transition-all">
-              <FaExclamationCircle className="text-xl shrink-0" />
+            <div className="bg-[var(--crimson-light)] border border-[var(--crimson-border)] text-[var(--crimson-primary)] px-4 py-3.5 rounded-xl flex items-center gap-3 mb-6 text-xs font-bold">
+              <FaExclamationCircle className="text-base shrink-0" />
               <p>{errorMessage}</p>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 transition-colors">
-                Ismingiz <span className="text-red-500">*</span>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4.5">
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="name" className="text-xs font-extrabold tracking-wider uppercase text-[var(--text-subtle)]">
+                Ismingiz <span className="text-[var(--crimson-primary)]">*</span>
               </label>
               <input
                 type="text"
@@ -117,13 +120,13 @@ ${formData.message}
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="Abdulla Qodiriy"
-                className="w-full px-4 py-2 bg-white dark:bg-[#252525] border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                className="w-full h-11 bg-[var(--bg-subtle)] border border-[var(--border-main)] rounded-xl px-4 text-sm font-semibold text-[var(--text-main)] placeholder-[#8a93a6] focus:border-[var(--navy-primary)] outline-none transition"
               />
             </div>
 
-            <div>
-              <label htmlFor="contact" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 transition-colors">
-                Aloqa uchun (Tel/Email)
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="contact" className="text-xs font-extrabold tracking-wider uppercase text-[var(--text-subtle)]">
+                Aloqa uchun (Tel / Telegram / Email)
               </label>
               <input
                 type="text"
@@ -132,12 +135,12 @@ ${formData.message}
                 value={formData.contact}
                 onChange={handleChange}
                 placeholder="+998 90 123 45 67"
-                className="w-full px-4 py-2 bg-white dark:bg-[#252525] border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                className="w-full h-11 bg-[var(--bg-subtle)] border border-[var(--border-main)] rounded-xl px-4 text-sm font-semibold text-[var(--text-main)] placeholder-[#8a93a6] focus:border-[var(--navy-primary)] outline-none transition"
               />
             </div>
 
-            <div>
-              <label htmlFor="topic" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 transition-colors">
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="topic" className="text-xs font-extrabold tracking-wider uppercase text-[var(--text-subtle)]">
                 Murojaat turi
               </label>
               <select
@@ -145,7 +148,7 @@ ${formData.message}
                 name="topic"
                 value={formData.topic}
                 onChange={handleChange}
-                className="w-full px-4 py-2 bg-white dark:bg-[#252525] border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-lg cursor-pointer focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                className="w-full h-11 bg-[var(--bg-subtle)] border border-[var(--border-main)] rounded-xl px-4 text-sm font-semibold text-[var(--text-main)] outline-none cursor-pointer"
               >
                 <option value="Taklif">Taklif</option>
                 <option value="Xatolik haqida">Saytdagi xatolik</option>
@@ -154,9 +157,9 @@ ${formData.message}
               </select>
             </div>
 
-            <div>
-              <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 transition-colors">
-                Xabaringiz <span className="text-red-500">*</span>
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="message" className="text-xs font-extrabold tracking-wider uppercase text-[var(--text-subtle)]">
+                Xabaringiz <span className="text-[var(--crimson-primary)]">*</span>
               </label>
               <textarea
                 id="message"
@@ -166,19 +169,21 @@ ${formData.message}
                 value={formData.message}
                 onChange={handleChange}
                 placeholder="Fikringizni shu yerda batafsil yozib qoldiring..."
-                className="w-full px-4 py-2 bg-white dark:bg-[#252525] border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors resize-none"
-              ></textarea>
+                className="w-full p-4 bg-[var(--bg-subtle)] border border-[var(--border-main)] rounded-xl text-sm font-semibold text-[var(--text-main)] placeholder-[#8a93a6] focus:border-[var(--navy-primary)] outline-none transition resize-none"
+              />
             </div>
 
             <button
               type="submit"
               disabled={status === "submitting"}
-              className="w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-colors flex items-center justify-center gap-2 disabled:opacity-75 disabled:cursor-not-allowed"
+              className="w-full h-12 rounded-xl bg-[var(--navy-primary)] text-white text-sm font-bold shadow-xs hover:opacity-90 transition cursor-pointer disabled:opacity-50 flex items-center justify-center gap-2 mt-2"
             >
               {status === "submitting" ? (
-                <>Yuborilmoqda...</>
+                "Yuborilmoqda..."
               ) : (
-                <>Jo'natish <FaPaperPlane className="text-sm" /></>
+                <>
+                  Jo'natish <FaPaperPlane className="text-xs" />
+                </>
               )}
             </button>
           </form>

@@ -1,44 +1,55 @@
-import { CgSearch } from "react-icons/cg";
 import { BiChevronDown } from "react-icons/bi";
 
-export default function SearchBar({ filters, handleInputChange }) {
+export default function SearchBar({ filters, handleInputChange, handleSearchSubmit }) {
   return (
-    <div className="flex flex-col sm:flex-row items-center gap-4 mb-8">
-      <div className="relative flex-1 w-full text-[#143c7b] dark:text-blue-300 transition-colors">
+    <div className="flex flex-col sm:flex-row items-center gap-3 mb-6 font-interface">
+      {/* Search Input Box */}
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (handleSearchSubmit) handleSearchSubmit();
+        }}
+        className="relative flex-1 w-full flex items-center h-12 px-4 bg-[var(--bg-card)] border border-[var(--border-main)] rounded-xl shadow-xs focus-within:border-[var(--navy-primary)] transition"
+      >
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#8a93a6" strokeWidth="2.4" strokeLinecap="round" className="shrink-0">
+          <circle cx="11" cy="11" r="7" />
+          <path d="M20 20l-4.2-4.2" />
+        </svg>
         <input
-          type="search"
+          type="text"
           name="search"
-          value={filters.search}
+          value={filters.search || ""}
           onChange={handleInputChange}
-          placeholder="Kitob nomi, muallif ..."
-          className="w-full rounded-xl bg-white dark:bg-[#1e1e1e] dark:text-gray-100 border border-gray-200 dark:border-gray-800 pl-11 pr-4 py-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 shadow-sm transition-colors dark:placeholder-gray-500"
+          placeholder="Kitob nomi, muallif, ISBN…"
+          className="w-full bg-transparent ml-3 text-sm font-semibold text-[var(--text-main)] placeholder-[#8a93a6] outline-none"
         />
-        <span className="absolute left-4 top-3.5 text-lg text-gray-400">
-          <CgSearch />
-        </span>
-      </div>
+        {filters.search && (
+          <button
+            type="button"
+            onClick={() => handleInputChange({ target: { name: "search", value: "" } })}
+            className="text-xs font-bold text-[var(--text-subtle)] hover:text-[var(--text-main)] cursor-pointer"
+          >
+            ✕
+          </button>
+        )}
+      </form>
 
-      <div className="relative w-full sm:w-64">
+      {/* Sort Select */}
+      <div className="relative w-full sm:w-60 h-12 flex items-center bg-[var(--bg-card)] border border-[var(--border-main)] rounded-xl px-4 shadow-xs">
         <select
           name="sort"
-          value={filters.sort}
+          value={filters.sort || "rating-high"}
           onChange={handleInputChange}
-          className="w-full appearance-none rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#1e1e1e] pl-4 pr-10 py-3 text-sm text-gray-700 dark:text-gray-300 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 shadow-sm transition-colors"
+          className="w-full bg-transparent text-sm font-semibold text-[var(--text-main)] outline-none appearance-none pr-6 cursor-pointer"
         >
-          <option value="rating-high">Reyting (Yuqorisidan)</option>
-          <option value="rating-low">Reyting (Pastidan)</option>
+          <option value="rating-high">Reyting (yuqorisidan)</option>
+          <option value="rating-low">Reyting (pastidan)</option>
           <option value="latest">Yangi qo'shilganlar</option>
           <option value="oldest">Eskilari</option>
           <option value="name-high">Nomi (A-Z)</option>
           <option value="name-low">Nomi (Z-A)</option>
-          <option value="published-date-high">
-            Nashr qilingan sana (Yuqorisidan)
-          </option>
-          <option value="published-date-low">
-            Nashr qilingan sana (Pastidan)
-          </option>
         </select>
-        <BiChevronDown className="absolute right-4 top-3.5 text-gray-500 text-xl pointer-events-none" />
+        <BiChevronDown className="absolute right-3.5 text-gray-400 text-lg pointer-events-none" />
       </div>
     </div>
   );

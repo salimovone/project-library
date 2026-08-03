@@ -1,92 +1,91 @@
 import { useEffect, useState } from "react";
-import { NewArrivalCard } from "../components/index.js";
+import { useNavigate } from "react-router";
+import BookCard from "../components/BookCard";
 import { getMe } from "../services/userService.js";
 import { fetchUserProfileStats } from "../services/additional.js";
 import {
-  BookIcon,
-  ClockIcon,
-  GoalProgress,
-  HeartIcon,
   ProfileHeader,
   StatsCard,
+  GoalProgress,
+  BookIcon,
+  ClockIcon,
   TrophyIcon,
+  HeartIcon,
 } from "../components/usePage/index.js";
 import { fetchReservations } from "../services/reservations.js";
 
 const stats = [
   {
     id: 1,
-    label: "O'qilgan kitoblar soni",
+    label: "O'qilgan kitoblar",
     stat: "returned_reservations",
     icon: <BookIcon />,
   },
   {
     id: 2,
-    label: "Kutilayotgan Kitoblar",
+    label: "Kutilayotgan kitoblar",
     stat: "pending_reservations",
     icon: <ClockIcon />,
   },
-  { id: 3, label: "Baholangan kitoblar", stat: "ratings", icon: <TrophyIcon /> },
-  { id: 4, label: "Saqlangan kitoblar", stat: "bookmarks", icon: <HeartIcon /> },
+  { id: 3, label: "Baholanganlar", stat: "ratings", icon: <TrophyIcon /> },
+  { id: 4, label: "Saqlanganlar", stat: "bookmarks", icon: <HeartIcon /> },
 ];
 
 export default function UserPage() {
+  const navigate = useNavigate();
   const [books, setBooks] = useState([]);
   const [user, setUser] = useState({});
-  // Tablarning statuslari: "reading" (O'qilayotgan), "reserved" (Band qilingan), "read" (O'qilgan)
-  const [activeTab, setActiveTab] = useState("reading"); 
+  const [activeTab, setActiveTab] = useState("reading");
   const [userProfileStats, setUserProfileStats] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
-  // Dastlabki foydalanuvchi ma'lumotlarini yuklash
   useEffect(() => {
     getMe().then((data) => {
-      setUser(data);
-      fetchUserProfileStats(data.id).then(setUserProfileStats);
+      if (data) {
+        setUser(data);
+        fetchUserProfileStats(data.id).then(setUserProfileStats);
+      }
     });
   }, []);
 
-  // Tab o'zgarganda kitoblarni yuklash
   useEffect(() => {
+    if (!user.id) return;
     setIsLoading(true);
-    setBooks([]); // Yangi tabga o'tganda eskisini tozalab turamiz
-    
+    setBooks([]);
+
     let status = "";
     switch (activeTab) {
       case "reading":
-        status = "given,not_returned"; // Qo'lda va qaytarilmagan
+        status = "given,not_returned";
         break;
       case "reserved":
-        status = "pending,approved"; // Kutilayotgan yoki tasdiqlangan (Band qilingan)
+        status = "pending,approved";
         break;
       case "read":
-        status = "returned"; // Qaytarilgan (O'qib bo'lingan)
+        status = "returned";
         break;
       default:
         break;
     }
 
-    // API chaqiruvi (activeTab parametri bilan)
-    fetchReservations({user_id: user.id, status })
+    fetchReservations({ user_id: user.id, status })
       .then((data) => {
         setBooks(data.results || data || []);
       })
-      .catch((err) => console.error("Xatolik:", err))
+      .catch((err) => console.error("Reservations error:", err))
       .finally(() => {
         setIsLoading(false);
       });
-  }, [activeTab]);
-
-  const activeTabFilter = "bg-white dark:bg-[#1e1e1e] font-semibold text-[#143c7b] dark:text-blue-300 shadow-sm border border-gray-100 dark:border-gray-800 transition-colors hover:bg-gray-50 dark:hover:bg-[#252525]";
-  const inactiveTabFilter = "bg-transparent font-medium text-[#5174ac] dark:text-blue-400 hover:bg-white dark:hover:bg-[#1e1e1e] hover:shadow-sm transition-colors";
+  }, [activeTab, user.id]);
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] dark:bg-[#121212] py-8 font-sans transition-colors duration-300">
-      <div className="max-w-300 mx-auto px-4 sm:px-6 space-y-6">
-        {/* Yuqori Profil va Statistika */}
+    <div className="min-h-screen bg-[var(--bg-page)] font-interface transition-colors duration-300 py-8 px-4 md:px-10">
+      <div className="max-w-[1320px] mx-auto flex flex-col gap-6">
+        {/* Header Profile Info */}
         <ProfileHeader user={user} />
 
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        {/* Stats Grid */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {stats.map((stat) => (
             <StatsCard
               key={stat.id}
@@ -98,87 +97,48 @@ export default function UserPage() {
 
         <GoalProgress hideProgress={true} />
 
-        {/* TABLAR */}
-        <div className="flex flex-wrap items-center gap-3 pt-4 pb-2">
-          {/* 1-Tab: O'qilayotgan */}
-          <button
-            onClick={() => setActiveTab("reading")}
-            className={`${
-              activeTab === "reading" ? activeTabFilter : inactiveTabFilter
-            } flex items-center gap-2 rounded-full px-5 py-2.5 text-sm transition`}
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="h-4 w-4 text-blue-500"
+        {/* Tab Switcher Pills */}
+        <div className="flex items-center gap-2 border-b border-[var(--border-main)] pb-3 pt-2">
+          {[
+            { key: "reading", label: "O'qilayotgan" },
+            { key: "reserved", label: "Band qilingan" },
+            { key: "read", label: "O'qilgan" },
+          ].map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => setActiveTab(tab.key)}
+              className={`px-4 py-2 rounded-xl text-xs font-extrabold transition cursor-pointer ${
+                activeTab === tab.key
+                  ? "bg-[var(--navy-primary)] text-white shadow-xs"
+                  : "bg-[var(--bg-card)] text-[var(--text-muted)] border border-[var(--border-main)] hover:border-[var(--navy-primary)]"
+              }`}
             >
-              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-            </svg>
-            O'qilayotgan
-          </button>
-
-          {/* 2-Tab: Band qilingan */}
-          <button
-            onClick={() => setActiveTab("reserved")}
-            className={`${
-              activeTab === "reserved" ? activeTabFilter : inactiveTabFilter
-            } flex items-center gap-2 rounded-full px-5 py-2.5 text-sm transition`}
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="h-4 w-4 text-orange-500"
-            >
-              <circle cx="12" cy="12" r="10" />
-              <polyline points="12 6 12 12 16 14" />
-            </svg>
-            Band qilingan
-          </button>
-
-          {/* 3-Tab: O'qilgan */}
-          <button
-            onClick={() => setActiveTab("read")}
-            className={`${
-              activeTab === "read" ? activeTabFilter : inactiveTabFilter
-            } flex items-center gap-2 rounded-full px-5 py-2.5 text-sm transition`}
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="h-4 w-4 text-green-500"
-            >
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-              <polyline points="22 4 12 14.01 9 11.01" />
-            </svg>
-            O'qilgan
-          </button>
+              {tab.label}
+            </button>
+          ))}
         </div>
 
-        {/* KITOBLAR RO'YXATI */}
+        {/* Book Grid */}
         {isLoading ? (
-          <div className="flex justify-center py-10">
-            <p className="text-gray-500 dark:text-gray-400 font-medium transition-colors">Kitoblar yuklanmoqda...</p>
+          <div className="flex justify-center py-16 text-[var(--navy-primary)] font-bold text-base">
+            Kitoblar yuklanmoqda...
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-8 sm:gap-x-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {books.length > 0 ? (
-              books.map((book) => <NewArrivalCard key={book.id} book={book} />)
+              books.map((item) => {
+                const bookData = item.book || item;
+                return (
+                  <BookCard
+                    key={item.id || bookData.id}
+                    book={bookData}
+                    onClick={() => navigate(`/books/${bookData.id}`)}
+                  />
+                );
+              })
             ) : (
-              <div className="col-span-full py-8 text-center text-gray-400 dark:text-gray-500 transition-colors">
-                Bu bo'limda hozircha kitoblar yo'q
+              <div className="col-span-full bg-[var(--bg-card)] border border-[var(--border-main)] rounded-2xl p-12 text-center text-[var(--text-muted)] font-medium">
+                Bu bo'limda hozircha kitoblar yo'q.
               </div>
             )}
           </div>

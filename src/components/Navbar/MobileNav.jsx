@@ -1,80 +1,118 @@
 import { useState } from 'react';
-import { Link } from 'react-router';
-import { CgSearch } from 'react-icons/cg';
-import { BiBell, BiChevronDown } from 'react-icons/bi';
+import { Link, useLocation } from 'react-router';
+import { BiChevronDown, BiGridAlt } from 'react-icons/bi';
 import { IoPersonOutline } from 'react-icons/io5';
 import LanguageSwitcher from './LanguageSwitcher';
+import ThemeToggle from '../ThemeToggle';
 import useRole from "../../hooks/useRole";
+import useAuth from "../../hooks/useAuth";
 
-const MobileNav = ({ categories, subcategories = [], closeMenu }) => {
+const MobileNav = ({ categories = [], subcategories = [], closeMenu }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState(null);
-  const displayCategories = categories.slice(0, 5);
-  const hasMoreCategories = categories.length > 5;
-  const { checkUserLevel } = useRole();
+  const { role, checkUserLevel } = useRole();
+  const { isAuthenticated, user, logout } = useAuth();
+  const location = useLocation();
+
+  const navLinks = [
+    { path: "/", label: "Bosh sahifa" },
+    { path: "/books", label: "Kutubxona" },
+    { path: "/top-books", label: "Top kitoblar" },
+    { path: "/feedback", label: "Fikr-mulohaza" },
+  ];
+
+  const adminLabels = {
+    teacher: "Kitob qo'shish",
+    librarian: "Boshqaruv paneli",
+    admin: "Boshqaruv paneli",
+  };
+
+  const getAdminPath = () => {
+    if (role === "teacher") return "/createBook";
+    return "/bookControl";
+  };
+
+  const getInitials = () => {
+    if (!user) return "U";
+    const name = user.first_name || user.username || user.name || "User";
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .substring(0, 2)
+      .toUpperCase();
+  };
 
   return (
-    <div className="lg:hidden mt-4 pb-4 border-t border-gray-200 dark:border-gray-700">
-      <div className="space-y-2 pt-4">
-        
-        <Link 
-          to={"/"} 
-          className="block text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium py-2 px-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition"
-          onClick={closeMenu}
-        >
-          Bosh sahifa
-        </Link>
-        
-        <Link 
-          to={"/books"} 
-          className="block text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium py-2 px-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition"
-          onClick={closeMenu}
-        >
-          Kutubxona
-        </Link>
+    <div className="lg:hidden bg-[var(--bg-card)] border-b border-[var(--border-main)] px-4 py-5 font-interface shadow-lg animate-in slide-in-from-top duration-200">
+      <div className="flex flex-col gap-2">
+        {/* Navigation items */}
+        {navLinks.map((item) => {
+          const isActive = location.pathname === item.path;
+          return (
+            <Link
+              key={item.path}
+              to={item.path}
+              onClick={closeMenu}
+              className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-bold transition ${
+                isActive
+                  ? "bg-[var(--navy-light)] text-[var(--navy-primary)] dark:text-white"
+                  : "text-[var(--text-muted)] hover:bg-[var(--bg-subtle)] hover:text-[var(--text-main)]"
+              }`}
+            >
+              {isActive && <span className="w-1.5 h-1.5 rounded-full bg-[var(--crimson-primary)]" />}
+              {item.label}
+            </Link>
+          );
+        })}
 
+        {/* Categories Accordion */}
         <div>
-          <button 
+          <button
+            type="button"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="w-full flex items-center justify-between text-gray-700 dark:text-gray-300 font-medium py-2 px-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition"
+            className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-bold text-[var(--text-muted)] hover:bg-[var(--bg-subtle)] hover:text-[var(--text-main)] transition cursor-pointer"
           >
-            Bo'limlar <BiChevronDown className={`transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} />
+            <span>Bo'limlar</span>
+            <BiChevronDown className={`text-lg transition-transform ${isDropdownOpen ? "rotate-180" : ""}`} />
           </button>
-          
+
           {isDropdownOpen && (
-            <div className="pl-4 py-2 flex flex-col gap-2 border-l-2 border-gray-200 dark:border-gray-700 ml-4 mt-1">
-              {displayCategories.map(cat => {
-                const catSubcategories = subcategories.filter(sub => sub.category === cat.id);
+            <div className="pl-3 py-2 flex flex-col gap-1.5 border-l-2 border-[var(--border-main)] ml-4 mt-1">
+              {categories.slice(0, 8).map((cat) => {
+                const catSubcategories = subcategories.filter((sub) => sub.category === cat.id);
                 const isCatActive = activeCategory === cat.id;
 
                 return (
                   <div key={cat.id} className="flex flex-col">
                     <div className="flex justify-between items-center pr-2">
-                      <Link 
+                      <Link
                         to="/books"
                         state={{ category: cat.id }}
-                        className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 py-1.5 flex-1"
+                        className="text-xs font-semibold text-[var(--text-muted)] hover:text-[var(--navy-primary)] dark:hover:text-white py-1.5 flex-1 truncate"
                         onClick={closeMenu}
                       >
                         {cat?.name}
                       </Link>
                       {catSubcategories.length > 0 && (
-                        <button 
+                        <button
+                          type="button"
                           onClick={() => setActiveCategory(isCatActive ? null : cat.id)}
-                          className="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded-md"
+                          className="px-1.5 py-0.5 bg-[var(--bg-subtle)] rounded-md text-xs cursor-pointer"
                         >
-                          <BiChevronDown className={`transition-transform duration-200 ${isCatActive ? 'rotate-180' : ''}`} />
+                          <BiChevronDown className={`transition-transform ${isCatActive ? "rotate-180" : ""}`} />
                         </button>
                       )}
                     </div>
+
                     {isCatActive && catSubcategories.length > 0 && (
-                      <div className="pl-4 py-1 flex flex-col gap-1 border-l border-gray-300 dark:border-gray-600 ml-2 mt-1">
-                        {catSubcategories.map(sub => (
-                          <Link 
-                            key={sub.id} 
+                      <div className="pl-3 py-1 flex flex-col gap-1 border-l border-[var(--border-main)] ml-2 mt-1">
+                        {catSubcategories.map((sub) => (
+                          <Link
+                            key={sub.id}
                             to="/books"
                             state={{ category: cat.id, subcategory: sub.id }}
-                            className="text-sm text-gray-500 dark:text-gray-500 hover:text-blue-600 dark:hover:text-blue-400 py-1"
+                            className="text-[11.5px] font-medium text-[var(--text-subtle)] hover:text-[var(--navy-primary)] dark:hover:text-white py-1 truncate"
                             onClick={closeMenu}
                           >
                             {sub?.name}
@@ -85,68 +123,57 @@ const MobileNav = ({ categories, subcategories = [], closeMenu }) => {
                   </div>
                 );
               })}
-              {hasMoreCategories && (
-                <Link 
-                  to="/categories" 
-                  className="text-sm font-semibold text-blue-600 py-1 mt-2"
-                  onClick={closeMenu}
-                >
-                  Barchasi...
-                </Link>
-              )}
             </div>
           )}
         </div>
 
-        <Link 
-          to={"/top-books"} 
-          className="block text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium py-2 px-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition"
-          onClick={closeMenu}
-        >
-          Top Kitoblar
-        </Link>
-        <Link 
-          to={"/feedback"} 
-          className="block text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium py-2 px-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition"
-          onClick={closeMenu}
-        >
-          Fikr-mulohaza
-        </Link>
-        {checkUserLevel("admin") && (
-          <Link 
-            to={"/user-logs"} 
-            className="block text-purple-600 dark:text-purple-400 font-medium py-2 px-2 rounded-lg hover:bg-purple-50 dark:hover:bg-gray-800 transition"
+        {/* Admin Button if staff */}
+        {adminLabels[role] && (
+          <Link
+            to={getAdminPath()}
             onClick={closeMenu}
+            className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-[var(--crimson-light)] border border-[var(--crimson-border)] text-[var(--crimson-primary)] text-xs font-extrabold transition shadow-xs mt-1"
           >
-            Foydalanuvchilar tarixi
+            <BiGridAlt className="text-base" /> {adminLabels[role]}
           </Link>
         )}
-        
-        <div className="mt-4 pt-6 border-t border-gray-200 dark:border-gray-700">
-          {/* <div className="relative text-[#003282] dark:text-blue-300 bg-[#f3f3f3] dark:bg-gray-800 rounded-full mb-6">
-            <input 
-              type="search" 
-              placeholder="Qidiruv" 
-              className="pl-11 pr-4 py-3 rounded-full bg-[#f3f3f3] dark:bg-gray-800 w-full focus:outline-none focus:ring-2 focus:ring-blue-600 dark:placeholder:text-gray-400 text-[#003282] dark:text-blue-300" 
-            />
-            <span className="absolute left-4 top-3.5 text-lg"><CgSearch /></span>
-          </div> */}
 
-          <div className="flex items-center gap-3">
-            <div className="flex-1">
-              <LanguageSwitcher />
-            </div>
-            {/* <button className="text-[#003282] dark:text-blue-300 rounded-full w-12 h-12 flex items-center justify-center bg-[#f3f3f3] dark:bg-gray-800 hover:bg-[#e0e0e0] dark:hover:bg-gray-700 transition">
-              <BiBell className="text-xl" />
-            </button> */}
-            <Link
-              to="/profile"
-              className="text-[#003282] dark:text-blue-300 rounded-full w-12 h-12 flex items-center justify-center bg-[#f3f3f3] dark:bg-gray-800 hover:bg-[#e0e0e0] dark:hover:bg-gray-700 transition"
-              onClick={closeMenu}
-            >
-              <IoPersonOutline className="text-xl" />
-            </Link>
+        {/* Footer controls: Language, Dark mode, Profile */}
+        <div className="mt-4 pt-4 border-t border-[var(--border-main)] flex flex-col gap-3">
+          <div className="flex items-center justify-between gap-3">
+            <LanguageSwitcher />
+            <ThemeToggle />
           </div>
+
+          {isAuthenticated ? (
+            <div className="flex items-center justify-between gap-3 bg-[var(--bg-subtle)] border border-[var(--border-main)] rounded-xl p-2.5 mt-1">
+              <Link to="/profile" onClick={closeMenu} className="flex items-center gap-2.5 min-w-0">
+                <span className="w-8 h-8 rounded-full bg-[var(--navy-primary)] text-white text-xs font-extrabold flex items-center justify-center shrink-0">
+                  {getInitials()}
+                </span>
+                <span className="text-xs font-bold text-[var(--text-main)] truncate">
+                  {user?.first_name || user?.username || "Kabinet"}
+                </span>
+              </Link>
+              <button
+                onClick={() => {
+                  logout && logout();
+                  closeMenu();
+                }}
+                className="text-xs font-bold text-[var(--crimson-primary)] hover:underline cursor-pointer"
+              >
+                Chiqish
+              </button>
+            </div>
+          ) : (
+            <Link
+              to="/login"
+              onClick={closeMenu}
+              className="flex items-center justify-center gap-2 w-full h-11 rounded-xl bg-[var(--navy-primary)] text-white text-xs font-bold shadow-xs hover:opacity-90 transition mt-1"
+            >
+              <IoPersonOutline className="text-base" /> Kirish
+            </Link>
+          )}
         </div>
       </div>
     </div>

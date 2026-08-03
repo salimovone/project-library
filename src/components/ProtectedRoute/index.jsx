@@ -6,13 +6,17 @@ export default function ProtectedRoute({ requiredRole, strict = false }) {
   const { checkUserLevel, role } = useRole();
   const navigate = useNavigate();
 
-  const shouldRedirect = (strict && role != requiredRole) || !checkUserLevel(requiredRole);
+  const shouldRedirect = (strict && role !== requiredRole) || !checkUserLevel(requiredRole);
 
   useEffect(() => {
     if (shouldRedirect) {
-      navigate(-1);
+      if (role === 'guest') {
+        navigate('/login', { replace: true });
+      } else {
+        navigate('/', { replace: true });
+      }
     }
-  }, [shouldRedirect, navigate]);
+  }, [shouldRedirect, navigate, role]);
 
   if (shouldRedirect) return null;
   return <Outlet />;

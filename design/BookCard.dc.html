@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="display:flex; flex-direction:column; background:#ffffff; border:1px solid #e6e3dc; border-radius:16px; overflow:hidden; font-family:Manrope, system-ui, sans-serif; box-shadow:0 1px 2px rgba(20,32,58,0.04); cursor:pointer;" style-hover="box-shadow:0 10px 28px rgba(20,32,58,0.10); border-color:#d3cfc6;">
+  <div style="position:relative; padding:10px 10px 0;">
+    <div style="position:relative; aspect-ratio:3/4; border-radius:11px; overflow:hidden; background:linear-gradient(140deg,#3d6cb0 0%,#2a538f 55%,#1b3f7a 100%); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:18px 14px; text-align:center;">
+      <span style="position:absolute; top:0; left:0; right:0; height:100%; background:radial-gradient(circle at 25% 15%, rgba(255,255,255,0.16), transparent 55%);"></span>
+      <span style="position:absolute; left:0; top:0; bottom:0; width:7px; background:#9e1b32;"></span>
+      <span style="font-family:Newsreader, Georgia, serif; font-size:19px; line-height:1.22; font-weight:500; color:#ffffff; position:relative; display:block;">{{ title }}</span>
+      <span style="width:22px; height:2px; background:#c23b52; border-radius:2px; margin:11px 0 9px; position:relative;"></span>
+      <span style="font-size:11.5px; font-weight:600; color:#b9c6de; position:relative; letter-spacing:0.01em;">{{ author }}</span>
+      <sc-if value="{{ badge }}" hint-placeholder-val="{{ false }}">
+        <span style="position:absolute; top:10px; right:10px; background:#9e1b32; color:#fff; font-size:9.5px; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; padding:4px 7px; border-radius:5px;">{{ badgeText }}</span>
+      </sc-if>
+    </div>
+  </div>
+
+  <div style="display:flex; flex-direction:column; gap:3px; padding:12px 14px 13px; flex:1;">
+    <span style="font-size:14px; font-weight:700; color:#14203a; line-height:1.3; letter-spacing:-0.01em; display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ title }}</span>
+    <span style="font-size:12.5px; font-weight:500; color:#7b8497;">{{ author }}</span>
+
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:auto; padding-top:12px;">
+      <div style="display:flex; align-items:center; gap:6px;">
+        <sc-if value="{{ hasPdf }}" hint-placeholder-val="{{ true }}">
+          <span title="PDF" style="display:flex; align-items:center; gap:4px; height:23px; padding:0 7px; border-radius:6px; background:#fff4ed; color:#c2571c; font-size:10px; font-weight:800; letter-spacing:0.04em;">PDF</span>
+        </sc-if>
+        <sc-if value="{{ hasAudio }}" hint-placeholder-val="{{ true }}">
+          <span title="Audio" style="display:flex; align-items:center; gap:4px; height:23px; padding:0 7px; border-radius:6px; background:#fdf0f2; color:#9e1b32; font-size:10px; font-weight:800; letter-spacing:0.04em;">AUDIO</span>
+        </sc-if>
+        <sc-if value="{{ hasPhysical }}" hint-placeholder-val="{{ true }}">
+          <span title="Kutubxonada bor" style="display:flex; align-items:center; gap:4px; height:23px; padding:0 7px; border-radius:6px; background:#eef1f7; color:#16305e; font-size:10px; font-weight:800; letter-spacing:0.04em;">FIZIK</span>
+        </sc-if>
+      </div>
+      <span style="display:flex; align-items:center; gap:4px; font-size:12.5px; font-weight:800; color:#14203a;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="#e0a32e"><path d="M12 2.5l2.9 6.1 6.6.7-4.9 4.4 1.4 6.5L12 16.9 6 20.2l1.4-6.5L2.5 9.3l6.6-.7z" /></svg>
+        {{ rating }}
+      </span>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:260,&quot;height&quot;:390},&quot;title&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Odam anatomiyasi&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;author&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;A. G'. Ahmedov&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;rating&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;4.8&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;formats&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;pdf,physical&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;badgeText&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const f = this.props.formats ?? "pdf,physical";
+    return {
+      title: this.props.title ?? "Kitob nomi",
+      author: this.props.author ?? "Noma'lum muallif",
+      rating: this.props.rating ?? "0.0",
+      hasPdf: f.includes("pdf"),
+      hasAudio: f.includes("audio"),
+      hasPhysical: f.includes("physical"),
+      badge: !!this.props.badgeText,
+      badgeText: this.props.badgeText ?? "",
+    };
+  }
+}
+</script>
+</body>
+</html>

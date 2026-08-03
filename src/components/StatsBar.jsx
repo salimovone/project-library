@@ -1,59 +1,53 @@
-import {useEffect, useState} from "react";
-import {fetchMainPageStats} from "../services/additional";
+import { useEffect, useState } from "react";
+import { fetchMainPageStats } from "../services/additional";
 
 /**
  * StatsBar Component
- * Responsibility: Render horizontal stats bar
+ * Responsibility: Render main stats bar according to design specs
  */
 export default function StatsBar() {
-	const [mainPageStats, setMainPageStats] = useState({});
-	let isMounted = false;
-	useEffect(() => {
-		if (isMounted) return;
+  const [mainPageStats, setMainPageStats] = useState({
+    total_books: "12 480",
+    active_users: "6 214",
+    category_counts: "14",
+  });
 
-		fetchMainPageStats().then(setMainPageStats);
+  useEffect(() => {
+    let isMounted = true;
+    fetchMainPageStats()
+      .then((data) => {
+        if (isMounted && data) {
+          setMainPageStats((prev) => ({ ...prev, ...data }));
+        }
+      })
+      .catch((err) => console.error("Stats error:", err));
 
-		return () => {
-			isMounted = true;
-		};
-	}, []);
-	return (
-		<section className="bg-[#123a7b] dark:bg-[#0a1e3f] py-10 transition-colors duration-300">
-			<div className="custom-container grid grid-cols-2 gap-6 text-center text-white sm:grid-cols-4">
-				<div>
-					<p className="text-2xl font-bold text-red-200 sm:text-3xl">
-						{mainPageStats.total_books}
-					</p>
-					<p className="text-xs uppercase tracking-wide text-blue-100">
-						Kitoblar
-					</p>
-				</div>
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
-				<div>
-					<p className="text-2xl font-bold text-red-200 sm:text-3xl">
-						{mainPageStats.active_users}
-					</p>
-					<p className="text-xs uppercase tracking-wide text-blue-100">
-						Aktiv foydalanuvchilar
-					</p>
-				</div>
+  const stats = [
+    { value: mainPageStats.total_books || "12 480", label: "Kitoblar" },
+    { value: mainPageStats.active_users || "6 214", label: "Aktiv foydalanuvchi" },
+    { value: mainPageStats.category_counts || "14", label: "Kategoriya" },
+    { value: "24/7", label: "Xizmat vaqti" },
+  ];
 
-				<div>
-					<p className="text-2xl font-bold text-red-200 sm:text-3xl">
-						{mainPageStats.category_counts}
-					</p>
-					<p className="text-xs uppercase tracking-wide text-blue-100">
-						Kategoriyalar soni
-					</p>
-				</div>
-
-				<div>
-					<p className="text-2xl font-bold text-red-200 sm:text-3xl">24/7</p>
-					<p className="text-xs uppercase tracking-wide text-blue-100">
-						Xizmat vaqti
-					</p>
-				</div>
-			</div>
-		</section>
-	);
+  return (
+    <section className="bg-[#eef3fb] dark:bg-[#0b1730] border-t border-[#e0e6f2] dark:border-[#1e2c4b] py-10 transition-colors duration-300 font-interface">
+      <div className="max-w-[1320px] mx-auto px-4 md:px-10 grid grid-cols-2 md:grid-cols-4 gap-6">
+        {stats.map((s, idx) => (
+          <div key={idx} className="flex flex-col gap-1.5">
+            <span className="font-editorial text-3xl md:text-4xl font-normal text-[var(--navy-primary)] dark:text-white leading-none block">
+              {s.value}
+            </span>
+            <span className="text-[11.5px] font-bold tracking-widest uppercase text-[#5f6b85] dark:text-[#7d8ba6] block">
+              {s.label}
+            </span>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
 }
