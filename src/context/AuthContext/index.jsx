@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect, useCallback } from 'react';
+import { getMe } from '../../services/userService';
 
 export const AuthContext = createContext(null);
 
@@ -6,6 +7,7 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(
     () => localStorage.getItem('access') !== null
   );
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -13,6 +15,29 @@ export const AuthProvider = ({ children }) => {
   if (baseURL?.endsWith('/')) {
     baseURL = baseURL.slice(0, -1);
   }
+
+  const fetchUser = useCallback(async () => {
+    if (!localStorage.getItem('access')) {
+      setUser(null);
+      return;
+    }
+    try {
+      const userData = await getMe();
+      if (userData) {
+        setUser(userData);
+      }
+    } catch (err) {
+      console.error("User ma'lumotlarini olishda xatolik:", err);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchUser();
+    } else {
+      setUser(null);
+    }
+  }, [isAuthenticated, fetchUser]);
 
   const login = useCallback(async (username, password, callback = null) => {
     try {
@@ -38,6 +63,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('refresh', data.refresh);
       
       setIsAuthenticated(true);
+      await fetchUser();
       
       if (callback) callback();
     } catch (err) {
@@ -60,7 +86,7 @@ export const AuthProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  }, [baseURL]);
+  }, [baseURL, fetchUser]);
 
   const logout = useCallback(async () => {
     try {
@@ -83,12 +109,13 @@ export const AuthProvider = ({ children }) => {
       localStorage.removeItem('access');
       localStorage.removeItem('refresh');
       setIsAuthenticated(false);
+      setUser(null);
       window.location.href = '/login';
     }
   }, [baseURL]);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout, loading, error }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, setUser, fetchUser, login, logout, loading, error }}>
       {children}
     </AuthContext.Provider>
   );

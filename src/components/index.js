@@ -6,3 +6,6 @@ export { default as NewArrivalCard } from './NewArrivalCard';
 export { default as CategoryCard } from './CategoryCard';
 export { default as MostReadCard } from './MostReadCard';
 export { default as StatsBar } from './StatsBar';
+export { default as ReadingProgressWidget } from './ReadingProgressWidget';
+export { default as TopBooksShowcase } from './TopBooksShowcase';
+

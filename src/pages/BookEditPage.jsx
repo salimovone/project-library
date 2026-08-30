@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { useParams } from "react-router";
-import { Link, useNavigate } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import { fetchCategories, fetchSubcategories, fetchTags } from "../services/additional";
 import { getAuthors, createAuthor, createTag, patchBook, fetchBook } from "../services/bookService";
 import { getMe } from "../services/userService";
@@ -34,9 +33,8 @@ export default function BookEditPage() {
 
   const [pdfFile, setPdfFile] = useState(null);
 
-  // Create modal states
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [createModalType, setCreateModalType] = useState(""); // "author" or "tag"
+  const [createModalType, setCreateModalType] = useState("");
   const [createModalLoading, setCreateModalLoading] = useState(false);
   const [createModalInitialValue, setCreateModalInitialValue] = useState("");
 
@@ -57,53 +55,57 @@ export default function BookEditPage() {
   useEffect(() => {
     const loadBookInfo = async () => {
       try {
-        const bookResp = await fetchBook(id);
-        const bk = bookResp; // The fetchBook service returns raw data response directly, or maybe res.data. Let's assume bk is the object because other code accessed bk.id directly.
-        setBookData({
-          name: bk.name || "",
-          author_ids: bk.author?.map(a => a.id) || [],
-          isbn: bk.isbn || "",
-          category_id: bk.category?.id || "",
-          subcategory_ids: bk.subcategories ? bk.subcategories.map(s => s.id) : (bk.subcategory ? [bk.subcategory.id] : []),
-          quantity: bk.quantity || "",
-          location: bk.location || "",
-          tag_ids: bk.tags?.map(t => t.id) || [],
-          description: bk.description || "",
-          pages: bk.pages || "",
-          published_date: bk.published_date || new Date().toISOString().split("T")[0],
-        });
-
-        if (bk.author?.length || bk.tags?.length) {
-          setOptions(prev => {
-            const newAuthors = [...prev.authors];
-            const newTags = [...prev.tags];
-
-            (bk.author || []).forEach(a => {
-              if (!newAuthors.find(existing => existing.id === a.id)) newAuthors.push(a);
-            });
-
-            (bk.tags || []).forEach(t => {
-              if (!newTags.find(existing => existing.id === t.id)) newTags.push(t);
-            });
-
-            return { ...prev, authors: newAuthors, tags: newTags };
+        const bk = await fetchBook(id);
+        if (bk) {
+          setBookData({
+            name: bk.name || "",
+            author_ids: bk.author?.map((a) => a.id) || [],
+            isbn: bk.isbn || "",
+            category_id: bk.category?.id || "",
+            subcategory_ids: bk.subcategories
+              ? bk.subcategories.map((s) => s.id)
+              : bk.subcategory
+              ? [bk.subcategory.id]
+              : [],
+            quantity: bk.quantity || "",
+            location: bk.location || "",
+            tag_ids: bk.tags?.map((t) => t.id) || [],
+            description: bk.description || "",
+            pages: bk.pages || "",
+            published_date: bk.published_date || new Date().toISOString().split("T")[0],
           });
+
+          if (bk.author?.length || bk.tags?.length) {
+            setOptions((prev) => {
+              const newAuthors = [...prev.authors];
+              const newTags = [...prev.tags];
+
+              (bk.author || []).forEach((a) => {
+                if (!newAuthors.find((existing) => existing.id === a.id)) newAuthors.push(a);
+              });
+
+              (bk.tags || []).forEach((t) => {
+                if (!newTags.find((existing) => existing.id === t.id)) newTags.push(t);
+              });
+
+              return { ...prev, authors: newAuthors, tags: newTags };
+            });
+          }
         }
       } catch (e) {
-        console.error("Kitobni yuklashda xatolik:", e);
+        console.error("Book fetch error:", e);
       }
     };
     if (id) loadBookInfo();
   }, [id]);
 
-  // Fetch user data for teacher auto-fill
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const data = await getMe();
         setUserData(data);
       } catch (e) {
-        console.error("User ma'lumotlarini yuklashda xatolik:", e);
+        console.error("User error:", e);
       }
     };
     fetchUser();
@@ -131,7 +133,7 @@ export default function BookEditPage() {
           tags: tagsRes || [],
         });
       } catch (error) {
-        console.error("Ma'lumotlarni yuklashda xatolik:", error);
+        console.error("Options load error:", error);
       }
     };
 
@@ -150,7 +152,7 @@ export default function BookEditPage() {
         return { ...prev, authors: newAuthors };
       });
     } catch (e) {
-      console.error("Avtorlarni qidirishda xatolik:", e);
+      console.error("Author search error:", e);
     }
   }, []);
 
@@ -166,7 +168,7 @@ export default function BookEditPage() {
         return { ...prev, tags: newTags };
       });
     } catch (e) {
-      console.error("Teglarni qidirishda xatolik:", e);
+      console.error("Tag search error:", e);
     }
   }, []);
 
@@ -224,7 +226,7 @@ export default function BookEditPage() {
       }
       setShowCreateModal(false);
     } catch (error) {
-      console.error("Yaratishda xatolik:", error);
+      console.error("Create error:", error);
       alert("Yaratishda xatolik yuz berdi");
     } finally {
       setCreateModalLoading(false);
@@ -236,7 +238,6 @@ export default function BookEditPage() {
     setIsLoading(true);
 
     try {
-      // For teacher: find or use their name as author
       let authorIds = bookData.author_ids;
       if (isTeacher && userData) {
         const teacherName = `${userData.first_name || ""} ${userData.last_name || ""}`.trim();
@@ -255,7 +256,6 @@ export default function BookEditPage() {
         }
       }
 
-      // FormData bilan yuboramiz (fayl + ma'lumotlar)
       const formData = new FormData();
       formData.append("name", bookData.name);
       formData.append("description", bookData.description);
@@ -272,25 +272,20 @@ export default function BookEditPage() {
       const tagIds = bookData.tag_ids.length > 0 ? bookData.tag_ids.map(Number) : [0];
       const finalAuthorIds = authorIds.length > 0 ? authorIds.map(Number) : [0];
       const subcatIds = bookData.subcategory_ids.length > 0 ? bookData.subcategory_ids.map(Number) : [0];
-      
+
       tagIds.forEach((id) => formData.append("tag_ids", id));
       finalAuthorIds.forEach((id) => formData.append("author_ids", id));
       subcatIds.forEach((id) => formData.append("subcategory_ids", id));
 
-      // PDF fayl
       if (pdfFile) {
         formData.append("pdf", pdfFile);
       }
-
-      // Rasm
       if (imageFile) {
         formData.append("img", imageFile);
       }
 
       await patchBook(id, formData);
-
       navigate(`/books/${id}`);
-
     } catch (error) {
       console.error("Xatolik:", error);
       alert(error.message || "Saqlashda xatolik yuz berdi");
@@ -300,191 +295,193 @@ export default function BookEditPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-[#121212] pb-20 font-sans transition-colors duration-300">
-      <div className="bg-[#f2f4f7] dark:bg-[#1a1a1a] py-3 transition-colors duration-300">
-        <div className="custom-container mx-auto px-4 text-sm font-medium text-[#143c7b] dark:text-blue-300 transition-colors">
-          <Link to="/">Home</Link> / Book Edit
-        </div>
+    <div className="p-6 md:p-8 font-interface flex flex-col gap-6 text-[var(--text-main)]">
+      <div className="bg-[var(--bg-card)] border border-[var(--border-main)] rounded-2xl p-6 shadow-xs flex flex-col gap-1">
+        <h1 className="font-editorial text-2.5xl md:text-3xl font-normal text-[var(--text-main)]">
+          Kitob ma'lumotlarini tahrirlash
+        </h1>
+        <span className="text-xs text-[var(--text-subtle)]">
+          Kitob nashri va fayllariga o'zgartirishlar kiritish
+        </span>
       </div>
 
-      <div className="custom-container mx-auto px-4 mt-8">
-        <form onSubmit={handleSubmit} className="max-w-5xl mx-auto space-y-8">
-
-          <div className="bg-[#f6f8fa] dark:bg-[#1e1e1e] border border-[#d1d9e6] dark:border-gray-800 rounded-3xl p-8 shadow-sm transition-colors duration-300">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-              {/* Kitob nomi */}
-              <div className="space-y-1.5 md:col-span-2">
-                <label className="text-sm font-bold text-[#143c7b] dark:text-blue-300 transition-colors">Kitob nomi *</label>
-                <input
-                  name="name"
-                  type="text"
-                  value={bookData.name || ""}
-                  placeholder="Kitob nomi kiriting ...."
-                  className="w-full bg-white dark:bg-[#252525] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-4 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors"
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-
-              {/* Mualliflar */}
-              {!isTeacher && (
-                <MultiSelectDropdown
-                  label="Mualliflar *"
-                  placeholder="Muallif qidirish..."
-                  createType="author"
-                  selectedIds={bookData.author_ids}
-                  items={options.authors}
-                  searchResults={searchOptions.authors}
-                  onSearchChange={handleAuthorSearch}
-                  onToggleItem={toggleAuthor}
-                  onOpenCreate={openCreateModal}
-                  colorTheme="blue"
-                />
-              )}
-
-              {/* Teacher info notice */}
-              {isTeacher && userData && (
-                <div className="space-y-1.5">
-                  <label className="text-sm font-bold text-[#143c7b] dark:text-blue-300 transition-colors">Muallif</label>
-                  <div className="w-full bg-gray-100 dark:bg-[#2a2a2a] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-4 text-gray-600 dark:text-gray-300 transition-colors">
-                    {`${userData.first_name || ""} ${userData.last_name || ""}`.trim() || "Avtomatik to'ldiriladi"}
-                  </div>
-                </div>
-              )}
-
-              {/* Teglar */}
-              <MultiSelectDropdown
-                label="Adabyot turi"
-                placeholder="Adabyot turi qidirish..."
-                createType="tag"
-                selectedIds={bookData.tag_ids}
-                items={options.tags}
-                searchResults={searchOptions.tags}
-                onSearchChange={handleTagSearch}
-                onToggleItem={toggleTag}
-                onOpenCreate={openCreateModal}
-                colorTheme="green"
-              />
-
-              <div className="space-y-1.5">
-                <label className="text-sm font-bold text-[#143c7b] dark:text-blue-300 transition-colors">Fakultetni tanlash *</label>
-                <select
-                  name="category_id"
-                  value={bookData.category_id || ""}
-                  className="w-full bg-white dark:bg-[#252525] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-4 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors"
-                  onChange={handleInputChange}
-                  required
-                >
-                  <option value="">Fakultetni tanlang</option>
-                  {options.categories.map((cat) => (
-                    <option key={cat.id} value={cat.id}>
-                      {cat.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <MultiSelectDropdown
-                label="Yo'nalishlar *"
-                placeholder="Yo'nalish qidirish..."
-                selectedIds={bookData.subcategory_ids}
-                items={options.subcategories}
-                onToggleItem={toggleSubcategory}
-                colorTheme="blue"
-              />
-
-              <div className="space-y-1.5">
-                <label className="text-sm font-bold text-[#143c7b] dark:text-blue-300 transition-colors">Sahifalar soni *</label>
-                <input
-                  name="pages"
-                  type="number"
-                  value={bookData.pages || ""}
-                  placeholder="Sahifalar sonini kiriting ...."
-                  className="w-full bg-white dark:bg-[#252525] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-4 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors"
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-sm font-bold text-[#143c7b] dark:text-blue-300 transition-colors">Kitob soni *</label>
-                <input
-                  name="quantity"
-                  type="number"
-                  min="0"
-                  value={bookData.quantity || ""}
-                  placeholder="Kitob sonini kiriting ...."
-                  className="w-full bg-white dark:bg-[#252525] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-4 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors"
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-
-              {/* ISBN will be next to Joylashuv */}
-              <div className="space-y-1.5">
-                <label className="text-sm font-bold text-[#143c7b] dark:text-blue-300 transition-colors">Inventor raqam</label>
-                <input
-                  name="isbn"
-                  type="text"
-                  value={bookData.isbn || ""}
-                  placeholder="Inventor raqam kiriting ...."
-                  className="w-full bg-white dark:bg-[#252525] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-4 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors"
-                  onChange={handleInputChange}
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-sm font-bold text-[#143c7b] dark:text-blue-300 transition-colors">Javon raqami</label>
-                <input
-                  name="location"
-                  type="text"
-                  value={bookData.location || ""}
-                  placeholder="Javon raqamini kiriting ...."
-                  className="w-full bg-white dark:bg-[#252525] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-4 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors"
-                  onChange={handleInputChange}
-                />
-              </div>
-
-
-            </div>
-
-            <div className="mt-6 space-y-1.5">
-              <label className="text-sm font-bold text-[#143c7b] dark:text-blue-300 transition-colors">Kitobning to'liq shakli</label>
-              <textarea
-                name="description"
-                rows="6"
-                value={bookData.description || ""}
-                placeholder="Kitob haqida kiriting ...."
-                className="w-full bg-white dark:bg-[#252525] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-4 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none transition-colors"
-                onChange={handleInputChange}
-              />
-              <div className="mt-3 p-4 rounded-xl bg-[#f0f4f8] dark:bg-[#2a2a2a] border-l-4 border-l-[#143c7b] dark:border-l-blue-500 border border-[#d1d9e6] dark:border-gray-700 text-[13.5px] text-[#143c7b] dark:text-blue-300 leading-relaxed shadow-sm transition-colors">
-                <span className="font-bold block mb-1">Namuna:</span>
-                A.G’. Ahmedov, Odam anatomiyasi: Tibbiyot institutlarining bakalavriat yo’nalishidagi talabalari uchun darslik / A.G’.Ahmedov; O’zbekiston Reaspublikasi Oliy va o’rta maxsus ta’lim vazirligi, O’zbekiston Respublikasi sog’liqni saqlash vazirligi. -T.: “IQTISOD-MOLIYA”, 2007. 444b
-              </div>
-            </div>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+        <div className="bg-[var(--bg-card)] border border-[var(--border-main)] rounded-2xl p-6 shadow-xs grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="flex flex-col gap-1.5 md:col-span-2">
+            <label className="text-xs font-extrabold tracking-wider uppercase text-[var(--text-subtle)]">
+              Kitob nomi *
+            </label>
+            <input
+              name="name"
+              type="text"
+              value={bookData.name || ""}
+              placeholder="Masalan: Odam anatomiyasi"
+              className="w-full h-11 bg-[var(--bg-subtle)] border border-[var(--border-main)] rounded-xl px-4 text-sm font-semibold text-[var(--text-main)] outline-none focus:border-[var(--navy-primary)]"
+              onChange={handleInputChange}
+              required
+            />
           </div>
 
-          <FileUploadTable
-            imageFile={imageFile}
-            setImageFile={setImageFile}
-            pdfFile={pdfFile}
-            setPdfFile={setPdfFile}
-            isTeacher={isTeacher}
+          {!isTeacher && (
+            <MultiSelectDropdown
+              label="Mualliflar *"
+              placeholder="Muallif qidirish..."
+              createType="author"
+              selectedIds={bookData.author_ids}
+              items={options.authors}
+              searchResults={searchOptions.authors}
+              onSearchChange={handleAuthorSearch}
+              onToggleItem={toggleAuthor}
+              onOpenCreate={openCreateModal}
+              colorTheme="blue"
+            />
+          )}
+
+          {isTeacher && userData && (
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-extrabold tracking-wider uppercase text-[var(--text-subtle)]">
+                Muallif
+              </label>
+              <div className="h-11 bg-[var(--bg-subtle)] border border-[var(--border-main)] rounded-xl px-4 flex items-center text-sm font-semibold text-[var(--text-muted)]">
+                {`${userData.first_name || ""} ${userData.last_name || ""}`.trim() || "O'qituvchi muallif"}
+              </div>
+            </div>
+          )}
+
+          <MultiSelectDropdown
+            label="Adabiyot turi (Teglar)"
+            placeholder="Teg qidirish..."
+            createType="tag"
+            selectedIds={bookData.tag_ids}
+            items={options.tags}
+            searchResults={searchOptions.tags}
+            onSearchChange={handleTagSearch}
+            onToggleItem={toggleTag}
+            onOpenCreate={openCreateModal}
+            colorTheme="green"
           />
 
-          <div className="flex justify-end pt-4">
-            <button
-              type="submit"
-              disabled={isLoading}
-              className={`bg-[#003282] dark:bg-blue-600 text-white px-12 py-3.5 rounded-xl font-bold transition shadow-lg ${isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-900 dark:hover:bg-blue-500'}`}
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-extrabold tracking-wider uppercase text-[var(--text-subtle)]">
+              Kategoriya (Fakultet) *
+            </label>
+            <select
+              name="category_id"
+              value={bookData.category_id || ""}
+              className="w-full h-11 bg-[var(--bg-subtle)] border border-[var(--border-main)] rounded-xl px-4 text-sm font-semibold text-[var(--text-main)] outline-none cursor-pointer"
+              onChange={handleInputChange}
+              required
             >
-              {isLoading ? "Saqlanmoqda..." : "Kitobni o'zgartirish"}
-            </button>
+              <option value="">Fakultetni tanlang</option>
+              {options.categories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
           </div>
-        </form>
-      </div>
+
+          <MultiSelectDropdown
+            label="Yo'nalishlar *"
+            placeholder="Yo'nalish qidirish..."
+            selectedIds={bookData.subcategory_ids}
+            items={options.subcategories}
+            onToggleItem={toggleSubcategory}
+            colorTheme="blue"
+          />
+
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-extrabold tracking-wider uppercase text-[var(--text-subtle)]">
+              Betlar soni *
+            </label>
+            <input
+              name="pages"
+              type="number"
+              value={bookData.pages || ""}
+              placeholder="Masalan: 444"
+              className="w-full h-11 bg-[var(--bg-subtle)] border border-[var(--border-main)] rounded-xl px-4 text-sm font-semibold text-[var(--text-main)] outline-none focus:border-[var(--navy-primary)]"
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-extrabold tracking-wider uppercase text-[var(--text-subtle)]">
+              Nusxalar soni *
+            </label>
+            <input
+              name="quantity"
+              type="number"
+              min="0"
+              value={bookData.quantity || ""}
+              placeholder="Masalan: 24"
+              className="w-full h-11 bg-[var(--bg-subtle)] border border-[var(--border-main)] rounded-xl px-4 text-sm font-semibold text-[var(--text-main)] outline-none focus:border-[var(--navy-primary)]"
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-extrabold tracking-wider uppercase text-[var(--text-subtle)]">
+              ISBN / Inventor raqami
+            </label>
+            <input
+              name="isbn"
+              type="text"
+              value={bookData.isbn || ""}
+              placeholder="978-9943-00-123-4"
+              className="w-full h-11 bg-[var(--bg-subtle)] border border-[var(--border-main)] rounded-xl px-4 text-sm font-semibold text-[var(--text-main)] outline-none focus:border-[var(--navy-primary)]"
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-extrabold tracking-wider uppercase text-[var(--text-subtle)]">
+              Javon va xona raqami
+            </label>
+            <input
+              name="location"
+              type="text"
+              value={bookData.location || ""}
+              placeholder="3-xona, Javon 12"
+              className="w-full h-11 bg-[var(--bg-subtle)] border border-[var(--border-main)] rounded-xl px-4 text-sm font-semibold text-[var(--text-main)] outline-none focus:border-[var(--navy-primary)]"
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div className="flex flex-col gap-1.5 md:col-span-2">
+            <label className="text-xs font-extrabold tracking-wider uppercase text-[var(--text-subtle)]">
+              Annotatsiya va kitob haqida
+            </label>
+            <textarea
+              name="description"
+              rows="5"
+              value={bookData.description || ""}
+              placeholder="Kitob haqida ma'lumot kiritishingiz mumkin..."
+              className="w-full p-4 bg-[var(--bg-subtle)] border border-[var(--border-main)] rounded-xl text-sm font-semibold text-[var(--text-main)] outline-none focus:border-[var(--navy-primary)] resize-none"
+              onChange={handleInputChange}
+            />
+          </div>
+        </div>
+
+        <FileUploadTable
+          imageFile={imageFile}
+          setImageFile={setImageFile}
+          pdfFile={pdfFile}
+          setPdfFile={setPdfFile}
+          isTeacher={isTeacher}
+        />
+
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="h-12 px-8 rounded-xl bg-[var(--navy-primary)] text-white text-sm font-bold shadow-xs hover:opacity-90 transition cursor-pointer disabled:opacity-50"
+          >
+            {isLoading ? "Saqlanmoqda..." : "Kitobni o'zgartirish"}
+          </button>
+        </div>
+      </form>
 
       {showCreateModal && (
         <CreateModal

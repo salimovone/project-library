@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { fetchBook } from "../../services/bookService";
 import {
   BookCoverCard,
@@ -9,7 +9,6 @@ import {
 } from "./components";
 import useRole from "../../hooks/useRole";
 import CustomerReviewsSection from "./components/CustomerReviewSection";
-import LoadingScreen from "../../components/LoadingScreen";
 
 export default function BookDetailPage() {
   const [book, setBook] = useState(null);
@@ -34,38 +33,53 @@ export default function BookDetailPage() {
     };
 
     loadBook();
-  }, [id]); // ID o'zgarganda qayta yuklaydi
+  }, [id]);
 
   if (loading) {
     return (
-      <LoadingScreen />
+      <div className="min-h-screen flex items-center justify-center text-[var(--navy-primary)] font-bold text-lg font-interface">
+        Kitob ma'lumotlari yuklanmoqda...
+      </div>
     );
   }
 
-  // Agar ma'lumot kelmagan bo'lsa
   if (!book) {
-    return (
-      <NotFoundScreen />
-    );
+    return <NotFoundScreen />;
   }
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] dark:bg-[#121212] py-8 font-sans transition-colors duration-300">
-      <div className="custom-container mx-auto px-4 md:px-6 space-y-8">
-        <div className="grid gap-6 lg:grid-cols-[300px_1fr] xl:grid-cols-[340px_1fr]">
+    <div className="min-h-screen bg-[var(--bg-page)] font-interface transition-colors duration-300">
+      {/* Breadcrumbs Bar */}
+      <div className="bg-[var(--bg-card)] border-b border-[var(--border-main)] py-3 px-4 md:px-10">
+        <div className="max-w-[1320px] mx-auto flex items-center gap-2 text-xs md:text-sm font-semibold text-[var(--text-subtle)]">
+          <Link to="/" className="text-[var(--navy-primary)] dark:text-blue-300 hover:underline">
+            Bosh sahifa
+          </Link>
+          <span>/</span>
+          <Link to="/books" className="text-[var(--navy-primary)] dark:text-blue-300 hover:underline">
+            Kutubxona
+          </Link>
+          <span>/</span>
+          <span className="text-[var(--text-main)] font-bold truncate max-w-[300px]">
+            {book?.title || book?.name}
+          </span>
+        </div>
+      </div>
+
+      {/* Main Content Layout */}
+      <div className="max-w-[1320px] mx-auto px-4 md:px-10 py-8 flex flex-col gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-8 items-start">
           <BookCoverCard book={book} />
-          <div className="space-y-6">
+          <div className="flex flex-col gap-8 w-full">
             <BookDetailsPanel commentCount={commentCount} book={book} />
+            <CustomerReviewsSection
+              setCommentCountCallback={setCommentCount}
+              book={book}
+            />
           </div>
         </div>
-        {isAdmin && <BookHistoryCard book={book} />}
 
-        <div className="space-y-6 w-full">
-          <CustomerReviewsSection
-            setCommentCountCallback={setCommentCount}
-            book={book}
-          />
-        </div>
+        {isAdmin && <BookHistoryCard book={book} />}
       </div>
     </div>
   );

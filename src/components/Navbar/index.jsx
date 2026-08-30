@@ -15,15 +15,17 @@ const Navbar = () => {
   
   const closeMenu = () => {
     setIsMenuOpen(false);
-  }
+  };
 
   useEffect(() => {
     let isMounted = true;
     Promise.all([fetchCategories(), fetchSubcategories()]).then(([catData, subcatData]) => {
       if (isMounted) {
-        setCategoriesData(catData);
-        setSubcategoriesData(subcatData);
+        setCategoriesData(catData || []);
+        setSubcategoriesData(subcatData || []);
       }
+    }).catch((err) => {
+      console.error("Navbar categories error:", err);
     });
     return () => {
       isMounted = false;
@@ -31,30 +33,30 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className="bg-white dark:bg-[#1e1e1e] shadow-md sticky top-0 z-50 transition-colors duration-300">
-      <div className="custom-container mx-auto px-4 py-3">
-        <div className="flex items-center justify-between">
-          <Logo />
-          
-          <DesktopNav categories={categoriesData} subcategories={subcategoriesData} />
+    <header className="bg-[var(--bg-card)] border-b border-[var(--border-main)] sticky top-0 z-50 transition-colors duration-300 font-interface">
+      <div className="max-w-[1480px] mx-auto px-4 md:px-10 h-[76px] flex items-center justify-between gap-4">
+        <Logo />
+        
+        <DesktopNav categories={categoriesData} subcategories={subcategoriesData} />
+        
+        <div className="flex items-center gap-3">
           <Actions />
           
-          {/* Hamburger tugmasi lg gacha ko'rinadi */}
-          <div className="flex lg:hidden items-center">
-            <button 
-              onClick={toggleMenu}
-              className="text-2xl text-[#003282] dark:text-blue-400 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition"
-            >
-              {isMenuOpen ? <MdClose /> : <GiHamburgerMenu />}
-            </button>
-          </div>
+          {/* Hamburger button for mobile/tablet */}
+          <button 
+            onClick={toggleMenu}
+            className="lg:hidden text-2xl text-[var(--navy-primary)] dark:text-white p-2 rounded-xl hover:bg-[var(--bg-subtle)] transition cursor-pointer"
+            aria-label="Toggle Navigation Menu"
+          >
+            {isMenuOpen ? <MdClose /> : <GiHamburgerMenu />}
+          </button>
         </div>
-
-        {isMenuOpen && (
-          <MobileNav categories={categoriesData} subcategories={subcategoriesData} closeMenu={closeMenu} />
-        )}
       </div>
-    </nav>
+
+      {isMenuOpen && (
+        <MobileNav categories={categoriesData} subcategories={subcategoriesData} closeMenu={closeMenu} />
+      )}
+    </header>
   );
 };
 

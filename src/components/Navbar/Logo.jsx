@@ -1,9 +1,21 @@
 import { Link } from "react-router";
-import logo from '../../assets/logo.png';
+import logoDarkText from '../../assets/logo.png';
+import logoWhiteText from '../../assets/logo-white-text.png';
 
 const Logo = () => (
-  <Link to={"/"} className="flex items-center hover:opacity-80 transition not-dark:drop-shadow-[0_2px_2px_rgba(5,5,5,0.8)]">
-    <img width={120} src={logo} alt="Kutubxona" className="md:w-37.5 " />
+  <Link to="/" className="flex items-center hover:opacity-90 transition shrink-0 py-1">
+    {/* Light mode: dark text */}
+    <img
+      src={logoDarkText}
+      alt="Alfraganus University Library"
+      className="h-8 md:h-9 w-auto block dark:hidden object-contain"
+    />
+    {/* Dark mode: white text */}
+    <img
+      src={logoWhiteText}
+      alt="Alfraganus University Library"
+      className="h-8 md:h-9 w-auto hidden dark:block object-contain"
+    />
   </Link>
 );
 

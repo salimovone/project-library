@@ -1,21 +1,38 @@
-import { NewArrivalCard } from "../../../components";
+import { useNavigate } from "react-router";
+import BookCard from "../../../components/BookCard";
 
 const BookCardSkeleton = () => (
-  <div className="animate-pulse">
-    <div className="bg-gray-200 dark:bg-gray-700 rounded-lg h-48 w-full transition-colors duration-300"></div>
-    <div className="mt-2 h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 transition-colors duration-300"></div>
-    <div className="mt-1 h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2 transition-colors duration-300"></div>
+  <div className="animate-pulse bg-[var(--bg-card)] border border-[var(--border-main)] rounded-2xl p-3 h-80 flex flex-col gap-3">
+    <div className="bg-[var(--bg-subtle)] rounded-xl h-52 w-full" />
+    <div className="h-4 bg-[var(--bg-subtle)] rounded w-3/4" />
+    <div className="h-3 bg-[var(--bg-subtle)] rounded w-1/2" />
   </div>
 );
 
 export default function BookGrid({ books, isLoading }) {
+  const navigate = useNavigate();
+
+  if (!isLoading && (!books || books.length === 0)) {
+    return (
+      <div className="bg-[var(--bg-card)] border border-[var(--border-main)] rounded-2xl p-12 text-center text-[var(--text-muted)] font-interface font-medium">
+        Hech qanday kitob topilmadi. Qidiruv yoki filtr parametrlarini o'zgartirib ko'ring.
+      </div>
+    );
+  }
+
   return (
-    <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-x-4 gap-y-8 sm:gap-x-6 sm:gap-y-10 mb-10">
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 min-[2560px]:grid-cols-5 gap-4.5 mb-8 min-w-0">
       {isLoading
-        ? Array.from({ length: 6 }).map((_, index) => (
-            <BookCardSkeleton key={`initial-skeleton-${index}`} />
+        ? Array.from({ length: 8 }).map((_, index) => (
+            <BookCardSkeleton key={`skeleton-${index}`} />
           ))
-        : books.map((book) => <NewArrivalCard key={book.id} book={book} />)}
+        : books.map((book) => (
+            <BookCard
+              key={book.id}
+              book={book}
+              onClick={() => navigate(`/books/${book.id}`)}
+            />
+          ))}
     </div>
   );
 }

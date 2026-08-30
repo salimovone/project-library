@@ -52,7 +52,7 @@ export default function SearchableSelect({
           onClick={() => setIsOpen(!isOpen)}
           className="w-full appearance-none rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#252525] px-3 py-2 text-sm text-gray-700 dark:text-gray-300 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 flex justify-between items-center transition-colors"
         >
-          <span>{selectedOptionName}</span>
+          <span className="truncate max-w-[180px] text-left font-semibold">{selectedOptionName}</span>
           <BiChevronDown
             className={`text-gray-500 text-lg transition-transform ${
               isOpen ? "rotate-180" : ""

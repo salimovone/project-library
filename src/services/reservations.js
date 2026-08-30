@@ -1,25 +1,12 @@
 import api from './api';
 
-
-export async function reserveBookStudent(bookId) {
-  let data = await api.post(`/reservations/create_for_student/`, { book: bookId })
-  return data
-}
-
-export async function reserveBookReservationStudent(bookId) {
-  let data = await api.post(`/reservations/cancel_for_student/`, { book: bookId })
-  return data
-}
-
 /**
  * Band qilingan kitoblar ro'yxatini olish.
- * @param {Object} params - Filtrlar (status, search, page)
- * @returns {Promise} - Backenddan qaytgan natija
+ * @param {Object} params - Filtrlar (status, search, page, page_size, ordering)
  */
 export async function fetchReservations(params = {}) {
-  // params: { status: 'pending' | 'borrowed' | 'returned', search: '...' }
   const data = await api.get('/reservations/', { params });
-  return data; // results va count bilan qaytadi
+  return data;
 }
 
 /**
@@ -32,18 +19,16 @@ export async function fetchReservationById(id) {
 
 /**
  * Bandlov holatini (statusini) yangilash.
- * Masalan: pending -> borrowed (Topshirish) yoki borrowed -> returned (Qabul qilish)
  * @param {number} id - Reservation ID
- * @param {Object} payload - { status: '...', return_date: '...' }
+ * @param {Object} payload - { status: 'pending'|'approved'|'given'|'returned'|'cancelled', return_date: '...' }
  */
 export async function updateReservationStatus(id, payload) {
-  // Payload ichida status va ixtiyoriy ravishda return_date (qaytarish muddati) bo'ladi
   const data = await api.patch(`/reservations/${id}/`, payload);
   return data;
 }
 
 /**
- * Yangi bandlov yaratish (Kitobxon uchun).
+ * Yangi bandlov yaratish.
  */
 export async function createReservation(bookId) {
   const data = await api.post('/reservations/', { book: bookId });
@@ -51,10 +36,34 @@ export async function createReservation(bookId) {
 }
 
 /**
- * Bandlovni bekor qilish.
+ * Talaba uchun bandlov yaratish.
+ */
+export async function reserveBookStudent(bookId) {
+  let data = await api.post(`/reservations/create_for_student/`, { book: bookId });
+  return data;
+}
+
+/**
+ * Talaba bandlovini bekor qilish.
+ */
+export async function reserveBookReservationStudent(bookId) {
+  let data = await api.post(`/reservations/cancel_for_student/`, { book: bookId });
+  return data;
+}
+
+/**
+ * Bandlovni bekor qilish / o'chirish.
  */
 export async function cancelReservation(id) {
   const data = await api.delete(`/reservations/${id}/`);
+  return data;
+}
+
+/**
+ * Bandlov statistikasi.
+ */
+export async function fetchReservationStats(bookId) {
+  const data = await api.get('/reservation-stats/', { params: { book_id: bookId } });
   return data;
 }
 
@@ -65,5 +74,6 @@ export default {
   createReservation,
   cancelReservation,
   reserveBookStudent,
-  reserveBookReservationStudent
+  reserveBookReservationStudent,
+  fetchReservationStats
 };

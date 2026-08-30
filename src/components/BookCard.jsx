@@ -1,77 +1,104 @@
-// components/BookCard.tsx
 import React from 'react';
-import {
-  FaBook,
-  FaHeadphones,
-  FaBookmark,
-  FaStar
-} from 'react-icons/fa';
+import { FaStar } from 'react-icons/fa';
 
 const BookCard = ({
-  title = "Book Title",
-  author = "Author Name",
+  book,
+  title = "Kitob nomi",
+  author = "Noma'lum muallif",
   coverImage,
-  rating = 0.0,
-  ratingCount = 0,
+  rating = "0.0",
+  badgeText = "",
+  hasPdf = true,
+  hasAudio = false,
+  hasPhysical = true,
   onClick,
   className = "",
 }) => {
+  // Support passing a book object directly or individual props
+  const bookTitle = book?.title || book?.name || title;
+  const bookAuthor = Array.isArray(book?.author)
+    ? book.author.map((a) => (typeof a === "object" ? a.name || a.sortingname || "" : a)).filter(Boolean).join(", ")
+    : typeof book?.author === "object"
+    ? book.author.name || book.author.sortingname || author
+    : book?.author || author;
+  const bookRating = book?.average_rating || book?.rating || rating;
+  const bookBadge = book?.is_new ? "YANGI" : badgeText;
+  const bookPdf = book ? !!book.file_pdf : hasPdf;
+  const bookAudio = book ? !!book.file_audio : hasAudio;
+  const bookPhysical = book ? (book.total_copies > 0) : hasPhysical;
+  const bookCover = book?.img || book?.cover_image || book?.cover || coverImage;
+
   return (
     <div
       onClick={onClick}
-      className={`
-        group relative bg-white rounded-xl shadow-md overflow-hidden 
-        hover:shadow-xl transition-all duration-300 cursor-pointer
-        ${className}
-      `}
-      style={{ width: '280px', minWidth: '240px' }} // card kengligini o'zingiz o'zgartirishingiz mumkin
+      className={`group flex flex-col bg-[var(--bg-card)] border border-[var(--border-main)] rounded-2xl overflow-hidden font-interface shadow-xs hover:shadow-lg hover:border-[var(--border-strong)] transition-all duration-300 cursor-pointer ${className}`}
     >
-      {/* Cover rasm */}
-      <div className="relative">
-        {coverImage ? (
-          <img
-            src={coverImage}
-            alt={`${title} muqovasi`}
-            className="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-105"
-          />
+      <div className="relative p-2.5 pb-0">
+        {bookCover ? (
+          <div className="relative aspect-3/4 rounded-xl overflow-hidden">
+            <img
+              src={bookCover}
+              alt={bookTitle}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+            {bookBadge && (
+              <span className="absolute top-2.5 right-2.5 bg-[var(--crimson-primary)] text-white text-[9.5px] font-extrabold tracking-wider uppercase px-2 py-1 rounded-md shadow-sm">
+                {bookBadge}
+              </span>
+            )}
+          </div>
         ) : (
-          <div className="w-full h-80 bg-linear-to-br from-[#003366] to-[#1a478e] p-4 flex flex-col items-center justify-center text-center shadow-inner relative overflow-hidden transition-transform duration-500 group-hover:scale-105">
-            <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] animate-pulse bg-repeat"></div>
-            <FaBook className="text-4xl text-blue-200/40 mb-3 relative z-10" />
-            <h3 className="text-lg font-bold text-white mb-2 line-clamp-3 leading-snug relative z-10 px-1 drop-shadow-sm">{title}</h3>
-            <div className="h-0.5 w-8 bg-blue-400 rounded-full mb-2 relative z-10"></div>
-            <p className="text-blue-200 font-medium text-sm leading-snug relative z-10 line-clamp-2 px-2">{author}</p>
+          <div className="relative aspect-3/4 rounded-xl overflow-hidden bg-gradient-to-br from-[#3d6cb0] via-[#2a538f] to-[#1b3f7a] flex flex-col items-center justify-center p-4 text-center group-hover:scale-[1.02] transition-transform duration-300">
+            <span className="absolute inset-0 bg-[radial-gradient(circle_at_25%_15%,rgba(255,255,255,0.16),transparent_55%)] pointer-events-none" />
+            <span className="absolute left-0 top-0 bottom-0 w-1.5 bg-[var(--crimson-primary)]" />
+            
+            <span className="font-editorial text-lg md:text-xl font-normal text-white relative leading-snug line-clamp-3">
+              {bookTitle}
+            </span>
+            <span className="w-5 h-0.5 bg-[var(--crimson-accent)] rounded-full my-2.5 relative" />
+            <span className="text-[11.5px] font-semibold text-[#b9c6de] relative tracking-wide line-clamp-1">
+              {bookAuthor}
+            </span>
+
+            {bookBadge && (
+              <span className="absolute top-2.5 right-2.5 bg-[var(--crimson-primary)] text-white text-[9.5px] font-extrabold tracking-wider uppercase px-2 py-1 rounded-md shadow-xs">
+                {bookBadge}
+              </span>
+            )}
           </div>
         )}
-
-        {/* Rating badge (yuqori o'ng burchakda) */}
-        <div className="absolute top-3 right-3 bg-black/70 text-white px-2.5 py-1 rounded-full text-sm font-medium flex items-center gap-1 shadow-md">
-          <FaStar className="text-yellow-400 text-base" />
-          <span>{rating}</span>
-        </div>
       </div>
 
-      {/* Content qismi */}
-      <div className="p-4 space-y-1">
-        <h3 className="font-bold text-lg text-gray-900 line-clamp-2 group-hover:text-blue-700 transition-colors">
-          {title}
-        </h3>
+      <div className="flex flex-col gap-1 p-3 md:p-3.5 flex-1">
+        <span className="text-sm font-bold text-[var(--text-main)] leading-snug tracking-tight truncate">
+          {bookTitle}
+        </span>
+        <span className="text-[12.5px] font-medium text-[var(--text-muted)] truncate">
+          {bookAuthor}
+        </span>
 
-        <p className="text-gray-600 text-sm">{author}</p>
-
-        {/* Iconlar + rating */}
-        <div className="flex items-center justify-between pt-2">
-          <div className="flex items-center gap-4 text-gray-500">
-            <FaBook className="text-xl hover:text-blue-600 transition-colors" title="O'qish" />
-            <FaHeadphones className="text-xl hover:text-pink-600 transition-colors" title="Audio" />
-            <FaBookmark className="text-xl hover:text-orange-600 transition-colors" title="Saqlash" />
+        <div className="flex items-center justify-between gap-2 mt-auto pt-3">
+          <div className="flex items-center gap-1.5">
+            {bookPdf && (
+              <span title="PDF" className="flex items-center h-5 px-1.5 rounded-md bg-[var(--orange-pdf-bg)] text-[var(--orange-pdf)] text-[10px] font-extrabold tracking-wider">
+                PDF
+              </span>
+            )}
+            {bookAudio && (
+              <span title="Audio" className="flex items-center h-5 px-1.5 rounded-md bg-[var(--crimson-light)] text-[var(--crimson-primary)] text-[10px] font-extrabold tracking-wider">
+                AUDIO
+              </span>
+            )}
+            {bookPhysical && (
+              <span title="Kutubxonada bor" className="flex items-center h-5 px-1.5 rounded-md bg-[var(--navy-light)] text-[var(--navy-primary)] text-[10px] font-extrabold tracking-wider">
+                FIZIK
+              </span>
+            )}
           </div>
-
-          <div className="flex items-center gap-1 text-sm font-medium">
-            <FaStar className="text-yellow-500" />
-            <span className="text-gray-700">{rating}</span>
-            <span className="text-gray-400 text-xs">★</span>
-          </div>
+          <span className="flex items-center gap-1 text-[12.5px] font-extrabold text-[var(--text-main)]">
+            <FaStar className="text-[#e0a32e] text-xs" />
+            {bookRating}
+          </span>
         </div>
       </div>
     </div>

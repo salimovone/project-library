@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { FiUser, FiEyeOff, FiEye, FiArrowRight } from "react-icons/fi";
-import logo from "../../assets/logo.png";
+import logoDarkText from "../../assets/logo.png";
+import logoWhiteText from "../../assets/logo-white-text.png";
 import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router";
 
@@ -41,94 +42,111 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f5f6f8] dark:bg-[#121212] flex flex-col items-center justify-center p-4 font-sans transition-colors duration-300">
-      <div onClick={() => navigate("/")} className="mb-8 cursor-pointer">
+    <div className="min-h-screen bg-[var(--bg-page)] flex flex-col items-center justify-center p-4 font-interface transition-colors duration-300 relative">
+      {/* Top Left Return to Home Button */}
+      <button
+        onClick={() => navigate("/")}
+        className="absolute top-5 left-5 md:top-8 md:left-8 inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-[var(--border-main)] bg-[var(--bg-card)] text-[var(--navy-primary)] dark:text-white text-xs font-bold shadow-xs hover:bg-[var(--navy-light)] transition cursor-pointer"
+      >
+        ← Bosh sahifaga qaytish
+      </button>
+
+      {/* Brand Header */}
+      <div onClick={() => navigate("/")} className="mb-8 cursor-pointer flex flex-col items-center gap-2">
         <img
-          src={logo}
+          src={logoDarkText}
           alt="Alfraganus Library"
-          className="h-16 md:h-20 object-contain"
+          className="h-12 md:h-14 w-auto block dark:hidden object-contain"
+        />
+        <img
+          src={logoWhiteText}
+          alt="Alfraganus Library"
+          className="h-12 md:h-14 w-auto hidden dark:block object-contain"
         />
       </div>
 
-      <div className="w-full max-w-120 bg-white dark:bg-[#1e1e1e] border border-[#e5e7eb] dark:border-gray-800 rounded-2xl px-6 py-10 md:px-10 md:py-12 shadow-sm transition-colors duration-300">
-        <div className="text-center mb-8">
-          <h1 className="text-xl md:text-2xl font-bold text-[#143c7b] dark:text-blue-300 mb-2 transition-colors">
-            Qaytib kelganingizdan xursandmiz
+      {/* Card */}
+      <div className="w-full max-w-md bg-[var(--bg-card)] border border-[var(--border-main)] rounded-2xl p-7 md:p-9 shadow-xs transition-colors duration-300">
+        <div className="text-center mb-7">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--navy-light)] text-[var(--navy-primary)] dark:text-white text-xs font-bold mb-3">
+            Alfraganus University
+          </span>
+          <h1 className="font-editorial text-2.5xl md:text-3xl font-normal text-[var(--text-main)] mb-1.5">
+            Tizimga kirish
           </h1>
-          <p className="text-[#5174ac] dark:text-blue-400 font-medium text-sm md:text-base transition-colors">
-            O'qishni davom ettirish uchun tizimga kiring
+          <p className="text-xs md:text-sm text-[var(--text-muted)] font-semibold">
+            HEMIS ID va parolingiz orqali shaxsiy kabinetga kiring
           </p>
         </div>
 
         {localError && (
-          <div className="mb-6 bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-4 rounded-r-xl transition-colors">
-            <p className="text-sm text-red-700 dark:text-red-400 font-medium">{localError}</p>
+          <div className="mb-5 bg-[var(--crimson-light)] border border-[var(--crimson-border)] p-3.5 rounded-xl text-xs font-bold text-[var(--crimson-primary)]">
+            {localError}
           </div>
         )}
 
-        <form onSubmit={handleLogin} className="space-y-6">
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-[#143c7b] dark:text-blue-300 transition-colors">
-              Hemis Id
+        <form onSubmit={handleLogin} className="flex flex-col gap-4.5">
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-extrabold tracking-wider uppercase text-[var(--text-subtle)]">
+              HEMIS ID
             </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#5174ac] dark:text-blue-400 transition-colors">
-                <FiUser className="text-lg" />
-              </div>
+            <div className="relative flex items-center">
+              <FiUser className="absolute left-3.5 text-gray-400 text-base" />
               <input
                 type="text"
                 value={useId}
                 onChange={handleInputChange(setuseId)}
                 placeholder="457000007876"
-                className="w-full bg-[#f8f9fa] dark:bg-[#252525] border border-gray-300 dark:border-gray-700 rounded-xl py-3 pl-10 pr-4 text-gray-800 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:border-[#143c7b] dark:focus:border-blue-500 focus:ring-1 focus:ring-[#143c7b] dark:focus:ring-blue-500 transition-colors"
+                className="w-full h-11 bg-[var(--bg-subtle)] border border-[var(--border-main)] rounded-xl pl-10 pr-4 text-sm font-semibold text-[var(--text-main)] placeholder-[#8a93a6] focus:border-[var(--navy-primary)] outline-none transition"
                 required
               />
             </div>
           </div>
 
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-[#143c7b] dark:text-blue-300 transition-colors">
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-extrabold tracking-wider uppercase text-[var(--text-subtle)]">
               Parol
             </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-[#5174ac] dark:text-blue-400 transition-colors">
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="focus:outline-none hover:text-[#143c7b] transition-colors"
-                >
-                  {showPassword ? (
-                    <FiEye className="text-lg" />
-                  ) : (
-                    <FiEyeOff className="text-lg" />
-                  )}
-                </button>
-              </div>
+            <div className="relative flex items-center">
               <input
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={handleInputChange(setPassword)}
                 placeholder="••••••••"
-                className="w-full bg-[#f8f9fa] dark:bg-[#252525] border border-gray-300 dark:border-gray-700 rounded-xl py-3 pl-10 pr-4 text-gray-800 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:border-[#143c7b] dark:focus:border-blue-500 focus:ring-1 focus:ring-[#143c7b] dark:focus:ring-blue-500 transition-colors"
+                className="w-full h-11 bg-[var(--bg-subtle)] border border-[var(--border-main)] rounded-xl pl-4 pr-10 text-sm font-semibold text-[var(--text-main)] placeholder-[#8a93a6] focus:border-[var(--navy-primary)] outline-none transition"
                 required
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3.5 text-gray-400 hover:text-[var(--text-main)] cursor-pointer"
+              >
+                {showPassword ? <FiEye className="text-base" /> : <FiEyeOff className="text-base" />}
+              </button>
             </div>
           </div>
 
           <button
             disabled={loading}
             type="submit"
-            className={`w-full flex items-center justify-center gap-2 text-white font-medium py-3.5 rounded-xl transition-colors duration-200 mt-2 
-              ${localError
-                ? "bg-red-600 hover:bg-red-700 disabled:bg-red-400 active:bg-red-800"
-                : "bg-[#003282] dark:bg-blue-600 hover:bg-blue-900 dark:hover:bg-blue-700 disabled:bg-blue-400 active:bg-blue-700"
-              }`}
+            className="w-full h-12 flex items-center justify-center gap-2 rounded-xl bg-[var(--crimson-primary)] text-white text-sm font-bold shadow-xs hover:opacity-90 transition cursor-pointer disabled:opacity-50 mt-2"
           >
-            {loading ? "Kutilmoqda..." : "Kirish"}{" "}
-            <FiArrowRight className="text-lg" />
+            {loading ? "Kutilmoqda..." : "Kirish"} <FiArrowRight className="text-base" />
           </button>
         </form>
+
+        <div className="mt-6 pt-5 border-t border-[var(--border-main)] text-center text-xs text-[var(--text-subtle)] font-medium">
+          Ma'lumotlar qayta tiklash uchun HEMIS bo'limiga murojaat qiling.
+        </div>
       </div>
+
+      {/* Additional Bottom Return Button */}
+      <button
+        onClick={() => navigate("/")}
+        className="mt-6 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-[var(--border-main)] bg-[var(--bg-card)] text-[var(--navy-primary)] dark:text-white text-xs font-bold shadow-xs hover:bg-[var(--navy-light)] transition cursor-pointer"
+      >
+        ← Bosh sahifaga qaytish
+      </button>
     </div>
   );
 }
