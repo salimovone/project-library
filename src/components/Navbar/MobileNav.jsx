@@ -34,13 +34,23 @@ const MobileNav = ({ categories = [], subcategories = [], closeMenu }) => {
 
   const getInitials = () => {
     if (!user) return "U";
-    const name = user.first_name || user.username || user.name || "User";
+    const name = [user.first_name, user.last_name].filter(Boolean).join(" ") || user.username || user.name || "";
+    if (!name) return "U";
     return name
       .split(" ")
       .map((n) => n[0])
+      .filter(Boolean)
       .join("")
       .substring(0, 2)
       .toUpperCase();
+  };
+
+  const getUserName = () => {
+    if (!user) return "Kabinet";
+    if (user.first_name) {
+      return `${user.first_name} ${user.last_name ? user.last_name[0] + "." : ""}`.trim();
+    }
+    return user.username || user.name || "Kabinet";
   };
 
   return (
@@ -152,7 +162,7 @@ const MobileNav = ({ categories = [], subcategories = [], closeMenu }) => {
                   {getInitials()}
                 </span>
                 <span className="text-xs font-bold text-[var(--text-main)] truncate">
-                  {user?.first_name || user?.username || "Kabinet"}
+                  {getUserName()}
                 </span>
               </Link>
               <button

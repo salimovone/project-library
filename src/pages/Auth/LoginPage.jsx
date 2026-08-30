@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { FiUser, FiEyeOff, FiEye, FiArrowRight } from "react-icons/fi";
-import logo from "../../assets/logo.png";
+import logoDarkText from "../../assets/logo.png";
+import logoWhiteText from "../../assets/logo-white-text.png";
 import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router";
 
@@ -53,9 +54,14 @@ export default function LoginPage() {
       {/* Brand Header */}
       <div onClick={() => navigate("/")} className="mb-8 cursor-pointer flex flex-col items-center gap-2">
         <img
-          src={logo}
+          src={logoDarkText}
           alt="Alfraganus Library"
-          className="h-12 md:h-14 object-contain dark:brightness-0 dark:invert"
+          className="h-12 md:h-14 w-auto block dark:hidden object-contain"
+        />
+        <img
+          src={logoWhiteText}
+          alt="Alfraganus Library"
+          className="h-12 md:h-14 w-auto hidden dark:block object-contain"
         />
       </div>
 

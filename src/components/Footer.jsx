@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo-white-text.png";
 
 /**
  * Footer Component
@@ -11,11 +11,13 @@ export default function Footer() {
       <div className="max-w-[1320px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 items-start">
         {/* Col 1: Brand & Details */}
         <div className="flex flex-col gap-3.5">
-          <img
-            src={logo}
-            alt="Alfraganus University Library"
-            className="h-8.5 w-auto self-start object-contain brightness-0 invert opacity-95"
-          />
+          <Link to="/">
+            <img
+              src={logo}
+              alt="Alfraganus University Library"
+              className="h-8.5 w-auto self-start object-contain"
+            />
+          </Link>
           <span className="text-xs md:text-[13px] leading-relaxed text-[#8fa1c2] max-w-[300px] block">
             Alfraganus University kutubxonasi — elektron katalog, PDF va audio kitoblar, fizik nusxalarni onlayn band qilish.
           </span>

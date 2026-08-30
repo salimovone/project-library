@@ -194,6 +194,15 @@
   .no-arrow::-ms-expand {
     display: none;
   }
+
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
 
 .dynamic-svg-wrapper svg {

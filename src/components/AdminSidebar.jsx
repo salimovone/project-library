@@ -8,7 +8,7 @@ import {
   FiUsers,
   FiShield,
 } from "react-icons/fi";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo-white-text.png";
 import useRole from "../hooks/useRole";
 import useAuth from "../hooks/useAuth";
 
@@ -58,19 +58,24 @@ export default function AdminSidebar({ activeKey, isMobileOpen, onCloseMobile })
       : ["dashboard", "reservations", "overdue", "books", "create", "users", "logs"];
 
   const getInitials = () => {
-    if (!user) return "SS";
-    const name = user.first_name || user.username || user.name || "Sardor Salimov";
+    if (!user) return "U";
+    const name = [user.first_name, user.last_name].filter(Boolean).join(" ") || user.username || user.name || "";
+    if (!name) return "U";
     return name
       .split(" ")
       .map((n) => n[0])
+      .filter(Boolean)
       .join("")
       .substring(0, 2)
       .toUpperCase();
   };
 
   const getUserName = () => {
-    if (!user) return "Sardor Salimov";
-    return user.first_name ? `${user.first_name} ${user.last_name || ""}`.trim() : user.username || "Sardor Salimov";
+    if (!user) return "";
+    if (user.first_name) {
+      return `${user.first_name} ${user.last_name || ""}`.trim();
+    }
+    return user.username || user.name || "";
   };
 
   const computedActiveKey =
@@ -101,7 +106,7 @@ export default function AdminSidebar({ activeKey, isMobileOpen, onCloseMobile })
       {/* Brand Logo */}
       <div className="flex items-center gap-3 px-2 pb-5">
         <Link to="/">
-          <img src={logo} alt="Alfraganus University Library" className="h-7.5 w-auto brightness-0 invert opacity-95" />
+          <img src={logo} alt="Alfraganus University Library" className="h-7.5 w-auto object-contain block" />
         </Link>
       </div>
 

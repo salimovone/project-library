@@ -17,19 +17,24 @@ const Actions = () => {
   };
 
   const getInitials = () => {
-    if (!user) return "AS";
-    const name = user.first_name || user.username || user.name || "Aziza Salimova";
+    if (!user) return "U";
+    const name = [user.first_name, user.last_name].filter(Boolean).join(" ") || user.username || user.name || "";
+    if (!name) return "U";
     return name
       .split(" ")
       .map((n) => n[0])
+      .filter(Boolean)
       .join("")
       .substring(0, 2)
       .toUpperCase();
   };
 
   const getUserName = () => {
-    if (!user) return "Aziza S.";
-    return user.first_name ? `${user.first_name} ${user.last_name ? user.last_name[0] + "." : ""}` : user.username || "Aziza S.";
+    if (!user) return "";
+    if (user.first_name) {
+      return `${user.first_name} ${user.last_name ? user.last_name[0] + "." : ""}`.trim();
+    }
+    return user.username || user.name || "";
   };
 
   return (

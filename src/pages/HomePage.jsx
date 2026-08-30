@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router";
 import {
   CategoryCard,
@@ -11,11 +11,24 @@ import { fetchCategories } from "../services/additional";
 
 export default function HomePage() {
   const navigate = useNavigate();
+  const carouselRef = useRef(null);
   const [newArrivals, setNewArrivals] = useState([]);
   const [mostRead, setMostRead] = useState([]);
   const [categories, setCategories] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
+
+  const scrollLeft = () => {
+    if (carouselRef.current) {
+      carouselRef.current.scrollBy({ left: -240, behavior: "smooth" });
+    }
+  };
+
+  const scrollRight = () => {
+    if (carouselRef.current) {
+      carouselRef.current.scrollBy({ left: 240, behavior: "smooth" });
+    }
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -174,7 +187,7 @@ export default function HomePage() {
       </section>
 
       {/* Yangi qo'shilgan kitoblar Section */}
-      <section className="py-11 px-4 md:px-10">
+      <section className="py-11 px-4 md:px-10 overflow-hidden">
         <div className="max-w-[1320px] 2xl:max-w-[1680px] min-[1920px]:max-w-[1840px] min-[2560px]:max-w-[2240px] mx-auto">
           <div className="flex items-end justify-between mb-5.5">
             <div className="flex flex-col gap-1">
@@ -185,22 +198,55 @@ export default function HomePage() {
                 Oxirgi 30 kunda fondga qo'shilgan 46 nashr
               </span>
             </div>
+            
             <button
               onClick={() => navigate("/books")}
-              className="inline-flex items-center gap-1.5 h-9 px-4 border border-[var(--border-strong)] rounded-full bg-[var(--bg-card)] text-xs font-bold text-[var(--navy-primary)] dark:text-white hover:bg-[var(--navy-light)] transition cursor-pointer"
+              className="inline-flex items-center gap-1.5 h-9 px-4 border border-[var(--border-strong)] rounded-full bg-[var(--bg-card)] text-xs font-bold text-[var(--navy-primary)] dark:text-white hover:bg-[var(--navy-light)] transition cursor-pointer shrink-0"
             >
               Barchasi →
             </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 2xl:grid-cols-6 min-[2560px]:grid-cols-7 gap-4.5">
-            {newArrivals.map((book) => (
-              <BookCard
-                key={book.id}
-                book={book}
-                onClick={() => navigate(`/books/${book.id}`)}
-              />
-            ))}
+          <div className="relative">
+            {/* Carousel Container */}
+            <div
+              ref={carouselRef}
+              className="flex overflow-x-auto snap-x snap-mandatory scrollbar-none gap-4 pb-3 pt-1 -mx-4 px-4 sm:mx-0 sm:px-0 sm:pb-0 sm:pt-0 sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 2xl:grid-cols-6 min-[2560px]:grid-cols-7 sm:gap-4.5"
+            >
+              {newArrivals.map((book) => (
+                <div
+                  key={book.id}
+                  className="snap-start shrink-0 w-[68vw] max-w-[230px] min-w-[190px] sm:w-auto sm:max-w-none sm:min-w-0 sm:shrink sm:grow-0"
+                >
+                  <BookCard
+                    book={book}
+                    onClick={() => navigate(`/books/${book.id}`)}
+                    className="h-full"
+                  />
+                </div>
+              ))}
+            </div>
+
+            {/* Bottom Controls for Mobile (below carousel) */}
+            <div className="flex sm:hidden items-center justify-center gap-3 mt-3">
+              <button
+                onClick={scrollLeft}
+                aria-label="Oldingi kitoblar"
+                className="w-8 h-8 rounded-full border border-[var(--border-strong)] bg-[var(--bg-card)] text-[var(--text-main)] flex items-center justify-center text-sm font-bold shadow-xs active:scale-95 transition cursor-pointer"
+              >
+                ‹
+              </button>
+              <span className="text-[11.5px] font-semibold text-[var(--text-subtle)]">
+                Surish uchun suring
+              </span>
+              <button
+                onClick={scrollRight}
+                aria-label="Keyingi kitoblar"
+                className="w-8 h-8 rounded-full border border-[var(--border-strong)] bg-[var(--bg-card)] text-[var(--text-main)] flex items-center justify-center text-sm font-bold shadow-xs active:scale-95 transition cursor-pointer"
+              >
+                ›
+              </button>
+            </div>
           </div>
         </div>
       </section>

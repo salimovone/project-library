@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Outlet, useLocation, Link } from "react-router";
 import { GiHamburgerMenu } from "react-icons/gi";
 import AdminSidebar from "../components/AdminSidebar";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo-white-text.png";
 
 export default function AdminLayout() {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
@@ -36,7 +36,7 @@ export default function AdminLayout() {
           <span className="text-sm font-bold tracking-wide">Boshqaruv paneli</span>
         </div>
         <Link to="/">
-          <img src={logo} alt="Logo" className="h-6 w-auto brightness-0 invert opacity-95" />
+          <img src={logo} alt="Logo" className="h-6 w-auto object-contain block" />
         </Link>
       </div>
 
