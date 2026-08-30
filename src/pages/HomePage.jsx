@@ -5,8 +5,10 @@ import {
   MostReadCard,
   BookCard,
   StatsBar,
+  TopBooksShowcase,
+  ReadingProgressWidget,
 } from "../components";
-import { fetchLatestBooks } from "../services/bookService";
+import { fetchLatestBooks, fetchTopBooksPaginated } from "../services/bookService";
 import { fetchCategories } from "../services/additional";
 
 export default function HomePage() {
@@ -83,7 +85,7 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="relative bg-gradient-to-b from-[#eff4fc] to-[#f6f5f2] dark:from-[#0b1730] dark:to-[#0b1120] border-b border-[var(--border-main)] py-12 md:py-16 px-4 md:px-10 overflow-hidden">
         <span className="absolute inset-0 bg-[radial-gradient(circle_at_88%_12%,rgba(158,27,50,0.07),transparent_52%)] pointer-events-none" />
-        
+
         <div className="max-w-[1320px] 2xl:max-w-[1680px] min-[1920px]:max-w-[1840px] min-[2560px]:max-w-[2240px] mx-auto grid grid-cols-1 lg:grid-cols-[1.25fr_0.9fr] gap-[56px] items-center relative">
           {/* Hero Left Content */}
           <div className="flex flex-col gap-5">
@@ -136,53 +138,11 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Hero Right: Davom Ettirish Widget */}
-          <div className="bg-[var(--bg-card)] border border-[var(--border-main)] rounded-2xl p-5.5 shadow-sm flex flex-col gap-4">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-extrabold tracking-widest uppercase text-[var(--text-subtle)]">
-                Davom ettirish
-              </span>
-              <button onClick={() => navigate("/profile")} className="text-xs font-bold text-[var(--navy-primary)] dark:text-blue-400 hover:underline cursor-pointer">
-                Barchasi
-              </button>
-            </div>
+          {/* Hero Right: TOP 3 Kitoblar Showcase (mobileda ko'rinmaydi, desktopda lg:flex) */}
+          <TopBooksShowcase books={mostRead} className="hidden lg:flex" />
 
-            <div className="flex gap-3.5 items-center">
-              <span className="w-16 h-22 rounded-xl bg-gradient-to-br from-[#4a7fc9] to-[#2a538f] shrink-0 relative overflow-hidden block">
-                <span className="absolute left-0 top-0 bottom-0 w-1.2 bg-[var(--crimson-primary)]" />
-              </span>
-              <div className="flex flex-col gap-1.5 flex-1 min-w-0">
-                <span className="text-sm font-bold text-[var(--text-main)] leading-snug truncate">
-                  Odam anatomiyasi
-                </span>
-                <span className="text-xs text-[var(--text-subtle)]">
-                  A. G'. Ahmedov · 233-bet / 444
-                </span>
-                <div className="h-1.5 rounded-full bg-[#f0eee9] dark:bg-[#1a2540] relative overflow-hidden">
-                  <span className="absolute left-0 top-0 bottom-0 w-[52%] bg-[#5fd28a] rounded-full" />
-                </div>
-                <button
-                  onClick={() => navigate("/books/1")}
-                  className="self-start mt-1 h-8 px-3.5 rounded-lg bg-[var(--navy-primary)] text-white text-xs font-bold hover:opacity-90 transition cursor-pointer"
-                >
-                  O'qishni davom ettirish
-                </button>
-              </div>
-            </div>
-
-            <div className="h-px bg-[var(--border-main)]" />
-
-            <div className="grid grid-cols-2 gap-3">
-              <div className="bg-[var(--bg-subtle)] border border-[var(--border-main)] rounded-xl p-3">
-                <span className="text-xl font-extrabold text-[var(--text-main)] block leading-none">2</span>
-                <span className="text-[11.5px] text-[var(--text-subtle)] font-semibold mt-1 block">Band qilingan</span>
-              </div>
-              <div className="bg-[var(--bg-subtle)] border border-[var(--border-main)] rounded-xl p-3">
-                <span className="text-xl font-extrabold text-[#a8760c] block leading-none">3 kun</span>
-                <span className="text-[11.5px] text-[var(--text-subtle)] font-semibold mt-1 block">Qaytarish muddati</span>
-              </div>
-            </div>
-          </div>
+          {/* Eski ReadingProgressWidget component kelajakda qayta ishlatish uchun saqlab qolindi: */}
+          {/* <ReadingProgressWidget className="hidden lg:flex" /> */}
         </div>
       </section>
 
@@ -198,7 +158,7 @@ export default function HomePage() {
                 Oxirgi 30 kunda fondga qo'shilgan 46 nashr
               </span>
             </div>
-            
+
             <button
               onClick={() => navigate("/books")}
               className="inline-flex items-center gap-1.5 h-9 px-4 border border-[var(--border-strong)] rounded-full bg-[var(--bg-card)] text-xs font-bold text-[var(--navy-primary)] dark:text-white hover:bg-[var(--navy-light)] transition cursor-pointer shrink-0"
